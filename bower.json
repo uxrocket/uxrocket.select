@@ -1,0 +1,27 @@
+{
+  "name": "uxrocket.select",
+  "version": "2.4.0",
+  "homepage": "https://github.com/uxrocket/uxrocket.select",
+  "authors": [
+    "Bilal Çınarlı <bcinarli@gmail.com>"
+  ],
+  "description": "jQuery based Select box replacement function",
+  "main": "lib/uxrocket.select.js",
+  "dependencies": {
+    "jquery": ">=1.11.1"
+  },
+  "keywords": [
+    "jQuery",
+    "javascript",
+    "select",
+    "uxrocket"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
