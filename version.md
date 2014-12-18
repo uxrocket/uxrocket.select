@@ -1,3 +1,6 @@
+## Versiyon 2.6.1
+- FIX: Diğer pluginlerden gelen data ile karıştığı için data('opt') tanımları data('uxSelect') olarak değiştirildi.
+
 ## Versiyon 2.6.0
 - DEĞİŞİKLİK: Select elemanından wrapper üzerine class isimleri aktarılırken, "uxitd-select-ready" ve selector classı kaldırılmaya başlandı. 
 
