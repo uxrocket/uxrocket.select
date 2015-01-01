@@ -1,3 +1,6 @@
+## Versiyon 2.6.1a (non-release)
+- YENİ: Yeni tanımlanmaya başlayan, elemana bağlanmış uxRocket plugin listesi kontrolleri eklendi.
+
 ## Versiyon 2.6.1
 - FIX: Diğer pluginlerden gelen data ile karıştığı için data('opt') tanımları data('uxSelect') olarak değiştirildi.
 
