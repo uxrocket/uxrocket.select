@@ -156,6 +156,23 @@
 						<option value="43">Kütahya</option>
 					</select>
 				</p>
+
+				<p>Easyway to get selected option details</p>
+				<pre>
+					<code>
+// add an onSelect callback
+&lt;select data-on-select="selected(event)">&lt;/select>
+
+// get the selected value from list data-attributes
+function selected(e){
+	var $el = $(e.target);
+
+	console.log('Selected Value: ' + $el.data('value'));
+	console.log('Selected Index: ' + $el.data('index'));
+	console.log('Selected Text: ' + $el.text());
+}
+					</code>
+				</pre>
 			</div>
 		</div>
 		<script>
