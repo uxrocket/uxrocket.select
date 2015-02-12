@@ -1,3 +1,10 @@
+## Versiyon 2.7.0
+- YENİ: $.uxselect.remove() metodu eklendi.
+- YENİ: Update metodundan sonra çalışan onUpdate callback eklendi.
+- YENİ: Remove metodundan sonra çalışan onRemove callback eklendi.
+- DEĞİŞİKLİK: Eventler, uxSelect namespace içerisinde tanımlanmaya başlandı.
+- DEĞİŞİKLİK: Tanımlarda kullanılan statik isimlendirmeler, `ns` altında parametrik hale getirildi.
+
 ## Versiyon 2.6.1a (non-release)
 - YENİ: Yeni tanımlanmaya başlayan, elemana bağlanmış uxRocket plugin listesi kontrolleri eklendi.
 

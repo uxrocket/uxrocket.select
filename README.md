@@ -34,12 +34,16 @@ Data Attribute			   | &nbsp;
 -------------------------- | -----
 on-ready                   | Select, form elemanına bağlandığında çalışacak fonksiyonu çağırır.
 on-select                  | Listeden seçim yapıldığında, çalışacak fonksiyonu çağırır.
+on-update                  | Update metodundan sonra çalışacak fonksiyonu çağırır.
+on-remove                  | Remove metodundan, çalışacak fonksiyonu çağırır.
 
 
 Callback			 | &nbsp;
 -------------------- | -----
 onReady              | Select, form elemanına bağlandığında çalışacak fonksiyonu çağırır.
 onSelect             | Listeden seçim yapıldığında, çalışacak fonksiyonu çağırır.
+onUpdate             | Update metodundan sonra çalışacak fonksiyonu çağırır.
+onRemove             | Remove metodundan, çalışacak fonksiyonu çağırır.
 
 
 ### Public Metodlar
@@ -49,4 +53,5 @@ $(selector).select(options) | Bu method plugini manuel olarak bir elemana bağla
 $.uxselect                  | Bu method pluginin detayını görmenizi sağlar.
 $.uxselect.version          | Sayfaya eklenmiş pluginin versiyon numarasını gösterir.
 $.uxselect.settings         | Aktif pluginin ayarlarını gösterir.
-$.uxselect.update           | DOM üzerinde değişiklik yapıldıktan sonra, Select eklenmiş elemanların güncellenmesini sağlar. `$.uxselect.update()` şeklinde çağrılırsa sayfadaki bütün select elemanlarını günceller. `$.uxselect.update("#myselect")` şeklinde çağrılırsa, sadece seçilen elemanı günceller.
+$.uxselect.update(el)       | DOM üzerinde değişiklik yapıldıktan sonra, Select eklenmiş elemanların güncellenmesini sağlar. `$.uxselect.update()` şeklinde çağrılırsa sayfadaki bütün select elemanlarını günceller. `$.uxselect.update("#myselect")` şeklinde çağrılırsa, sadece seçilen elemanı günceller.
+$.uxselect.remove(el)       | Select eklenmiş elemanlardan plugini ve ilgili eklenmiş liste/arayüz elemanlarını kaldırır. `$.uxselect.remove()` şeklinde çağrılırsa sayfadaki bütün select elemanlarına bağlı plugini kaldırır. `$.uxselect.remove("#myselect")` şeklinde çağrılırsa, sadece seçilen elemandan kaldırır.
