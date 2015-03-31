@@ -1,5 +1,5 @@
 /* @author Bilal Cinarli */
-$select-version: "2.6.1b";
+$select-version: "2.7.1";
 $select-height: 32px;
 
 .uxitd-select-wrap {
@@ -37,12 +37,13 @@ $select-height: 32px;
     }
 
     .uxitd-select-current {
-        @include dims(100%, $select-height);
         position: absolute;
         top: 0;
         left: 0;
         overflow: hidden;
         display: inline-block;
+        width: 100%;
+        height: $select-height;
         cursor: pointer;
         background: #fff;
         padding: 0 15px 0 8px;
@@ -61,19 +62,21 @@ $select-height: 32px;
 
         .uxitd-select-arrow {
             @extend .icon-caret-down !optional;
-            @include dims(12px, 100%);
             position: absolute;
             top: 0;
             right: 0;
+            width: 12px;
+            height: 100%;
             background: #fff;
 
             &:before {
                 @extend %font-icon !optional;
-                @include dims(10px, 14px);
                 position: absolute;
                 top: 50%;
                 right: 5px;
                 display: block;
+                width: 10px;
+                height: 14px;
                 margin-top: -7px;
             }
         }
