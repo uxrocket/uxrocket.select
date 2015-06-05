@@ -17,6 +17,22 @@ Select plugini, CSS ile görünüm stillendirilmesi mümkün olmayan `select` el
 ### Notlar
 Select elemanının görünümünü değiştirmek için görsel amaçlı kullanılmaktadır. Plugin ayarlarındaki tanımları da tema hazırlama durumuna göre özelleşmiştir.
 
+### Önemli (select tanımlarını güncelleme işlemleri)
+
+Select plugininin çalışma şeklinin tanımları `data` attributeleri ile yapıldığı durumlarda, güncelleme sırasında `$(".select").attr('data-on-select', 'myFunc()')` şeklinde yapılacak tanımlama işlemleri selecti güncellemeyecektir. `data` attribute güncellemelerinin `data()` fonksiyonu ile yapılması gerekmektedir.
+
+```JAVASCRIPT
+var $select = $(".select");
+// Yanlış güncelleme 
+$select.attr('data-on-select', 'myFunc()');
+$.uxselect.update($select); // seçim yapıldıktan sonra çalışacak fonksiyon değişmeyecektir
+
+// Doğru güncelleme
+$select.data('on-select', 'myFunc()');
+$.uxselect.update($select); // seçim yapıldıktan sonra yeni tanımlanan fonksiyon çalışmaya başlayacaktır
+```
+Yukarıda belirtilen örnek ve güncelleme kullanımları `data` attribute ile belirlenen bütün select özellikleri için geçerlidir.
+
 
 
 ### Tanımlar
