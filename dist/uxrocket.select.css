@@ -2,5 +2,9 @@
  * @author Bilal Cinarli
  */
 /** -------------------------------------------
- 	Clear Styles
+ 	Select Styles
     ------------------------------------------- **/
+.uxr-select-wrap {
+  position: relative;
+  display: inline-block;
+}

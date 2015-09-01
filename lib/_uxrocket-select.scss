@@ -2,11 +2,14 @@
  * @author Bilal Cinarli
  */
 
-$clear-version: "3.0.0";
+$select-version: "3.0.0";
 
 /** -------------------------------------------
- 	Clear Styles
+ 	Select Styles
     ------------------------------------------- **/
-.uxr-clear {
-
+.uxr-select {
+    &-wrap {
+        position: relative;
+        display: inline-block;
+    }
 }
