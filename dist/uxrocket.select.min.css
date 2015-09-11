@@ -2,8 +2,8 @@
  *  jQuery based Select box replacement function 
  *  @author Bilal Cinarli <bcinarli@gmail.com> (http://bcinarli.com/) 
  *  @version 3.0.0 
- *  @build Tue Sep 01 2015 15:56:13 GMT+0300 (EEST) 
+ *  @build Fri Sep 11 2015 09:17:21 GMT+0300 (EEST) 
  */
-.uxr-select-wrap{position:relative;display:inline-block}
+.uxr-select-wrap{position:relative;display:inline-block}.uxr-select-list{position:absolute;margin:0;padding:0;list-style:none}
 
 /*# sourceMappingURL=uxrocket.select.min.css.map */

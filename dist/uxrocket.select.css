@@ -8,3 +8,10 @@
   position: relative;
   display: inline-block;
 }
+
+.uxr-select-list {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}

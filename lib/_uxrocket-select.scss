@@ -12,4 +12,11 @@ $select-version: "3.0.0";
         position: relative;
         display: inline-block;
     }
+
+    &-list {
+        position: absolute;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
 }

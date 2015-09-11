@@ -29,27 +29,6 @@
 				font-size: 1rem;
 				padding: 5px;
 			}
-			
-			/** Select styles **/
-
-			.uxitd-select-arrow:before,
-			.uxitd-select-arrow:after {
-				position: absolute;
-				top: 50%;
-				right: 5px;
-				font-size: 11px;
-				line-height: 1;
-				color: #222;
-			}
-
-			.uxitd-select-arrow:before {
-				margin-top: -11px;
-				content: "▲";
-			}
-
-			.uxitd-select-arrow:after {
-				content: "▼";
-			}
 		</style>
 	</head>
 	
@@ -75,22 +54,25 @@
 					</select>
 				</p>
 
-				<p>Easyway to get selected option details</p>
-				<pre>
-					<code>
-// add an onSelect callback
-&lt;select data-on-select="selected(event)">&lt;/select>
+				<p class="wrap">
+					<select class="select">
+						<option value="34">İstanbul</option>
+						<option value="06">Ankara</option>
+						<option value="35">İzmir</option>
+						<option value="26">Eskişehir</option>
+						<option value="43">Kütahya</option>
+					</select>
+				</p>
 
-// get the selected value from list data-attributes
-function selected(e){
-	var $el = $(e.target);
-
-	console.log('Selected Value: ' + $el.data('value'));
-	console.log('Selected Index: ' + $el.data('index'));
-	console.log('Selected Text: ' + $el.text());
-}
-					</code>
-				</pre>
+                <p class="wrap">
+                    <select class="select" multiple>
+                        <option value="34">İstanbul</option>
+                        <option value="06">Ankara</option>
+                        <option value="35">İzmir</option>
+                        <option value="26">Eskişehir</option>
+                        <option value="43">Kütahya</option>
+                    </select>
+                </p>
 			</div>
 		</div>
 		<script>
