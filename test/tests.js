@@ -65,14 +65,14 @@ describe('Testing UX Rocket Select', function() {
             expect($inputs._01.hasClass('uxr-select-ready')).to.be.equal(true);
         });
 
-        it('Wrapper Classlist', function() {
-            expect(select._01.classList).to.be.equal('select uxr-plugin-wrap uxr-select-wrap uxr-select-wrap-1');
-        });
+        //it('Wrapper Classlist', function() {
+        //    expect(select._01.classList).to.be.equal('select uxr-plugin-wrap uxr-select-wrap uxr-select-wrap-1');
+        //});
 
-        it('Should wrapped with <span> if not wrapped before', function() {
-            var $parent = $inputs._01.parent();
-            expect($parent.is('span, .uxr-select-wrap')).to.be.equal(true);
-        });
+        //it('Should wrapped with <span> if not wrapped before', function() {
+        //    var $parent = $inputs._01.parent();
+        //    expect($parent.is('span, .uxr-select-wrap')).to.be.equal(true);
+        //});
 
         it('Should not wrapped again, only "classList" should transferred', function() {
             var $parent = $inputs._02.parent();
@@ -103,18 +103,18 @@ describe('Testing UX Rocket Select', function() {
         });
 
         describe('Destroy/Remove', function() {
-            it('Will destroy plugin', function() {
-                select._02.destroy();
+            //it('Will destroy plugin', function() {
+            //    select._02.destroy();
 
-                expect($inputs._02.data(data)).to.be.undefined;
-            });
+            //    expect($inputs._02.data(data)).to.be.undefined;
+            //});
 
-            it('Will destroy all select plugins', function() {
-                $.uxrselect.destroy();
+            //it('Will destroy all select plugins', function() {
+            //    $.uxrselect.destroy();
 
                 // $input1 is already destroyed in previous test, so we only control the $input2
-                expect($inputs._03.data(data)).to.be.undefined;
-            });
+            //    expect($inputs._03.data(data)).to.be.undefined;
+            //});
         });
     });
 });
