@@ -8,6 +8,10 @@ $prefix: 'uxr-select';
 /** -------------------------------------------
  	Select Styles
     ------------------------------------------- **/
+[class^="#{$prefix}-"] {
+    box-sizing: border-box;
+}
+
 .#{$prefix} {
     &-wrap {
         position: relative;
