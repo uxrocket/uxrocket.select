@@ -11,18 +11,18 @@ $prefix: 'uxr-select';
 .#{$prefix} {
     &-wrap {
         position: relative;
-    }
 
-    &-aria-hidden {
-        position: absolute;
-        overflow: hidden;
-        width: 1px;
-        height: 1px;
-        margin: -1px;
-        padding: 0;
-        border: 0;
-        clip: rect(0, 0, 0, 0);
-        clip-path: inset(0 0 0 0);
+        .#{$prefix}-aria-hidden {
+            position: absolute;
+            overflow: hidden;
+            width: 1px;
+            height: 1px;
+            margin: -1px;
+            padding: 0;
+            border: 0;
+            clip: rect(0, 0, 0, 0);
+            clip-path: inset(0 0 0 0);
+        }
     }
 
     &-selection {
@@ -30,7 +30,7 @@ $prefix: 'uxr-select';
         display: inline-block;
         border-radius: 4px;
         border: 1px solid #ccc;
-        cursor: pointer;
+        vertical-align: middle;
 
         &-text {
             display: block;
