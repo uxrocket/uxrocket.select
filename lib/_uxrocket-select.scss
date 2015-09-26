@@ -3,26 +3,26 @@
  */
 
 $select-version: "3.0.0";
+$prefix: 'uxr-select';
 
 /** -------------------------------------------
  	Select Styles
     ------------------------------------------- **/
-.uxr-select {
-    &-hidden {
-        position: absolute !important;
-        overflow: hidden !important;
-        width: 1px !important;
-        height: 1px !important;
-        margin: -1px !important;
-        padding: 0 !important;
-        border: 0 !important;
-        clip: rect(0, 0, 0, 0);
-        clip-path: inset(0 0 0 0);
-    }
-
+.#{$prefix} {
     &-wrap {
         position: relative;
-        display: inline-block;
+    }
+
+    &-aria-hidden {
+        position: absolute;
+        overflow: hidden;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        border: 0;
+        clip: rect(0, 0, 0, 0);
+        clip-path: inset(0 0 0 0);
     }
 
     &-selection {
@@ -33,9 +33,12 @@ $select-version: "3.0.0";
         cursor: pointer;
 
         &-text {
-            display: inline-block;
-            padding: 5px;
-            margin-right: 25px;
+            display: block;
+            overflow: hidden;
+            width: 100%;
+            padding: 5px 30px 5px 5px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
     }
 
@@ -48,6 +51,10 @@ $select-version: "3.0.0";
         margin-top: -2px;
         border: 5px solid;
         border-color: #555 transparent transparent;
+
+        .#{$prefix}-multiple & {
+            display: none;
+        }
     }
 
     &-list {
