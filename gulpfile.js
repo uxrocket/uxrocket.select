@@ -4,13 +4,13 @@
 
 "use strict";
 
-var gulp = require("gulp"),
-    pkg = require('./package.json'),
+var gulp     = require("gulp"),
+    pkg      = require('./package.json'),
     uxrocket = require('./uxrocket.json'),
-    p = require('gulp-load-plugins')();
+    p        = require('gulp-load-plugins')();
 
 var banner = [
-    "/*! UX Rocket <%= uxrocket.pluginName %> \n" +
+    "/*! UX Rocket <%= uxrocket.name %> \n" +
     " *  <%= pkg.description %> \n" +
     " *  @author <%= pkg.author %> \n" +
     "<% pkg.contributors.forEach(function(contributor) { %>" +
@@ -24,7 +24,7 @@ var banner = [
 var tasks = {
     mocha: function() {
         return gulp.src(uxrocket.paths.test + 'index.html')
-        .pipe(p.mochaPhantomjs());
+            .pipe(p.mochaPhantomjs());
     },
 
     sass: function() {
@@ -73,9 +73,32 @@ var tasks = {
             .pipe(p.rename(uxrocket.registry + '.min.js'))
             .pipe(p.notify('Script file uglified'))
             .pipe(gulp.dest(uxrocket.paths.dist));
+    },
+
+    connect: function() {
+        p.connect.server({
+            root:       './',
+            livereload: true,
+            port:       3000
+        });
+    },
+
+    reload: {
+        styles: function() {
+            return gulp.src(uxrocket.paths.dist + '**/*.css')
+                .pipe(p.notify({message: 'Styles Reloaded', onLast: true}))
+                .pipe(p.connect.reload());
+        },
+
+        scripts: function() {
+            return gulp.src(config.paths.scripts + '**/*.js')
+                .pipe(p.notify({message: 'Scripts Reloaded', onLast: true}))
+                .pipe(p.connect.reload());
+        }
     }
 };
 
+gulp.task('connect', tasks.connect);
 gulp.task('sass', tasks.sass);
 gulp.task('csslint', tasks.csslint);
 gulp.task('lint', tasks.lint);
@@ -83,9 +106,13 @@ gulp.task('scripts', tasks.scripts);
 gulp.task('mocha', tasks.mocha);
 
 gulp.task('watch', ['csslint', 'sass', 'lint', 'scripts', 'mocha'], function() {
-    gulp.watch(uxrocket.paths.lib + '**/*.scss', ['sass']);
+    gulp.watch(uxrocket.paths.lib + '**/*.scss', ['sass'], function() {
+        return tasks.reload.styles();
+    });
     gulp.watch(uxrocket.paths.dist + '**/*.css', ['csslint']);
-    gulp.watch(uxrocket.paths.lib + '**/*.js', ['lint', 'scripts', 'mocha']);
+    gulp.watch(uxrocket.paths.lib + '**/*.js', ['lint', 'scripts', 'mocha'], function() {
+        return tasks.reload.scripts();
+    });
 });
 
-gulp.task('default', ['watch']);
+gulp.task('default', ['connect', 'watch']);
