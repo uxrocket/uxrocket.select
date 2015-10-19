@@ -4,6 +4,8 @@
 
 $select-version: "3.0.0";
 $prefix: 'uxr-select';
+$border: #ccc;
+$radius: 4px;
 
 /** -------------------------------------------
  	Select Styles
@@ -29,12 +31,21 @@ $prefix: 'uxr-select';
         }
     }
 
+    &-ready {
+        visibility: hidden;
+    }
+
     &-selection {
         position: relative;
         display: inline-block;
-        border-radius: 4px;
-        border: 1px solid #ccc;
+        height: 32px;
+        border-radius: $radius;
+        border: 1px solid $border;
         vertical-align: middle;
+
+        &.#{$prefix}-opened {
+            border-radius: $radius $radius 0 0;
+        }
 
         &-text {
             display: block;
@@ -59,12 +70,42 @@ $prefix: 'uxr-select';
         .#{$prefix}-multiple & {
             display: none;
         }
+
+        .#{$prefix}-opened & {
+            margin-top: -7px;
+            border-color: transparent transparent #555;
+        }
+    }
+
+    &-drop {
+        position: absolute;
+        margin-top: 30px;
+        border: 1px solid $border;
+        border-radius: 0 0 $radius;
+        background-color: #fff;
     }
 
     &-list {
-        position: absolute;
         margin: 0;
         padding: 0;
         list-style: none;
+    }
+
+    &-search {
+        display: block;
+        padding: 4px;
+
+        input {
+            width: calc(100% - 8px);
+            padding: 4px;
+            border: 1px solid $border;
+            border-radius: $radius;
+        }
+    }
+
+    &-option {
+        display: block;
+        padding: 4px;
+        cursor: pointer;
     }
 }
