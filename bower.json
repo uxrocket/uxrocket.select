@@ -23,5 +23,8 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "devDependencies": {
+    "uxrocket.factory": "1.0.0-alpha2"
+  }
 }
