@@ -7,7 +7,8 @@
 var gulp     = require("gulp"),
     pkg      = require('./package.json'),
     uxrocket = require('./uxrocket.json'),
-    p        = require('gulp-load-plugins')();
+    p        = require('gulp-load-plugins')(),
+    connect  = require('gulp-connect');
 
 var banner = [
     "/*! UX Rocket <%= uxrocket.name %> \n" +
@@ -76,8 +77,7 @@ var tasks = {
     },
 
     connect: function() {
-        p.connect.server({
-            root:       './',
+        connect.server({
             livereload: true,
             port:       3000
         });

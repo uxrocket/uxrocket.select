@@ -41,6 +41,8 @@ $radius: 4px;
         height: 32px;
         border-radius: $radius;
         border: 1px solid $border;
+        color: #222;
+        text-decoration: none;
         vertical-align: middle;
 
         &.#{$prefix}-opened {
@@ -86,6 +88,8 @@ $radius: 4px;
     }
 
     &-list {
+        max-height: 250px;
+        overflow-y: scroll;
         margin: 0;
         padding: 0;
         list-style: none;
