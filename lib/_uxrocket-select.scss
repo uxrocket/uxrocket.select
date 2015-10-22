@@ -78,6 +78,14 @@ $radius: 4px;
             border-color: transparent transparent #555;
         }
     }
+	
+    &-selected-tag {
+		display: inline-block;
+		padding: 3px;
+		border-radius: $radius;
+		background-color: #ddd;
+		font-size: .8em;
+    }
 
     &-drop {
         position: absolute;
