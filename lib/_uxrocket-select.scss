@@ -111,5 +111,10 @@ $radius: 4px;
         display: block;
         padding: 4px;
         cursor: pointer;
+
+        &:hover,
+        .#{$prefix}-selected & {
+            background-color: #fafafa;
+        }
     }
 }
