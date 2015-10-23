@@ -25,23 +25,24 @@
         focusedInstance = null,
 
         templates       = {
-            selection: '<a href="#" id="{{selectionClass}}-{{id}}" data-id="{{id}}" class="{{selectionClass}} {{#if multiple}}{{multipleClass}}{{/if}}" style="{{width}}">' +
+            selection: '<a href="#" id="{{selectionClass}}-{{id}}" class="{{selectionClass}} {{#if multiple}}{{multipleClass}}{{/if}}" style="{{width}}">' +
                        '    <span class="{{selectionTextClass}}">{{selectionText}}</span>' +
                        '    <span class="{{arrowClass}}"></span>' +
                        '</a>',
+            multi:     '<span class="{{selectionTagClass}} {{selectionTagClass}}-{{index}}" data-index="{{index}}">' +
+                       '    {{selectionText}}' +
+                       '</span>',
             search:    '<span class="{{searchClass}}">' +
-                       '   <input type="text" ' +
-                       '          name="{{searchInput}}"' +
-                       '          data-list="{{list}}" />' +
+                       '   <input type="text" name="{{searchInput}}" />' +
                        '</span>',
             list:      '<ul class="{{listClass}}">' +
                        '   {{#each options}}' +
                        '   <li{{#if options.selected}} class="{{selectedClass}}"{{/if}}>' +
-                       '        <a class="{{optionClass}}" data-value="{{options.value}}">{{options.text}}</a>' +
+                       '        <a class="{{optionClass}}" data-index="{{options.index}}" data-value="{{options.value}}">{{options.text}}</a>' +
                        '   </li>' +
                        '   {{/each}}' +
                        '</ul>',
-            drop:      '<div id="{{dropID}}" class="{{dropClass}}">' +
+            drop:      '<div id="{{dropID}}" class="{{dropClass}}{{#if multiple}} {{multipleClass}}{{/if}}">' +
                        '    {{search}}' +
                        '    {{list}}' +
                        '</div>'
@@ -61,6 +62,7 @@
             // callbacks
             onReady:   false,
             onSelect:  false,
+            onChange:  false,
             onUpdate:  false,
             onDestroy: false
         },
@@ -88,6 +90,7 @@
                 ready:         'ready',
                 selection:     'selection',
                 selectionText: 'selection-text',
+                selectionTag:  'selected-tag',
                 arrow:         'arrow',
                 multiple:      'multiple',
                 opened:        'opened',
@@ -97,14 +100,13 @@
                 optionName:    'option-name',
                 selected:      'selected',
                 search:        'search',
-                hidden:        'aria-hidden'
+                hidden:        'aria-hidden',
+                hide:          'hide'
             }
         };
 
     // Constructor Method
     var Select = function(el, options, selector) {
-        var $el = $(el);
-
         this._instance = i;
         this._name     = rocketName;
         this._defaults = defaults;
@@ -113,7 +115,7 @@
         this.utils = new window.uxrPluginUtils({ns: ns});
 
         this.el       = el;
-        this.$el      = $el;
+        this.$el      = $(el);
         this.id       = 'uxr-select-options-' + i;
         this.multiple = this.el.hasAttribute('multiple');
         this.width    = this.getWidth();
@@ -122,7 +124,7 @@
         this.tabbed   = false;
         this.clicked  = 0;
 
-        this.options = $.extend(true, {}, defaults, options, $el.data());
+        this.options = $.extend(true, {}, defaults, options, this.$el.data());
 
         i++;
 
@@ -152,39 +154,6 @@
         this.emitEvent('ready');
     };
 
-    Select.prototype.getPosition = function() {
-        this.position = {
-            top:  this.el.offsetTop,
-            left: this.el.offsetLeft
-        };
-    };
-
-    Select.prototype.getWidth = function() {
-        var classes = this.$el.attr('class')
-            .replace(this.utils.getClassname('ready'), '')
-            .replace(this.utils.getClassname('hidden'), ''),
-            styles  = this.$el.attr('style'),
-            $shadow = $(document.createElement('div')).css('display', 'none'),
-            attr    = '',
-            w;
-
-        if(classes) {
-            attr += ' class="' + classes + '"';
-        }
-
-        if(styles) {
-            attr += ' style="' + styles + '"';
-        }
-
-        $shadow.html('<div ' + attr + '></div>').appendTo('body');
-
-        w = $shadow.find('div').css('width');
-
-        $shadow.remove();
-
-        return w;
-    };
-
     Select.prototype.getSelected = function() {
         return {
             value: this.$el.val(),
@@ -193,16 +162,20 @@
     };
 
     Select.prototype.getOptionData = function() {
-        var _this = this;
+        var _this = this,
+            index = 0;
 
         _this.optionData = [];
 
         this.$el.find('option').each(function() {
             _this.optionData.push({
+                index:    index,
                 text:     $(this).text(),
                 value:    $(this).val(),
                 selected: $(this).is(':selected')
             });
+
+            index++;
         });
     };
 
@@ -273,14 +246,14 @@
                 e.preventDefault();
                 _this.onFocus();
             })
-            .on(events.change, function() {
-                _this.onChange();
+            .on(events.change, function(e) {
+                _this.onChange(e);
             })
-            .on(events.ready, function() {
-                _this.onReady();
+            .on(events.ready, function(e) {
+                _this.onReady(e);
             })
-            .on(events.select, function() {
-                _this.onSelect();
+            .on(events.select, function(e) {
+                _this.onSelect(e);
             })
             .on(events.update, function() {
                 _this.onUpdate();
@@ -291,7 +264,6 @@
 
         _this.$selection
             .on(events.focus + ' ' + events.keyup, function(e) {
-                e.stopPropagation();
                 e.preventDefault();
 
                 if(e.keyCode === 9) {
@@ -315,15 +287,27 @@
                     _this.onFocus();
                 }
 
-                else if((_this.opened && _this.clicked % 2 == 0) || (_this.opened && _this.tabbed)) {
+                else if((_this.opened && _this.clicked % 2 === 0) || (_this.opened && _this.tabbed)) {
                     _this.onBlur();
                 }
             });
 
+        $(document).on(events.click, function(e) {
+            if(_this.$drop.has(e.target).length === 0 || _this.$selection.has(e.target) === 0) {
+                _this.onBlur();
+            }
+        });
+    };
+
+    Select.prototype.bindDropUI = function() {
+        var _this = this;
+
         _this.$drop
             .on(events.click, '.' + _this.utils.getClassname('option'), function(e) {
                 e.preventDefault();
-                e.stopPropagation();
+
+                _this.emitEvent('select');
+                _this.select(e);
             })
             .on(events.keyup + ' ' + events.input, '.' + _this.utils.getClassname('search') + ' input', function(e) {
                 e.preventDefault();
@@ -335,12 +319,6 @@
                     _this.setOriginalList();
                 }
             });
-
-        $(document).on(events.click, function(e) {
-            if(_this.$drop.has(e.target).length === 0 || _this.$selection.has(e.target) === 0) {
-                _this.onBlur();
-            }
-        });
     };
 
     Select.prototype.unbindUI = function() {
@@ -348,12 +326,77 @@
         this.$el.off('.' + rocketName);
     };
 
+    Select.prototype.select = function(e) {
+        var $selected     = $(e.currentTarget),
+            selected      = this.utils.getClassname('selected'),
+            selectionText = this.utils.getClassname('selectionText'),
+            selectionTag  = this.utils.getClassname('selectionTag'),
+            index         = $selected.data('index'),
+            text          = $selected.text();
+
+        if(!this.multiple) {
+            $selected.parent().addClass(selected).siblings('.' + selected).removeClass(selected);
+            this.$selection.find('.' + selectionText).text(text);
+            this.$el.find('option:eq(' + index + ')').prop('selected', true);
+            this.onBlur();
+        }
+
+        else {
+            // double click deselects
+            if($selected.parent().hasClass(selected)) {
+                this.$el.find('option:eq(' + index + ')').prop('selected', false);
+                $selected.parent().removeClass(selected);
+                this.$selection.find('.' + selectionTag + '-' + index).remove();
+            }
+
+            else {
+                var tag = this.utils.render(templates.multi, {
+                    selectionText:     text,
+                    selectionTagClass: selectionTag,
+                    index:             index
+                });
+                $selected.parent().addClass(selected);
+                this.$selection.find('.' + selectionText).append(tag);
+                this.$el.find('option:eq(' + index + ')').prop('selected', true);
+            }
+        }
+
+        this.emitEvent('change');
+    };
+
+    Select.prototype.search = function(term) {
+        var _this = this,
+            results,
+            list;
+
+        results = $.map(this.optionData, function(item) {
+            if(_this._search(item, term)) {
+                return item;
+            }
+        });
+
+        list = this.renderList(results);
+
+        this.$drop.find('.' + this.utils.getClassname('list')).replaceWith(list);
+    };
+
+    Select.prototype._search = function(item, term) {
+        var _text  = item.text.replace('İ', 'i').toLowerCase(),
+            _value = item.value.replace('İ', 'i').toLowerCase(),
+            _term  = term.replace('İ', 'i').toLowerCase();
+
+        return (_text.indexOf(_term) > -1 || _value.toLowerCase().indexOf(_term) > -1);
+    };
+
     Select.prototype.showDrop = function() {
         this.$drop.appendTo('body');
+        this.bindDropUI();
     };
 
     Select.prototype.hideDrop = function() {
         this.$drop.remove();
+        this.$search.val('');
+        this.setOriginalList();
     };
 
     Select.prototype.renderSelection = function() {
@@ -394,10 +437,12 @@
 
     Select.prototype.renderDrop = function() {
         var data = {
-            dropID:    this.id,
-            dropClass: this.utils.getClassname('drop'),
-            search:    this.renderSearchField(),
-            list:      this.renderList()
+            dropID:        this.id,
+            dropClass:     this.utils.getClassname('drop'),
+            multiple:      this.multiple,
+            multipleClass: this.utils.getClassname('drop') + '-multiple',
+            search:        this.renderSearchField(),
+            list:          this.renderList()
         };
 
         return this.utils.render(templates.drop, data);
@@ -409,8 +454,11 @@
         this.$search = this.$drop.find('.' + this.utils.getClassname('search') + ' input');
         this.setDropPosition();
 
-        if(this.optionData.length >= this.options.searchItemLimit) {
-            this.$search.addClass(this.utils.getClassname('hide'));
+        if(!this.options.search || this.optionData.length >= this.options.searchItemLimit) {
+            this.$search.parent().addClass(this.utils.getClassname('hide'));
+        }
+        else {
+            this.$search.parent().removeClass(this.utils.getClassname('hide'));
         }
     };
 
@@ -424,30 +472,6 @@
 
     Select.prototype.setOriginalList = function() {
         this.$drop.find('.' + this.utils.getClassname('list')).replaceWith(this.$list);
-    };
-
-    Select.prototype.search = function(term) {
-        var _this = this,
-            results,
-            list;
-
-        results = $.map(this.optionData, function(item) {
-            if(_this._search(item, term)) {
-                return item;
-            }
-        });
-
-        list = this.renderList(results);
-
-        this.$drop.find('.' + this.utils.getClassname('list')).replaceWith(list);
-    };
-
-    Select.prototype._search = function(item, term) {
-        var _text  = item.text.replace('İ', 'i').toLowerCase(),
-            _value = item.value.replace('İ', 'i').toLowerCase(),
-            _term  = term.replace('İ', 'i').toLowerCase();
-
-        return (_text.indexOf(_term) > -1 || _value.toLowerCase().indexOf(_term) > -1);
     };
 
     Select.prototype.onFocus = function() {
@@ -467,8 +491,8 @@
         this.clicked = 0;
     };
 
-    Select.prototype.onChange = function() {
-
+    Select.prototype.onChange = function(e) {
+        this.utils.callback(this.options.onChange);
     };
 
     Select.prototype.onReady = function() {
@@ -515,6 +539,37 @@
         };
 
         this.$el.data(ns.rocket, uxrocket);
+    };
+
+    Select.prototype.getPosition = function() {
+        this.position = {
+            top:  this.el.offsetTop,
+            left: this.el.offsetLeft
+        };
+    };
+
+    Select.prototype.getWidth = function() {
+        var classes = this.$el.attr('class'),
+            styles  = this.$el.attr('style'),
+            $shadow = $(document.createElement('div')).css('display', 'none'),
+            attr    = '',
+            w;
+
+        if(classes) {
+            attr += ' class="' + classes.replace(this.utils.getClassname('ready'), '').replace(this.utils.getClassname('hidden'), '') + '"';
+        }
+
+        if(styles) {
+            attr += ' style="' + styles + '"';
+        }
+
+        $shadow.html('<div ' + attr + '></div>').appendTo('body');
+
+        w = $shadow.find('div').css('width');
+
+        $shadow.remove();
+
+        return w;
     };
 
     Select.prototype.emitEvent = function(which) {
@@ -567,7 +622,7 @@
         $el.each(function() {
             var ins = $(this).data(ns.data);
 
-            if(ins._instance !== instance){
+            if(ins._instance !== instance) {
                 ins.close();
             }
 

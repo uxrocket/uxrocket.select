@@ -73,6 +73,15 @@
   border-color: transparent transparent #555;
 }
 
+.uxr-select-selected-tag {
+  display: inline-block;
+  padding: 3px;
+  border-radius: 4px;
+  background-color: #ddd;
+  font-size: .8em;
+  line-height: 1;
+}
+
 .uxr-select-drop {
   position: absolute;
   margin-top: 30px;
@@ -105,4 +114,13 @@
   display: block;
   padding: 4px;
   cursor: pointer;
+}
+
+.uxr-select-option:hover,
+.uxr-select-selected .uxr-select-option {
+  background-color: #fafafa;
+}
+
+.uxr-select-hide {
+  display: none;
 }

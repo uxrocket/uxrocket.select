@@ -85,6 +85,7 @@ $radius: 4px;
 		border-radius: $radius;
 		background-color: #ddd;
 		font-size: .8em;
+        line-height: 1;
     }
 
     &-drop {
@@ -124,5 +125,9 @@ $radius: 4px;
         .#{$prefix}-selected & {
             background-color: #fafafa;
         }
+    }
+
+    &-hide {
+        display: none;
     }
 }
