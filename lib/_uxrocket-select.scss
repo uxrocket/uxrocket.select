@@ -139,7 +139,8 @@ $radius: 4px;
         cursor: pointer;
 
         &:hover,
-        .#{$prefix}-selected & {
+        .#{$prefix}-selected &,
+        .#{$prefix}-highlight & {
             background-color: #fafafa;
         }
     }
@@ -150,7 +151,13 @@ $radius: 4px;
 }
 
 @keyframes uxr-select-blink {
-    0% { opacity: 0; }
-    50% { opacity: 0; }
-    100% { opacity: 1; }
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
