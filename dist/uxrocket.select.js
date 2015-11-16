@@ -19,26 +19,31 @@
 }(function($) {
     'use strict';
 
+    if(typeof window.UXRocket === 'undefined'){
+        console.warn('UXRocket Select is required UXRocket Factory to run properly. You can clone/download factory at https://github.com/uxrocket/uxrocket.factory');
+    }
+
     var ux, // local shorthand
         i               = 1,
         rocketName = 'uxrSelect',
         focusedInstance = null,
 
         templates       = {
-            selection: '<a href="#" id="{{selectionClass}}-{{id}}" class="{{selectionClass}} {{#if multiple}}{{multipleClass}}{{/if}}" style="{{width}}">' +
+            selection: '<a href="#" id="{{selectionClass}}-{{id}}" class="{{selectionClass}} {{#if multiple}}{{multipleClass}}{{/if}} {{themeCurrent}}" style="{{width}}">' +
                        '    <span class="{{selectionTextClass}}">{{selectionText}}</span>' +
-                       '    <span class="{{arrowClass}}"></span>' +
+                       '    <span class="{{arrowClass}} {{themeArrow}}"></span>' +
                        '</a>',
-            multi:     '<span class="{{selectionTagClass}} {{selectionTagClass}}-{{index}}" data-index="{{index}}">' +
+            multi:     '<span class="{{selectionTagClass}} {{selectionTagClass}}-{{index}}" data-index="{{index}}" data-value="{{value}}">' +
                        '    {{selectionText}}' +
+                       '    <span class="{{removeSelectionClass}}">X</span>' +
                        '</span>',
             search:    '<span class="{{searchClass}}">' +
                        '   <input type="text" name="{{searchInput}}" />' +
                        '</span>',
-            list:      '<ul class="{{listClass}}">' +
+            list:      '<ul class="{{listClass}} {{themeList}}">' +
                        '   {{#each options}}' +
-                       '   <li{{#if options.selected}} class="{{selectedClass}}"{{/if}}>' +
-                       '        <a class="{{optionClass}}" data-index="{{options.index}}" data-value="{{options.value}}">{{options.text}}</a>' +
+                       '   <li id="{{optionClass}}-{{options.index}}"{{#if options.selected}} class="{{selectedClass}} {{themeSelected}}"{{/if}}>' +
+                       '        <a class="{{optionClass}} {{themeOption}}" data-index="{{options.index}}" data-value="{{options.value}}">{{options.text}}</a>' +
                        '   </li>' +
                        '   {{/each}}' +
                        '</ul>',
@@ -56,7 +61,8 @@
             option:          '',
             selected:        '',
             search:          true,
-            searchItemLimit: 10, // search box will visible if more than 10 item present in select
+            searchItemLimit: 10, // search box will visible if more than 10 item present in select,
+            searchType:      'starts', // starts or contain. search if term starts with the key or contain the key
             minLetters:      2,
 
             // callbacks
@@ -75,10 +81,27 @@
             input:   'input.' + rocketName,
             // custom events
             ready:   'uxrready.' + rocketName,
-            toggle:  'uxrtoggle.' + rocketName,
             select:  'uxrselect.' + rocketName,
             update:  'uxrupdate.' + rocketName,
             destroy: 'uxrdestroy.' + rocketName
+        },
+        keys            = {
+            codes: {
+                9:  'tab',
+                13: 'return',
+                27: 'esc',
+                37: 'left',
+                38: 'up',
+                39: 'right',
+                40: 'down'
+            },
+            tab:    9,
+            return: 13,
+            esc:    27,
+            left:   37,
+            up:     38,
+            right:  39,
+            down:   40
         },
         ns              = {
             prefix:  'uxr-',
@@ -86,22 +109,24 @@
             data:    rocketName,
             name:    'select',
             classes: {
-                wrap:          'wrap',
-                ready:         'ready',
-                selection:     'selection',
-                selectionText: 'selection-text',
-                selectionTag:  'selected-tag',
-                arrow:         'arrow',
-                multiple:      'multiple',
-                opened:        'opened',
-                drop:          'drop',
-                list:          'list',
-                option:        'option',
-                optionName:    'option-name',
-                selected:      'selected',
-                search:        'search',
-                hidden:        'aria-hidden',
-                hide:          'hide'
+                wrap:            'wrap',
+                ready:           'ready',
+                selection:       'selection',
+                selectionText:   'selection-text',
+                selectionTag:    'selected-tag',
+                removeSelection: 'remove-selected-tag',
+                arrow:           'arrow',
+                multiple:        'multiple',
+                opened:          'opened',
+                drop:            'drop',
+                list:            'list',
+                option:          'option',
+                optionName:      'option-name',
+                highlight:       'highlight',
+                selected:        'selected',
+                search:          'search',
+                hidden:          'aria-hidden',
+                hide:            'hide'
             }
         };
 
@@ -200,6 +225,8 @@
             this.wrapped = true;
             this.$el.wrap('<label class="' + this.utils.getClassname('wrap') + '"></label>');
         }
+
+        this.$el.parent().addClass(this.options.wrapper);
     };
 
     Select.prototype.unwrap = function() {
@@ -207,7 +234,7 @@
             this.$el.unwrap();
         }
         else {
-            this.$el.parent().removeClass(this.utils.getClassname('wrap'));
+            this.$el.parent().removeClass(this.utils.getClassname('wrap') + ' ' + this.options.wrapper);
         }
     };
 
@@ -263,12 +290,13 @@
             });
 
         _this.$selection
-            .on(events.focus + ' ' + events.keyup, function(e) {
+            .on(events.keyup, function(e) {
                 e.preventDefault();
 
-                if(e.keyCode === 9) {
-                    _this.tabbed = true;
-                }
+                _this.onKeyup(e);
+            })
+            .on(events.focus, function(e) {
+                e.preventDefault();
 
                 _this.onFocus();
             })
@@ -281,15 +309,10 @@
                 e.stopPropagation();
                 e.preventDefault();
 
-                _this.clicked++;
-
-                if(!_this.opened) {
-                    _this.onFocus();
-                }
-
-                else if((_this.opened && _this.clicked % 2 === 0) || (_this.opened && _this.tabbed)) {
-                    _this.onBlur();
-                }
+                _this.onClick(e);
+            })
+            .on(events.click, '.' + _this.utils.getClassname('removeSelection'), function(e) {
+                _this.removeTag($(e.target));
             });
 
         $(document).on(events.click, function(e) {
@@ -307,10 +330,18 @@
                 e.preventDefault();
 
                 _this.emitEvent('select');
-                _this.select(e);
+                _this.select($(e.currentTarget));
             })
             .on(events.keyup + ' ' + events.input, '.' + _this.utils.getClassname('search') + ' input', function(e) {
                 e.preventDefault();
+
+                if(e.keyCode === keys.up || e.keyCode === keys.down) {
+                    _this.navigateWithArrow(keys.codes[e.keyCode]);
+                }
+
+                if(e.keyCode === keys.return) {
+                    _this.navigateWithEnter();
+                }
 
                 if(this.value.length >= _this.options.minLetters) {
                     _this.search(this.value);
@@ -326,46 +357,66 @@
         this.$el.off('.' + rocketName);
     };
 
-    Select.prototype.select = function(e) {
-        var $selected     = $(e.currentTarget),
-            selected      = this.utils.getClassname('selected'),
-            selectionText = this.utils.getClassname('selectionText'),
-            selectionTag  = this.utils.getClassname('selectionTag'),
-            index         = $selected.data('index'),
-            text          = $selected.text();
+    Select.prototype.select = function($selected) {
+        var selected        = this.utils.getClassname('selected'),
+            highlight       = this.utils.getClassname('highlight'),
+            selectionText   = this.utils.getClassname('selectionText'),
+            selectionTag    = this.utils.getClassname('selectionTag'),
+            removeSelection = this.utils.getClassname('removeSelection'),
+            $option         = $selected.parent(),
+            optionID        = $option.attr('id'),
+            index           = $selected.data('index'),
+            value           = $selected.data('value'),
+            text            = $selected.text();
 
         if(!this.multiple) {
-            $selected.parent().addClass(selected).siblings('.' + selected).removeClass(selected);
+            this.$list.find('.' + highlight).removeClass(highlight);
+            this.$list.find('.' + selected).removeClass(selected);
             this.$selection.find('.' + selectionText).text(text);
             this.$el.find('option:eq(' + index + ')').prop('selected', true);
             this.onBlur();
+            this.$list.find('#' + optionID).addClass(selected);
         }
 
         else {
             // double click deselects
-            if($selected.parent().hasClass(selected)) {
+            if($option.hasClass(selected)) {
                 this.$el.find('option:eq(' + index + ')').prop('selected', false);
-                $selected.parent().removeClass(selected);
+                $option.removeClass(selected);
                 this.$selection.find('.' + selectionTag + '-' + index).remove();
             }
 
             else {
                 var tag = this.utils.render(templates.multi, {
-                    selectionText:     text,
-                    selectionTagClass: selectionTag,
-                    index:             index
+                    selectionText:        text,
+                    selectionTagClass:    selectionTag,
+                    removeSelectionClass: removeSelection,
+                    index:                index,
+                    value:                value
                 });
-                $selected.parent().addClass(selected);
+                $option.addClass(selected);
                 this.$selection.find('.' + selectionText).append(tag);
                 this.$el.find('option:eq(' + index + ')').prop('selected', true);
             }
+
+            // multiple selection could change the selection height
+            this.setDropPosition();
         }
 
         this.emitEvent('change');
     };
 
+    Select.prototype.removeTag = function($tag) {
+        var index = $tag.parent().data('index');
+
+        this.$el.find('option:eq(' + index + ')').prop('selected', false);
+        this.$list.find('[data-index="' + index + '"]').parent().removeClass(this.utils.getClassname('selected'));
+        $tag.parent().remove();
+    };
+
     Select.prototype.search = function(term) {
         var _this = this,
+            $list = this.$drop.find('.' + this.utils.getClassname('list')),
             results,
             list;
 
@@ -376,8 +427,7 @@
         });
 
         list = this.renderList(results);
-
-        this.$drop.find('.' + this.utils.getClassname('list')).replaceWith(list);
+        $list.replaceWith(list);
     };
 
     Select.prototype._search = function(item, term) {
@@ -385,11 +435,21 @@
             _value = item.value.replace('İ', 'i').toLowerCase(),
             _term  = term.replace('İ', 'i').toLowerCase();
 
-        return (_text.indexOf(_term) > -1 || _value.toLowerCase().indexOf(_term) > -1);
+        switch(this.options.searchType) {
+            default:
+            case 'starts':
+                return (_text.indexOf(_term) === 0 || _value.toLowerCase().indexOf(_term) === 0);
+                break;
+            case 'contains':
+                return (_text.indexOf(_term) > -1 || _value.toLowerCase().indexOf(_term) > -1);
+                break;
+        }
     };
 
     Select.prototype.showDrop = function() {
         this.$drop.appendTo('body');
+        this.setListPosition();
+        this.$list.find('.' + this.utils.getClassname('highlight')).removeClass(this.utils.getClassname('highlight'));
         this.bindDropUI();
     };
 
@@ -397,6 +457,52 @@
         this.$drop.remove();
         this.$search.val('');
         this.setOriginalList();
+    };
+
+    Select.prototype.navigateWithEnter = function() {
+        if(!this.multiple) {
+            var highlight   = this.utils.getClassname('highlight'),
+                highlighted = this.$list.find('.' + highlight);
+
+            if(highlighted.length > 0) {
+                highlighted.removeClass(highlight);
+
+                this.emitEvent('select');
+                this.select(highlighted.find('a'));
+            }
+        }
+    };
+
+    Select.prototype.navigateWithArrow = function(updown) {
+        var $highlighted,
+            direction   = updown === 'up' ? 'prev' : 'next',
+            highlight = this.utils.getClassname('highlight'),
+            highlighted = (this.$list.find('.' + highlight).length > 0) ? this.$list.find('.' + highlight) : this.$list.find('.' + this.utils.getClassname('selected')),
+            listPos     = this.$list.offset().top,
+            scrollTop   = this.$list.scrollTop(),
+            height      = this.$list.height();
+
+        if(!highlighted.length) {
+            $highlighted = this.$list.find('.' + this.utils.getClassname('option')).parent().first().addClass(highlight);
+        }
+
+        else {
+            $highlighted = highlighted.removeClass(highlight)[direction]().addClass(highlight);
+
+            if($highlighted.length) {
+                if(updown === 'down') {
+                    if($highlighted.offset().top > (listPos + height - $highlighted.height())) {
+                        this.$list.scrollTop(scrollTop + $highlighted.height());
+                    }
+                }
+
+                else {
+                    if($highlighted.offset().top < listPos) {
+                        this.$list.scrollTop(scrollTop - $highlighted.height());
+                    }
+                }
+            }
+        }
     };
 
     Select.prototype.renderSelection = function() {
@@ -408,7 +514,9 @@
             width:              'width:' + this.width,
             selectionTextClass: this.utils.getClassname('selectionText'),
             selectionText:      this.getSelected().text,
-            arrowClass:         this.utils.getClassname('arrow')
+            arrowClass:         this.utils.getClassname('arrow'),
+            themeCurrent:       this.options.current,
+            themeArrow:         this.options.arrow
         };
 
         return this.utils.render(templates.selection, data);
@@ -429,7 +537,10 @@
             listClass:     this.utils.getClassname('list'),
             selectedClass: this.utils.getClassname('selected'),
             optionClass:   this.utils.getClassname('option'),
-            options:       list || this.optionData
+            options:       list || this.optionData,
+            themeList:     this.options.list,
+            themeSelected: this.options.selected,
+            themeOption:   this.options.option
         };
 
         return this.utils.render(templates.list, data);
@@ -453,8 +564,9 @@
         this.$list   = this.$drop.find('.' + this.utils.getClassname('list'));
         this.$search = this.$drop.find('.' + this.utils.getClassname('search') + ' input');
         this.setDropPosition();
+        this.setListPosition();
 
-        if(!this.options.search || this.optionData.length >= this.options.searchItemLimit) {
+        if(!this.options.search || this.options.searchItemLimit >= this.optionData.length) {
             this.$search.parent().addClass(this.utils.getClassname('hide'));
         }
         else {
@@ -464,14 +576,54 @@
 
     Select.prototype.setDropPosition = function() {
         this.$drop.css({
-            top:      this.position.top,
+            top:      this.position.top + this.$selection.height(),
             left:     this.position.left,
             minWidth: this.$selection.outerWidth()
         });
     };
 
+    Select.prototype.setListPosition = function() {
+        var selected = this.$list.find('.' + this.utils.getClassname('selected') + ':eq(0)');
+
+        if(selected.length === 1) {
+            this.$list.scrollTop(selected.offset().top - this.$list.offset().top - (this.$list.height() / 2));
+        }
+    };
+
     Select.prototype.setOriginalList = function() {
         this.$drop.find('.' + this.utils.getClassname('list')).replaceWith(this.$list);
+    };
+
+    Select.prototype.onKeyup = function(e) {
+        switch(e.keyCode) {
+            case keys.tab:
+                this.tabbed = true;
+                this.onFocus();
+                break;
+            case keys.return:
+                this.navigateWithEnter();
+                break;
+            case keys.up:
+            case keys.down:
+                this.navigateWithArrow(keys.codes[e.keyCode]);
+                break;
+        }
+    };
+
+    Select.prototype.onClick = function(e) {
+        if($(e.target).is('.' + this.utils.getClassname('removeSelection'))) {
+            return;
+        }
+
+        this.clicked++;
+
+        if(!this.opened) {
+            this.onFocus();
+        }
+
+        else if((this.opened && this.clicked % 2 === 0) || (this.opened && this.tabbed)) {
+            this.onBlur();
+        }
     };
 
     Select.prototype.onFocus = function() {
@@ -479,6 +631,7 @@
         focusedInstance = this._instance;
         this.showDrop();
         this.$selection.addClass(this.utils.getClassname('opened'));
+        this.$search.focus();
         this.opened = true;
     };
 
@@ -576,7 +729,6 @@
         this.$el.trigger(events[which]);
     };
 
-
     ux = $.fn.select = $.fn.uxrselect = $.fn.uxitdselect = $.uxrselect = function(options) {
         var selector = this.selector;
 
@@ -603,7 +755,7 @@
             opts = options;
         }
 
-        $el.filter('input').each(function() {
+        $el.filter('select').each(function() {
             var _this     = $(this),
                 _instance = _this.data(ns.data),
                 _opts     = _instance.options;
