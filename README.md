@@ -58,6 +58,7 @@ search               | true             | Indicates whether list is searchable o
 searchItemLimit      | 10               | Defines the search box is visible or not. Usefull for small list. Search list will be visible even if its set to true when options are more than `searchItemLimit`
 searchType           | starts (starts or contains) | Defines the search lookup. If set to `starts` then it looks up if option's text or value starts with search term, otherwise, looks up if it contains the term.
 minLetters           | 2                | Minimum letter required for search to start.
+placeholder          | null             | Adds a placeholder text on multiple selects
 onReady              | false            | Calls the function when plugin is ready.
 onSelect             | false            | Calls the function when option is selected.
 onChange             | false            | Calls the function when list is closed.
@@ -78,6 +79,7 @@ search               | Indicates whether list is searchable or not.
 search-item-limit    | Defines the search box is visible or not. Usefull for small list. Search list will be visible even if its set to true when options are more than `searchItemLimit`
 search-type          | Defines the search lookup. If set to `starts` then it looks up if option's text or value starts with search term, otherwise, looks up if it contains the term.
 min-letters          | Minimum letter required for search to start.
+placeholder          | Adds a placeholder text on multiple selects
 on-ready             | Calls the function when plugin is ready.
 on-select            | Calls the function when option is selected.
 on-change            | Calls the function when list is closed.
