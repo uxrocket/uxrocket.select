@@ -1,117 +1,164 @@
-/* @author Bilal Cinarli */
-$select-version: "2.7.1";
-$select-height: 32px;
+/**
+ * @author Bilal Cinarli
+ */
 
-.uxitd-select-wrap {
-    position: relative;
-    display: inline-block;
-    vertical-align: middle;
-    height: $select-height;
+$select-version: "3.0.0";
+$prefix: 'uxr-select';
+$border: #ccc;
+$radius: 4px;
 
-    &[class*="-columns"] {
-        [class*="-columns"]{
-            width: 100%;
+/** -------------------------------------------
+ 	Select Styles
+    ------------------------------------------- **/
+[class^="#{$prefix}-"] {
+    box-sizing: border-box;
+}
+
+.#{$prefix} {
+    &-wrap {
+        position: relative;
+
+        .#{$prefix}-aria-hidden {
+            position: absolute;
+            overflow: hidden;
+            width: 1px;
+            height: 1px;
+            margin: -1px;
+            padding: 0;
+            border: 0;
+            clip: rect(0, 0, 0, 0);
+            clip-path: inset(0 0 0 0);
         }
     }
-}
 
-.uxitd-select-readonly {
-	cursor: default;
-	background-color: #f5f5f5;
+    &-ready {
+        visibility: hidden;
+    }
 
-	.uxitd-select-current {
-		background-color: #f5f5f5;
-	}
-
-	.uxitd-select-arrow {
-		background-color: #f5f5f5;
-		color: #a6a6a6;
-	}
-}
-
-    .uxitd-select-ready {
+    &-selection {
         position: relative;
-        outline: 0;
-        height: auto;
-        padding: 0;
-    }
-
-    .uxitd-select-current {
-        position: absolute;
-        top: 0;
-        left: 0;
-        overflow: hidden;
         display: inline-block;
-        width: 100%;
-        height: $select-height;
-        cursor: pointer;
-        background: #fff;
-        padding: 0 15px 0 8px;
-        border: 1px solid #ccc;
-        line-height: $select-height - 1 !important;
-        color: #090909;
-        white-space: nowrap;
-    }
+        min-height: 32px;
+        border-radius: $radius;
+        border: 1px solid $border;
+        color: #222;
+        text-decoration: none;
+        vertical-align: middle;
 
-        .uxitd-select-current-text {
-            display: inline-block;
+        &.#{$prefix}-opened {
+            border-radius: $radius $radius 0 0;
+        }
+
+        &-text {
+            display: block;
             overflow: hidden;
             width: 100%;
-            padding-right: 22px;
-        }
-
-        .uxitd-select-arrow {
-            @extend .icon-caret-down !optional;
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 12px;
-            height: 100%;
-            background: #fff;
-
-            &:before {
-                @extend %font-icon !optional;
-                position: absolute;
-                top: 50%;
-                right: 5px;
-                display: block;
-                width: 10px;
-                height: 14px;
-                margin-top: -7px;
-            }
-        }
-
-    .uxitd-select-list {
-        // top, left and width calculated with js
-        position: absolute;
-        z-index: 999;
-        display: none;
-        overflow-y: scroll;
-        max-height: 200px;
-        margin: $select-height 0 0;
-        padding: 0;
-        list-style: none;
-
-        border: 1px solid #ccc;
-        background: #fff;
-        border-radius: 2px;
-    }
-
-        .uxitd-select-list-item {
-            margin: 0 !important;
-        }
-
-        .uxitd-select-option {
-            display: block;
-            cursor: pointer;
-            padding: 8px 10px;
-            color: #333;
-            line-height: 20px;
+            padding: 5px 30px 5px 5px;
+            text-overflow: ellipsis;
             white-space: nowrap;
 
-            &:hover,
-            &.uxitd-select-option-selected {
-                background: #f5f5f5;
-                text-decoration: none;
+            .#{$prefix}-multiple & {
+                padding: 5px;
+                overflow: auto;
+                white-space: normal;
+            }
+
+            .#{$prefix}-multiple.#{$prefix}-opened & {
+                &:after {
+                    content: "|";
+                    animation: uxr-select-blink linear infinite 1s;
+                }
             }
         }
+    }
+
+    &-arrow {
+        position: absolute;
+        top: 50%;
+        right: 5px;
+        width: 0;
+        height: 0;
+        margin-top: -2px;
+        border: 5px solid;
+        border-color: #555 transparent transparent;
+
+        .#{$prefix}-multiple & {
+            display: none;
+        }
+
+        .#{$prefix}-opened & {
+            margin-top: -7px;
+            border-color: transparent transparent #555;
+        }
+    }
+
+    &-selected-tag {
+        display: inline-block;
+        margin-bottom: 3px;
+        padding: 3px;
+        border-radius: $radius;
+        background-color: #ddd;
+        font-size: .8em;
+        line-height: 1;
+    }
+
+    &-remove-selected-tag {
+        cursor: pointer;
+    }
+
+    &-drop {
+        position: absolute;
+        border: 1px solid $border;
+        border-radius: 0 0 $radius;
+        background-color: #fff;
+    }
+
+    &-list {
+        max-height: 250px;
+        overflow-y: scroll;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    &-search {
+        display: block;
+        padding: 4px;
+
+        input {
+            width: calc(100% - 8px);
+            padding: 4px;
+            border: 1px solid $border;
+            border-radius: $radius;
+        }
+    }
+
+    &-option {
+        display: block;
+        max-width: 400px;
+        padding: 4px;
+        cursor: pointer;
+
+        &:hover,
+        .#{$prefix}-selected &,
+        .#{$prefix}-highlight & {
+            background-color: #fafafa;
+        }
+    }
+
+    &-hide {
+        display: none;
+    }
+}
+
+@keyframes uxr-select-blink {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}

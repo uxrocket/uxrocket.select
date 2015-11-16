@@ -1,3 +1,10 @@
+## Version 3.0.0-rc1
+- DEĞİŞİKLİK: Plugin mimarisi değiştirildi
+- YENİ: Liste içinde arama eklendi
+- YENİ: Çoklu seçim desteği eklendi
+- YENİ: Liste içinde aşağı/yukarı okları ile kontrol eklendi
+- YENİ: Liste içinde ok ile ilerlendiğinde enter ile seçme eklendi
+
 ## Versiyon 2.7.0
 - YENİ: $.uxselect.remove() metodu eklendi.
 - YENİ: Update metodundan sonra çalışan onUpdate callback eklendi.
