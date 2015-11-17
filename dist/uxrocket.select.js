@@ -78,6 +78,7 @@
             change:  'change.' + rocketName,
             click:   'click.' + rocketName,
             keyup:   'keyup.' + rocketName,
+            keydown: 'keydown.' + rocketName,
             input:   'input.' + rocketName,
             // custom events
             ready:   'uxrready.' + rocketName,
@@ -290,6 +291,9 @@
             });
 
         _this.$selection
+            .on(events.keydown, function(e) {
+                e.preventDefault();
+            })
             .on(events.keyup, function(e) {
                 e.preventDefault();
 
@@ -385,7 +389,7 @@
                 $option.removeClass(selected);
                 this.$selection.find('.' + selectionTag + '-' + index).remove();
 
-                if(this.$el.val() === null){
+                if(this.$el.val() === null) {
                     this.$selection.find('.' + selectionText).text(this.multiplePlaceholder);
                 }
             }
@@ -400,7 +404,7 @@
                 });
                 $option.addClass(selected);
 
-                if(this.$el.val() === null){
+                if(this.$el.val() === null) {
                     this.$selection.find('.' + selectionText).html(tag);
                 }
                 else {
@@ -424,7 +428,7 @@
         $('#' + this.utils.getClassname('option') + '-' + index).removeClass(this.utils.getClassname('selected'));
         $tag.parent().remove();
 
-        if(this.$el.val() === null){
+        if(this.$el.val() === null) {
             this.$selection.find('.' + this.utils.getClassname('selectionText')).text(this.multiplePlaceholder);
         }
 
@@ -500,22 +504,39 @@
             height      = this.$list.height();
 
         if(!highlighted.length) {
-            $highlighted = this.$list.find('.' + this.utils.getClassname('option')).parent().first().addClass(highlight);
+            var firstLast = updown === 'up' ? 'last' : 'first';
+
+            $highlighted = this.$list.find('li')[firstLast]().addClass(highlight);
         }
 
         else {
             $highlighted = highlighted.removeClass(highlight)[direction]().addClass(highlight);
+
+            if(!$highlighted.length){
+                if(direction === 'prev'){ // move to last
+                    $highlighted = this.$list.find('li').last().addClass(highlight);
+                }
+                else { // move to first
+                    $highlighted = this.$list.find('li').first().addClass(highlight);
+                }
+            }
 
             if($highlighted.length) {
                 if(updown === 'down') {
                     if($highlighted.offset().top > (listPos + height - $highlighted.height())) {
                         this.$list.scrollTop(scrollTop + $highlighted.height());
                     }
+                    else if(($highlighted.offset().top < listPos)) {
+                        this.$list.scrollTop(0); // move to top
+                    }
                 }
 
                 else {
-                    if($highlighted.offset().top < listPos) {
+                    if(($highlighted.offset().top < listPos)) {
                         this.$list.scrollTop(scrollTop - $highlighted.height());
+                    }
+                    else if($highlighted.offset().top > (listPos + height)){
+                        this.$list.scrollTop(scrollTop + $highlighted.offset().top); // move to last
                     }
                 }
             }

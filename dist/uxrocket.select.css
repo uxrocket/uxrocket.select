@@ -136,7 +136,7 @@
 .uxr-select-option:hover,
 .uxr-select-selected .uxr-select-option,
 .uxr-select-highlight .uxr-select-option {
-  background-color: #fafafa;
+  background-color: #f0f0f0;
 }
 
 .uxr-select-hide {
