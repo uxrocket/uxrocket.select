@@ -165,8 +165,6 @@
         // add options to UX Rocket registry
         this.registry();
 
-        this.getPosition();
-
         this.getOptionData();
 
         this.decorateUI();
@@ -469,6 +467,7 @@
 
     Select.prototype.showDrop = function() {
         this.$drop.appendTo('body');
+        this.setDropPosition();
         this.setListPosition();
         this.$list.find('.' + this.utils.getClassname('highlight')).removeClass(this.utils.getClassname('highlight'));
         this.bindDropUI();
@@ -620,8 +619,8 @@
 
     Select.prototype.setDropPosition = function() {
         this.$drop.css({
-            top:      this.position.top + this.$selection.height(),
-            left:     this.position.left,
+            top:      this.getPosition().top + this.$selection.height(),
+            left:     this.getPosition().left,
             minWidth: this.$selection.outerWidth()
         });
     };
@@ -739,9 +738,9 @@
     };
 
     Select.prototype.getPosition = function() {
-        this.position = {
-            top:  this.$el.offset().top,
-            left: this.$el.offset().left
+        return {
+            top:  this.$selection.offset().top,
+            left: this.$selection.offset().left
         };
     };
 
