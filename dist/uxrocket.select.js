@@ -719,8 +719,8 @@
 
     Select.prototype.getPosition = function() {
         this.position = {
-            top:  this.el.offsetTop,
-            left: this.el.offsetLeft
+            top:  this.$el.offset().top,
+            left: this.$el.offset().left
         };
     };
 
