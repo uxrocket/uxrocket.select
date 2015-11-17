@@ -16,9 +16,6 @@ $radius: 4px;
 
 .#{$prefix} {
     &-wrap {
-        position: relative;
-        display: inline-block;
-
         .#{$prefix}-aria-hidden {
             position: absolute;
             overflow: hidden;
