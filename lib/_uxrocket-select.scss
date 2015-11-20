@@ -72,6 +72,11 @@ $radius: 4px;
         }
     }
 
+    &-disabled {
+        color: #999;
+        cursor: default;
+    }
+
     &-arrow {
         position: absolute;
         top: 50%;
@@ -89,6 +94,14 @@ $radius: 4px;
         .#{$prefix}-opened & {
             margin-top: -7px;
             border-color: transparent transparent #555;
+        }
+
+        .#{$prefix}-disabled & {
+            border-color: #999 transparent transparent;
+        }
+
+        .#{$prefix}-disabled.#{$prefix}-opened & {
+            border-color: transparent transparent #999;
         }
     }
 
