@@ -73,8 +73,11 @@ $radius: 4px;
     }
 
     &-disabled {
-        color: #999;
-        cursor: default;
+        &,
+        &:hover {
+            color: #999;
+            cursor: default;
+        }
     }
 
     &-arrow {
