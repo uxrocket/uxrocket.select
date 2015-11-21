@@ -29,7 +29,7 @@
         focusedInstance = null,
 
         templates       = {
-            selection: '<a href="#" id="{{selectionClass}}-{{id}}" class="{{selectionClass}} {{#if multiple}}{{multipleClass}}{{/if}} {{themeCurrent}}" style="{{width}}">' +
+            selection: '<a href="#" id="{{selectionClass}}-{{id}}" class="{{selectionClass}}{{#if multiple}} {{multipleClass}}{{/if}}{{#if disabled}} {{disabledClass}}{{/if}} {{themeCurrent}}" style="{{width}}">' +
                        '    <span class="{{selectionTextClass}}">{{selectionText}}</span>' +
                        '    <span class="{{arrowClass}} {{themeArrow}}"></span>' +
                        '</a>',
@@ -47,7 +47,7 @@
                        '   </li>' +
                        '   {{/each}}' +
                        '</ul>',
-            drop:      '<div id="{{dropID}}" class="{{dropClass}}{{#if multiple}} {{multipleClass}}{{/if}}">' +
+            drop:      '<div id="{{dropID}}" data-select="{{id}}" class="{{dropClass}}{{#if multiple}} {{multipleClass}}{{/if}}">' +
                        '    {{search}}' +
                        '    {{list}}' +
                        '</div>'
@@ -73,18 +73,20 @@
             onDestroy: false
         },
         events          = {
-            focus:   'focus.' + rocketName,
-            blur:    'blur.' + rocketName,
-            change:  'change.' + rocketName,
-            click:   'click.' + rocketName,
-            keyup:   'keyup.' + rocketName,
-            keydown: 'keydown.' + rocketName,
-            input:   'input.' + rocketName,
+            focus:    'focus.' + rocketName,
+            blur:     'blur.' + rocketName,
+            change:   'change.' + rocketName,
+            click:    'click.' + rocketName,
+            keyup:    'keyup.' + rocketName,
+            keydown:  'keydown.' + rocketName,
+            input:    'input.' + rocketName,
+            resize:   'resize.' + rocketName,
+            touchend: 'touchend.' + rocketName + ' pointerup.' + rocketName + ' MSPointerUp.' + rocketName,
             // custom events
-            ready:   'uxrready.' + rocketName,
-            select:  'uxrselect.' + rocketName,
-            update:  'uxrupdate.' + rocketName,
-            destroy: 'uxrdestroy.' + rocketName
+            ready:    'uxrready.' + rocketName,
+            select:   'uxrselect.' + rocketName,
+            update:   'uxrupdate.' + rocketName,
+            destroy:  'uxrdestroy.' + rocketName
         },
         keys            = {
             codes: {
@@ -112,6 +114,7 @@
             classes: {
                 wrap:            'wrap',
                 ready:           'ready',
+                disabled:        'disabled',
                 selection:       'selection',
                 selectionText:   'selection-text',
                 selectionTag:    'selected-tag',
@@ -120,6 +123,7 @@
                 multiple:        'multiple',
                 opened:          'opened',
                 drop:            'drop',
+                reverseDrop:     'reverse-drop',
                 list:            'list',
                 option:          'option',
                 optionName:      'option-name',
@@ -129,7 +133,8 @@
                 hidden:          'aria-hidden',
                 hide:            'hide'
             }
-        };
+        },
+        utils           = new window.uxrPluginUtils({ns: ns});
 
     // Constructor Method
     var Select = function(el, options, selector) {
@@ -138,12 +143,13 @@
         this._defaults = defaults;
         this.wrapped   = false;
 
-        this.utils = new window.uxrPluginUtils({ns: ns});
+        //utils = new window.uxrPluginUtils({ns: ns});
 
         this.el       = el;
         this.$el      = $(el);
         this.id       = 'uxr-select-options-' + i;
         this.multiple = this.el.hasAttribute('multiple');
+        this.disabled = this.el.hasAttribute('disabled');
         this.width    = this.getWidth();
         this.selector = selector;
         this.opened   = false;
@@ -173,7 +179,7 @@
 
         this.bindUI();
 
-        this.$el.addClass(this.utils.getClassname('ready'));
+        this.$el.addClass(utils.getClassname('ready'));
 
         this.emitEvent('ready');
     };
@@ -217,12 +223,12 @@
 
     Select.prototype.wrap = function() {
         if(this.$el.parent().is('label')) {
-            this.$el.parent().addClass(this.utils.getClassname('wrap'));
+            this.$el.parent().addClass(utils.getClassname('wrap'));
         }
 
         else {
             this.wrapped = true;
-            this.$el.wrap('<label class="' + this.utils.getClassname('wrap') + '"></label>');
+            this.$el.wrap('<label class="' + utils.getClassname('wrap') + '"></label>');
         }
 
         this.$el.parent().addClass(this.options.wrapper);
@@ -233,7 +239,7 @@
             this.$el.unwrap();
         }
         else {
-            this.$el.parent().removeClass(this.utils.getClassname('wrap') + ' ' + this.options.wrapper);
+            this.$el.parent().removeClass(utils.getClassname('wrap') + ' ' + this.options.wrapper);
         }
     };
 
@@ -245,13 +251,13 @@
     };
 
     Select.prototype.removeSelection = function() {
-        this.$el.next('.' + this.utils.getClassname('selection')).remove();
+        this.$el.next('.' + utils.getClassname('selection')).remove();
         delete this.$selection;
     };
 
     Select.prototype.addAttributes = function() {
         this.$el
-            .addClass(this.utils.getClassname('hidden'))
+            .addClass(utils.getClassname('hidden'))
             .attr('aria-hidden', true);
     };
 
@@ -259,8 +265,8 @@
         this.$el
             .removeAttr('aria-hidden')
             .removeClass(
-                this.utils.getClassname('hidden') + ' ' +
-                this.utils.getClassname('ready')
+                utils.getClassname('hidden') + ' ' +
+                utils.getClassname('ready')
             );
     };
 
@@ -300,6 +306,10 @@
             .on(events.focus, function(e) {
                 e.preventDefault();
 
+                if(_this.disabled) {
+                    return false;
+                }
+
                 _this.onFocus();
             })
             .on(events.blur, function() {
@@ -311,9 +321,17 @@
                 e.stopPropagation();
                 e.preventDefault();
 
+                if(_this.disabled) {
+                    return false;
+                }
+
                 _this.onClick(e);
             })
-            .on(events.click, '.' + _this.utils.getClassname('removeSelection'), function(e) {
+            .on(events.click, '.' + utils.getClassname('removeSelection'), function(e) {
+                if(_this.disabled) {
+                    return false;
+                }
+
                 _this.removeTag($(e.target));
             });
 
@@ -328,13 +346,13 @@
         var _this = this;
 
         _this.$drop
-            .on(events.click, '.' + _this.utils.getClassname('option'), function(e) {
+            .on(events.click, '.' + utils.getClassname('option'), function(e) {
                 e.preventDefault();
 
                 _this.emitEvent('select');
                 _this.select($(e.currentTarget));
             })
-            .on(events.keyup + ' ' + events.input, '.' + _this.utils.getClassname('search') + ' input', function(e) {
+            .on(events.keyup + ' ' + events.input, '.' + utils.getClassname('search') + ' input', function(e) {
                 e.preventDefault();
 
                 if(e.keyCode === keys.up || e.keyCode === keys.down) {
@@ -360,11 +378,11 @@
     };
 
     Select.prototype.select = function($selected) {
-        var selected        = this.utils.getClassname('selected'),
-            highlight       = this.utils.getClassname('highlight'),
-            selectionText   = this.utils.getClassname('selectionText'),
-            selectionTag    = this.utils.getClassname('selectionTag'),
-            removeSelection = this.utils.getClassname('removeSelection'),
+        var selected        = utils.getClassname('selected'),
+            highlight       = utils.getClassname('highlight'),
+            selectionText   = utils.getClassname('selectionText'),
+            selectionTag    = utils.getClassname('selectionTag'),
+            removeSelection = utils.getClassname('removeSelection'),
             $option         = $selected.parent(),
             optionID        = $option.attr('id'),
             index           = $selected.data('index'),
@@ -393,7 +411,7 @@
             }
 
             else {
-                var tag = this.utils.render(templates.multi, {
+                var tag = utils.render(templates.multi, {
                     selectionText:        text,
                     selectionTagClass:    selectionTag,
                     removeSelectionClass: removeSelection,
@@ -423,11 +441,11 @@
         var index = $tag.parent().data('index');
 
         this.$el.find('option:eq(' + index + ')').prop('selected', false);
-        $('#' + this.utils.getClassname('option') + '-' + index).removeClass(this.utils.getClassname('selected'));
+        $('#' + utils.getClassname('option') + '-' + index).removeClass(utils.getClassname('selected'));
         $tag.parent().remove();
 
         if(this.$el.val() === null) {
-            this.$selection.find('.' + this.utils.getClassname('selectionText')).text(this.multiplePlaceholder);
+            this.$selection.find('.' + utils.getClassname('selectionText')).text(this.multiplePlaceholder);
         }
 
         this.setDropPosition();
@@ -435,7 +453,7 @@
 
     Select.prototype.search = function(term) {
         var _this = this,
-            $list = this.$drop.find('.' + this.utils.getClassname('list')),
+            $list = this.$drop.find('.' + utils.getClassname('list')),
             results,
             list;
 
@@ -469,7 +487,7 @@
         this.$drop.appendTo('body');
         this.setDropPosition();
         this.setListPosition();
-        this.$list.find('.' + this.utils.getClassname('highlight')).removeClass(this.utils.getClassname('highlight'));
+        this.$list.find('.' + utils.getClassname('highlight')).removeClass(utils.getClassname('highlight'));
         this.bindDropUI();
     };
 
@@ -481,7 +499,7 @@
 
     Select.prototype.navigateWithEnter = function() {
         if(!this.multiple) {
-            var highlight   = this.utils.getClassname('highlight'),
+            var highlight   = utils.getClassname('highlight'),
                 highlighted = this.$list.find('.' + highlight);
 
             if(highlighted.length > 0) {
@@ -496,8 +514,8 @@
     Select.prototype.navigateWithArrow = function(updown) {
         var $highlighted,
             direction   = updown === 'up' ? 'prev' : 'next',
-            highlight = this.utils.getClassname('highlight'),
-            highlighted = (this.$list.find('.' + highlight).length > 0) ? this.$list.find('.' + highlight) : this.$list.find('.' + this.utils.getClassname('selected')),
+            highlight = utils.getClassname('highlight'),
+            highlighted = (this.$list.find('.' + highlight).length > 0) ? this.$list.find('.' + highlight) : this.$list.find('.' + utils.getClassname('selected')),
             listPos     = this.$list.offset().top,
             scrollTop   = this.$list.scrollTop(),
             height      = this.$list.height();
@@ -511,8 +529,8 @@
         else {
             $highlighted = highlighted.removeClass(highlight)[direction]().addClass(highlight);
 
-            if(!$highlighted.length){
-                if(direction === 'prev'){ // move to last
+            if(!$highlighted.length) {
+                if(direction === 'prev') { // move to last
                     $highlighted = this.$list.find('li').last().addClass(highlight);
                 }
                 else { // move to first
@@ -534,7 +552,7 @@
                     if(($highlighted.offset().top < listPos)) {
                         this.$list.scrollTop(scrollTop - $highlighted.height());
                     }
-                    else if($highlighted.offset().top > (listPos + height)){
+                    else if($highlighted.offset().top > (listPos + height)) {
                         this.$list.scrollTop(scrollTop + $highlighted.offset().top); // move to last
                     }
                 }
@@ -545,13 +563,15 @@
     Select.prototype.renderSelection = function() {
         var data = {
             id:                 this.el.id,
-            selectionClass:     this.utils.getClassname('selection'),
+            selectionClass:     utils.getClassname('selection'),
             multiple:           this.multiple,
-            multipleClass:      this.utils.getClassname('multiple'),
+            multipleClass:      utils.getClassname('multiple'),
+            disabled:           this.disabled,
+            disabledClass:      utils.getClassname('disabled'),
             width:              'width:' + this.width,
-            selectionTextClass: this.utils.getClassname('selectionText'),
+            selectionTextClass: utils.getClassname('selectionText'),
             selectionText:      this.getSelected().text,
-            arrowClass:         this.utils.getClassname('arrow'),
+            arrowClass:         utils.getClassname('arrow'),
             themeCurrent:       this.options.current,
             themeArrow:         this.options.arrow
         };
@@ -562,58 +582,59 @@
             data.selectionText = this.multiplePlaceholder;
         }
 
-        return this.utils.render(templates.selection, data);
+        return utils.render(templates.selection, data);
     };
 
     Select.prototype.renderSearchField = function() {
         var data = {
-            searchClass: this.utils.getClassname('search'),
-            searchInput: this.utils.getClassname('search') + '-' + this._instance,
+            searchClass: utils.getClassname('search'),
+            searchInput: utils.getClassname('search') + '-' + this._instance,
             list:        this.id
         };
 
-        return this.utils.render(templates.search, data);
+        return utils.render(templates.search, data);
     };
 
     Select.prototype.renderList = function(list) {
         var data = {
-            listClass:     this.utils.getClassname('list'),
-            selectedClass: this.utils.getClassname('selected'),
-            optionClass:   this.utils.getClassname('option'),
+            listClass:     utils.getClassname('list'),
+            selectedClass: utils.getClassname('selected'),
+            optionClass:   utils.getClassname('option'),
             options:       list || this.optionData,
             themeList:     this.options.list,
             themeSelected: this.options.selected,
             themeOption:   this.options.option
         };
 
-        return this.utils.render(templates.list, data);
+        return utils.render(templates.list, data);
     };
 
     Select.prototype.renderDrop = function() {
         var data = {
             dropID:        this.id,
-            dropClass:     this.utils.getClassname('drop'),
+            id:            this.el.id,
+            dropClass:     utils.getClassname('drop'),
             multiple:      this.multiple,
-            multipleClass: this.utils.getClassname('drop') + '-multiple',
+            multipleClass: utils.getClassname('drop') + '-multiple',
             search:        this.renderSearchField(),
             list:          this.renderList()
         };
 
-        return this.utils.render(templates.drop, data);
+        return utils.render(templates.drop, data);
     };
 
     Select.prototype.prepareDrop = function() {
         this.$drop   = $(this.renderDrop());
-        this.$list   = this.$drop.find('.' + this.utils.getClassname('list'));
-        this.$search = this.$drop.find('.' + this.utils.getClassname('search') + ' input');
+        this.$list   = this.$drop.find('.' + utils.getClassname('list'));
+        this.$search = this.$drop.find('.' + utils.getClassname('search') + ' input');
         this.setDropPosition();
         this.setListPosition();
 
         if(!this.options.search || this.options.searchItemLimit >= this.optionData.length) {
-            this.$search.parent().addClass(this.utils.getClassname('hide'));
+            this.$search.parent().addClass(utils.getClassname('hide'));
         }
         else {
-            this.$search.parent().removeClass(this.utils.getClassname('hide'));
+            this.$search.parent().removeClass(utils.getClassname('hide'));
         }
     };
 
@@ -622,11 +643,17 @@
             top:      this.getPosition().top + this.$selection.height(),
             left:     this.getPosition().left,
             minWidth: this.$selection.outerWidth()
-        });
+        }).removeClass(utils.getClassname('reverseDrop'));
+
+        if(!this.inViewport()) {
+            this.$drop.css({
+                top: this.getPosition().top - this.$drop.height()
+            }).addClass(utils.getClassname('reverseDrop'));
+        }
     };
 
     Select.prototype.setListPosition = function() {
-        var selected = this.$list.find('.' + this.utils.getClassname('selected') + ':eq(0)');
+        var selected = this.$list.find('.' + utils.getClassname('selected') + ':eq(0)');
 
         if(selected.length === 1) {
             this.$list.scrollTop(selected.offset().top - this.$list.offset().top - (this.$list.height() / 2));
@@ -634,7 +661,28 @@
     };
 
     Select.prototype.setOriginalList = function() {
-        this.$drop.find('.' + this.utils.getClassname('list')).replaceWith(this.$list);
+        this.$drop.find('.' + utils.getClassname('list')).replaceWith(this.$list);
+    };
+
+    Select.prototype.inViewport = function() {
+        var drop   = this.$drop.get(0),
+            top    = drop.offsetTop,
+            left   = drop.offsetLeft,
+            width  = drop.offsetWidth,
+            height = drop.offsetHeight;
+
+        while(drop.offsetParent) {
+            drop = drop.offsetParent;
+            top += drop.offsetTop;
+            left += drop.offsetLeft;
+        }
+
+        return (
+            top >= window.pageYOffset &&
+            left >= window.pageXOffset &&
+            (top + height) <= (window.pageYOffset + window.innerHeight) &&
+            (left + width) <= (window.pageXOffset + window.innerWidth)
+        );
     };
 
     Select.prototype.onKeyup = function(e) {
@@ -654,7 +702,7 @@
     };
 
     Select.prototype.onClick = function(e) {
-        if($(e.target).is('.' + this.utils.getClassname('removeSelection'))) {
+        if($(e.target).is('.' + utils.getClassname('removeSelection'))) {
             return;
         }
 
@@ -673,7 +721,7 @@
         ux.close(this._instance);
         focusedInstance = this._instance;
         this.showDrop();
-        this.$selection.addClass(this.utils.getClassname('opened'));
+        this.$selection.addClass(utils.getClassname('opened'));
         this.$search.focus();
         this.opened = true;
     };
@@ -681,30 +729,30 @@
     Select.prototype.onBlur = function() {
         focusedInstance = null;
         this.hideDrop();
-        this.$selection.removeClass(this.utils.getClassname('opened'));
+        this.$selection.removeClass(utils.getClassname('opened'));
         this.opened  = false;
         this.tabbed  = false;
         this.clicked = 0;
     };
 
     Select.prototype.onChange = function(e) {
-        this.utils.callback(this.options.onChange);
+        utils.callback(this.options.onChange);
     };
 
     Select.prototype.onReady = function() {
-        this.utils.callback(this.options.onReady);
+        utils.callback(this.options.onReady);
     };
 
     Select.prototype.onSelect = function() {
-        this.utils.callback(this.options.onSelect);
+        utils.callback(this.options.onSelect);
     };
 
     Select.prototype.onUpdate = function() {
-        this.utils.callback(this.options.onUpdate);
+        utils.callback(this.options.onUpdate);
     };
 
     Select.prototype.onDestroy = function() {
-        this.utils.callback(this.options.onDestroy);
+        utils.callback(this.options.onDestroy);
     };
 
     Select.prototype.update = function() {
@@ -729,7 +777,7 @@
         uxrocket[ns.data] = {
             hasWrapper: true,
             wrapper:    ns.wrap,
-            ready:      this.utils.getClassname('ready'),
+            ready:      utils.getClassname('ready'),
             selector:   this.selector,
             options:    this.options
         };
@@ -752,7 +800,7 @@
             w;
 
         if(classes) {
-            attr += ' class="' + classes.replace(this.utils.getClassname('ready'), '').replace(this.utils.getClassname('hidden'), '') + '"';
+            attr += ' class="' + classes.replace(utils.getClassname('ready'), '').replace(utils.getClassname('hidden'), '') + '"';
         }
 
         if(styles) {
@@ -794,7 +842,7 @@
 
         // all elements will update according to new options
         if(typeof options === 'undefined' && typeof el === 'object') {
-            $el  = $('.uxr-select-ready');
+            $el  = $('.' + utils.getClassname('ready'));
             opts = el;
         }
         else {
@@ -811,33 +859,49 @@
             _instance.options = $.extend(true, {}, _opts, opts);
 
             // use onUpdate callback from original options
-            _this.utils.callback(_opts.onUpdate);
+            utils.callback(_opts.onUpdate);
         });
     };
 
-    ux.close = function(instance) {
-        var $el = typeof el === 'undefined' ? $('.uxr-select-ready') : $(el);
+    ux.close = function() {
+        var $drops = $('.' + utils.getClassname('drop'));
 
-        $el.each(function() {
-            var ins = $(this).data(ns.data);
+        if($drops.length > 0) {
+            $drops.each(function() {
+                var instance = $(utils.escapeSelector('#' + $(this).data('select'))).data(ns.data);
 
-            if(ins._instance !== instance) {
-                ins.close();
-            }
-
-        });
+                if(instance !== focusedInstance) {
+                    instance.close();
+                }
+            });
+        }
     };
 
     ux.destroy = function(el) {
-        var $el = typeof el === 'undefined' ? $('.uxr-select-ready') : $(el);
+        var $el = typeof el === 'undefined' ? $('.' + utils.getClassname('ready')) : $(el);
 
         $el.each(function() {
             $(this).data(ns.data).destroy();
         });
     };
 
+    // shared events
+    $(document).on(events.click, function(e) {
+        if($('.' + utils.getClassname('drop')).has(e.target).length === 0 || $('.' + utils.getClassname('selection')).has(e.target) === 0) {
+            ux.close();
+        }
+    });
+
+    $(window).on(events.resize + ' ' + events.touchend, function() {
+        var $drops = $('.' + utils.getClassname('drop'));
+
+        if($drops.length === 1) {
+            $(utils.escapeSelector('#' + $drops.data('select'))).data(ns.data).setDropPosition();
+        }
+    });
+
 // version
-    ux.version = '3.0.0-rc1';
+    ux.version = '3.0.0-rc2';
 
 // default settings
     ux.settings  = defaults;

@@ -8,10 +8,6 @@
   box-sizing: border-box;
 }
 
-.uxr-select-wrap {
-  position: relative;
-}
-
 .uxr-select-wrap .uxr-select-aria-hidden {
   position: absolute;
   overflow: hidden;
@@ -31,6 +27,7 @@
 
 .uxr-select-selection {
   position: relative;
+  overflow: hidden;
   display: inline-block;
   min-height: 32px;
   border-radius: 4px;
@@ -56,6 +53,7 @@
 .uxr-select-multiple .uxr-select-selection-text {
   padding: 5px;
   overflow: auto;
+  background-color: #fff;
   white-space: normal;
 }
 
@@ -63,6 +61,11 @@
   content: "|";
   -webkit-animation: uxr-select-blink linear infinite 1s;
           animation: uxr-select-blink linear infinite 1s;
+}
+
+.uxr-select-disabled, .uxr-select-disabled:hover {
+  color: #999;
+  cursor: default;
 }
 
 .uxr-select-arrow {
@@ -85,6 +88,14 @@
   border-color: transparent transparent #555;
 }
 
+.uxr-select-disabled .uxr-select-arrow {
+  border-color: #999 transparent transparent;
+}
+
+.uxr-select-disabled.uxr-select-opened .uxr-select-arrow {
+  border-color: transparent transparent #999;
+}
+
 .uxr-select-selected-tag {
   display: inline-block;
   margin-bottom: 3px;
@@ -101,6 +112,7 @@
 
 .uxr-select-drop {
   position: absolute;
+  z-index: 11000;
   border: 1px solid #ccc;
   border-radius: 0 0 4px;
   background-color: #fff;
