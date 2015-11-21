@@ -79,7 +79,7 @@ var tasks = {
     connect: function() {
         connect.server({
             livereload: true,
-            port:       3000
+            port:       3030
         });
     },
 
