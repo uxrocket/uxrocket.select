@@ -109,9 +109,10 @@ $radius: 4px;
     }
 
     &-selected-tag {
+        position: relative;
         display: inline-block;
         margin-bottom: 3px;
-        padding: 3px;
+        padding: 3px 25px 3px 3px;
         border-radius: $radius;
         background-color: #ddd;
         font-size: .8em;
@@ -119,6 +120,13 @@ $radius: 4px;
     }
 
     &-remove-selected-tag {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 20px;
+        height: 100%;
+        padding: 3px;
+        text-align: center;
         cursor: pointer;
     }
 
