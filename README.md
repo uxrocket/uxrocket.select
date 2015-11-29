@@ -49,6 +49,7 @@ Select plugin is designed to enhance native select, so in your HTML, you only ne
 Property 			 | Default			| Description
 -------------------- | ---------------- | --------
 wrapper              | null             | Wrapper class for your theme. Wrapper is the parent element which wraps both original select and uxrSelect's selection item. Plugin also adds `uxr-select-wrap` for internal usage.
+opened               | null             | Open indicator class for your theme. Added to wrapper. Plugin also adds `uxr-select-opened` for internal usage.
 current              | null             | Selection class for your theme. It is the element where the selected option is showed. Plugin also adds `uxr-select-selection` for internal usage.
 arrow                | null             | Arrow class for your theme. It is the part where select triangle shown. Plugin also adds `uxr-select-arrow` for internal usage.
 list                 | null             | Unordered option list class for your theme. Plugin also adds `uxr-select-list` for internal usage.
@@ -116,11 +117,12 @@ All these custom events also hooked the element itself when plugin is binded, an
  
 
 ## Public Methods
-Method  				    | Description
---------------------------- | -------------------------------------------------------
-$(selector).select(options) | Binds the plugin 
-$.uxrselect.update(el, opt) | Updates the settings on the element
-$.uxrselect.destroy(el)     | Removes plugin from element. If `el` is undefined, removes from all elements
-$.uxrselect.close           | Closes the select list
-$.uxrselect.version         | Shows the plugin version
-$.uxrselect.settings        | Shows the default settings
+Method  				         | Description
+-------------------------------- | -------------------------------------------------------
+$(selector).select(options)      | Binds the plugin 
+$.uxrselect.update(el, opt)      | Updates the settings on the element
+$.uxrselect.destroy(el)          | Removes plugin from element. If `el` is undefined, removes from all elements
+$.uxrselect.close                | Closes the select list
+$.uxrselect.getFocusedInstance() | Closes the select list
+$.uxrselect.version              | Shows the plugin version
+$.uxrselect.settings             | Shows the default settings
