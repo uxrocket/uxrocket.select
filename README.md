@@ -123,6 +123,6 @@ $(selector).select(options)      | Binds the plugin
 $.uxrselect.update(el, opt)      | Updates the settings on the element
 $.uxrselect.destroy(el)          | Removes plugin from element. If `el` is undefined, removes from all elements
 $.uxrselect.close                | Closes the select list
-$.uxrselect.getFocusedInstance() | Closes the select list
+$.uxrselect.getFocusedInstance() | Shows the active and previous instance
 $.uxrselect.version              | Shows the plugin version
 $.uxrselect.settings             | Shows the default settings
