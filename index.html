@@ -22,7 +22,7 @@
         });
     </script>
     <style>
-        .select.multiple{
+        .select.multiple {
             width: 50%;
         }
 
@@ -41,21 +41,28 @@
         </a></p>
 
         <ul>
-            <li><a href="https://github.com/uxrocket/uxrocket.select/zipball/master">Download <strong>ZIP File</strong></a></li>
-            <li><a href="https://github.com/uxrocket/uxrocket.select/tarball/master">Download <strong>TAR Ball</strong></a></li>
+            <li><a href="https://github.com/uxrocket/uxrocket.select/zipball/master">Download <strong>ZIP File</strong></a>
+            </li>
+            <li><a href="https://github.com/uxrocket/uxrocket.select/tarball/master">Download <strong>TAR Ball</strong></a>
+            </li>
             <li><a href="https://github.com/uxrocket/uxrocket.select">View On <strong>GitHub</strong></a></li>
         </ul>
     </header>
     <section>
-        <p>UX Rocket Select plugin is designed for styling and enhancing the user experience capabilities of native html select. You can search, select multiple options, limit max selection in
-            multiple selects etc. It is also easily themable. By default, its styles only defined for properly working. You need minimum amount of overwrite for defining your own theme for the
+        <p>UX Rocket Select plugin is designed for styling and enhancing the user experience capabilities of native html
+            select. You can search, select multiple options, limit max selection in
+            multiple selects etc. It is also easily themable. By default, its styles only defined for properly working.
+            You need minimum amount of overwrite for defining your own theme for the
             select.</p>
 
         <h2>
-            <a id="install" class="anchor" href="#install" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install</h2>
+            <a id="install" class="anchor" href="#install" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install
+        </h2>
 
-        <p>Select can directly install your project by copying the contents of <code>dist</code> folder to your assets, and <a href="https://www.npmjs.org/">npm</a> or
-            <a href="http://bower.io/">bower</a> packages. All dependent libraries will also installed with the packages. Just run, with npm;</p>
+        <p>Select can directly install your project by copying the contents of <code>dist</code> folder to your assets,
+            and <a href="https://www.npmjs.org/">npm</a> or
+            <a href="http://bower.io/">bower</a> packages. All dependent libraries will also installed with the
+            packages. Just run, with npm;</p>
 
 <pre><code>npm install uxrocket.select
 </code></pre>
@@ -79,10 +86,12 @@
 <span class="pl-s1">&lt;/<span class="pl-ent">script</span>&gt;</span></pre>
         </div>
 
-        <p><em>if you want to use plugin in development mode, you can <code>import</code> <code>_uxrocket-select.scss</code> file under <code>
-            &lt;path-to-bower_components&gt;/uxrocket.select/lib/</code> to your Sass</em></p>
+        <p><em>if you want to use plugin in development mode, you can <code>import</code>
+            <code>_uxrocket-select.scss</code> file under <code>
+                &lt;path-to-bower_components&gt;/uxrocket.select/lib/</code> to your Sass</em></p>
 
-        <p>Select plugin is designed to enhance native select, so in your HTML, you only need to have a normal select to bind the plugin.</p>
+        <p>Select plugin is designed to enhance native select, so in your HTML, you only need to have a normal select to
+            bind the plugin.</p>
 
         <div class="highlight highlight-text-html-basic"><pre>&lt;<span class="pl-ent">select</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>select<span class="pl-pds">"</span></span>&gt;
     &lt;<span class="pl-ent">option</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>&gt;Please select one&lt;/<span class="pl-ent">option</span>&gt;
@@ -95,9 +104,11 @@
         </div>
 
         <h2>
-            <a id="examples" class="anchor" href="#examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Examples</h2>
+            <a id="examples" class="anchor" href="#examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Examples
+        </h2>
 
         <h3>Simple Select</h3>
+
         <p>
             <select name="simple-select" class="select">
                 <option value="">Jedi Grand Masters</option>
@@ -115,6 +126,7 @@
         </p>
 
         <h3>Multiple Select</h3>
+
         <p>
             <select name="multiple-select" multiple class="select multiple" placeholder="Select Grand Masters">
                 <option>Fae Coven</option>
@@ -131,6 +143,7 @@
         </p>
 
         <h3>Searchable Select</h3>
+
         <p>
             <select name="searchable-select" class="select">
                 <option value="">Jedi Masters</option>
@@ -192,6 +205,7 @@
         </p>
 
         <h3>Disabled Select</h3>
+
         <p>
             <select name="disabled-select" class="select" disabled>
                 <option value="">Jedi Grand Masters</option>
@@ -209,7 +223,8 @@
         </p>
 
         <h2>
-            <a id="options" class="anchor" href="#options" aria-hidden="true"><span class="octicon octicon-link"></span></a>Options</h2>
+            <a id="options" class="anchor" href="#options" aria-hidden="true"><span class="octicon octicon-link"></span></a>Options
+        </h2>
 
         <table>
             <thead>
@@ -223,34 +238,53 @@
             <tr>
                 <td>wrapper</td>
                 <td>null</td>
-                <td>Wrapper class for your theme. Wrapper is the parent element which wraps both original select and uxrSelect's selection item. Plugin also adds <code>uxr-select-wrap</code> for
+                <td>Wrapper class for your theme. Wrapper is the parent element which wraps both original select and
+                    uxrSelect's selection item. Plugin also adds <code>uxr-select-wrap</code> for
+                    internal usage.
+                </td>
+            </tr>
+            <tr>
+                <td>opened</td>
+                <td>null</td>
+                <td>Open indicator class for your theme. Added to wrapper. Plugin also adds
+                    <code>uxr-select-opened</code> for
                     internal usage.
                 </td>
             </tr>
             <tr>
                 <td>current</td>
                 <td>null</td>
-                <td>Selection class for your theme. It is the element where the selected option is showed. Plugin also adds <code>uxr-select-selection</code> for internal usage.</td>
+                <td>Selection class for your theme. It is the element where the selected option is showed. Plugin also
+                    adds <code>uxr-select-selection</code> for internal usage.
+                </td>
             </tr>
             <tr>
                 <td>arrow</td>
                 <td>null</td>
-                <td>Arrow class for your theme. It is the part where select triangle shown. Plugin also adds <code>uxr-select-arrow</code> for internal usage.</td>
+                <td>Arrow class for your theme. It is the part where select triangle shown. Plugin also adds <code>uxr-select-arrow</code>
+                    for internal usage.
+                </td>
             </tr>
             <tr>
                 <td>list</td>
                 <td>null</td>
-                <td>Unordered option list class for your theme. Plugin also adds <code>uxr-select-list</code> for internal usage.</td>
+                <td>Unordered option list class for your theme. Plugin also adds <code>uxr-select-list</code> for
+                    internal usage.
+                </td>
             </tr>
             <tr>
                 <td>option</td>
                 <td>null</td>
-                <td>Class for each option in the list. It is the anchor element in each <code>li</code> Plugin also adds <code>uxr-select-option</code> for internal usage.</td>
+                <td>Class for each option in the list. It is the anchor element in each <code>li</code> Plugin also adds
+                    <code>uxr-select-option</code> for internal usage.
+                </td>
             </tr>
             <tr>
                 <td>selected</td>
                 <td>null</td>
-                <td>Selected option class for your theme. It is applied to <code>li</code> items in the list. Plugin also adds <code>uxr-select-selected</code> for internal usage.</td>
+                <td>Selected option class for your theme. It is applied to <code>li</code> items in the list. Plugin
+                    also adds <code>uxr-select-selected</code> for internal usage.
+                </td>
             </tr>
             <tr>
                 <td>search</td>
@@ -260,13 +294,16 @@
             <tr>
                 <td>searchItemLimit</td>
                 <td>10</td>
-                <td>Defines the search box is visible or not. Usefull for small list. Search list will be visible even if its set to true when options are more than <code>searchItemLimit</code>
+                <td>Defines the search box is visible or not. Usefull for small list. Search list will be visible even
+                    if its set to true when options are more than <code>searchItemLimit</code>
                 </td>
             </tr>
             <tr>
                 <td>searchType</td>
                 <td>starts (starts or contains)</td>
-                <td>Defines the search lookup. If set to <code>starts</code> then it looks up if option's text or value starts with search term, otherwise, looks up if it contains the term.</td>
+                <td>Defines the search lookup. If set to <code>starts</code> then it looks up if option's text or value
+                    starts with search term, otherwise, looks up if it contains the term.
+                </td>
             </tr>
             <tr>
                 <td>minLetters</td>
@@ -316,7 +353,9 @@
             <tbody>
             <tr>
                 <td>wrapper</td>
-                <td>Wrapper class for your theme. Wrapper is the parent element which wraps both original select and uxrSelect's selection item.</td>
+                <td>Wrapper class for your theme. Wrapper is the parent element which wraps both original select and
+                    uxrSelect's selection item.
+                </td>
             </tr>
             <tr>
                 <td>current</td>
@@ -344,12 +383,15 @@
             </tr>
             <tr>
                 <td>search-item-limit</td>
-                <td>Defines the search box is visible or not. Usefull for small list. Search list will be visible even if its set to true when options are more than <code>searchItemLimit</code>
+                <td>Defines the search box is visible or not. Usefull for small list. Search list will be visible even
+                    if its set to true when options are more than <code>searchItemLimit</code>
                 </td>
             </tr>
             <tr>
                 <td>search-type</td>
-                <td>Defines the search lookup. If set to <code>starts</code> then it looks up if option's text or value starts with search term, otherwise, looks up if it contains the term.</td>
+                <td>Defines the search lookup. If set to <code>starts</code> then it looks up if option's text or value
+                    starts with search term, otherwise, looks up if it contains the term.
+                </td>
             </tr>
             <tr>
                 <td>min-letters</td>
@@ -414,9 +456,11 @@
         </table>
 
         <h2>
-            <a id="event-hooks" class="anchor" href="#event-hooks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Event Hooks</h2>
+            <a id="event-hooks" class="anchor" href="#event-hooks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Event
+            Hooks</h2>
 
-        <p>Plugin uses both generic events and custom events. All events triggered in <em>uxrSelect</em> namespace. Rather than firing a function/method via callback you can attach your own method to
+        <p>Plugin uses both generic events and custom events. All events triggered in <em>uxrSelect</em> namespace.
+            Rather than firing a function/method via callback you can attach your own method to
             plugin events.</p>
 
         <div class="highlight highlight-source-js"><pre>$(<span class="pl-s"><span class="pl-pds">'</span>.select<span class="pl-pds">'</span></span>).on(<span class="pl-s"><span class="pl-pds">'</span>uxrselect.uxrSelect<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(){
@@ -451,10 +495,12 @@
             </tbody>
         </table>
 
-        <p>All these custom events also hooked the element itself when plugin is binded, and fires the callback options when triggered.</p>
+        <p>All these custom events also hooked the element itself when plugin is binded, and fires the callback options
+            when triggered.</p>
 
         <h2>
-            <a id="public-methods" class="anchor" href="#public-methods" aria-hidden="true"><span class="octicon octicon-link"></span></a>Public Methods</h2>
+            <a id="public-methods" class="anchor" href="#public-methods" aria-hidden="true"><span class="octicon octicon-link"></span></a>Public
+            Methods</h2>
 
         <table>
             <thead>
@@ -477,8 +523,12 @@
                 <td>Removes plugin from element. If <code>el</code> is undefined, removes from all elements</td>
             </tr>
             <tr>
-                <td>$.uxrselect.close</td>
+                <td>$.uxrselect.close()</td>
                 <td>Closes the select list</td>
+            </tr>
+            <tr>
+                <td>$.uxrselect.getFocusedInstance()</td>
+                <td>Shows the active and previous instance</td>
             </tr>
             <tr>
                 <td>$.uxrselect.version</td>
@@ -495,7 +545,8 @@
         <p>This project is maintained by <a href="https://github.com/uxrocket">uxrocket</a></p>
 
         <p>
-            <small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small>
+            <small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a>
+            </small>
         </p>
     </footer>
 </div>
