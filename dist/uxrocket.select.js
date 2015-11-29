@@ -24,11 +24,15 @@
     }
 
     var ux, // local shorthand
-        i               = 1,
+        i                = 1,
         rocketName = 'uxrSelect',
-        focusedInstance = null,
+        focusedInstances = {
+            lastFocused: null,
+            current:     null
+        },
+        touchmove        = false,
 
-        templates       = {
+        templates        = {
             selection: '<a href="#" id="{{selectionClass}}-{{id}}" class="{{selectionClass}}{{#if multiple}} {{multipleClass}}{{/if}}{{#if disabled}} {{disabledClass}}{{/if}} {{themeCurrent}}" style="{{width}}">' +
                        '    <span class="{{selectionTextClass}}">{{selectionText}}</span>' +
                        '    <span class="{{arrowClass}} {{themeArrow}}"></span>' +
@@ -53,8 +57,9 @@
                        '</div>'
         },
 
-        defaults        = {
+        defaults         = {
             wrapper:         '',
+            opened:          '',
             current:         '',
             arrow:           '',
             list:            '',
@@ -72,23 +77,25 @@
             onUpdate:  false,
             onDestroy: false
         },
-        events          = {
-            focus:    'focus.' + rocketName,
-            blur:     'blur.' + rocketName,
-            change:   'change.' + rocketName,
-            click:    'click.' + rocketName,
-            keyup:    'keyup.' + rocketName,
-            keydown:  'keydown.' + rocketName,
-            input:    'input.' + rocketName,
-            resize:   'resize.' + rocketName,
-            touchend: 'touchend.' + rocketName + ' pointerup.' + rocketName + ' MSPointerUp.' + rocketName,
+        events           = {
+            focus:     'focus.' + rocketName,
+            blur:      'blur.' + rocketName,
+            change:    'change.' + rocketName,
+            click:     'click.' + rocketName + ' touchend.' + rocketName + ' pointerup.' + rocketName + ' MSPointerUp.' + rocketName,
+            mousedown: 'mousedown.' + rocketName + ' touchend.' + rocketName + ' pointerdown.' + rocketName + ' MSPointerDown.' + rocketName,
+            keyup:     'keyup.' + rocketName,
+            keydown:   'keydown.' + rocketName,
+            input:     'input.' + rocketName,
+            resize:    'resize.' + rocketName,
+            touchend:  'touchend.' + rocketName + ' pointerup.' + rocketName + ' MSPointerUp.' + rocketName,
+            touchmove: 'touchmove.' + rocketName,
             // custom events
-            ready:    'uxrready.' + rocketName,
-            select:   'uxrselect.' + rocketName,
-            update:   'uxrupdate.' + rocketName,
-            destroy:  'uxrdestroy.' + rocketName
+            ready:     'uxrready.' + rocketName,
+            select:    'uxrselect.' + rocketName,
+            update:    'uxrupdate.' + rocketName,
+            destroy:   'uxrdestroy.' + rocketName
         },
-        keys            = {
+        keys             = {
             codes: {
                 9:  'tab',
                 13: 'return',
@@ -106,7 +113,7 @@
             right:  39,
             down:   40
         },
-        ns              = {
+        ns               = {
             prefix:  'uxr-',
             rocket:  'uxRocket',
             data:    rocketName,
@@ -134,7 +141,7 @@
                 hide:            'hide'
             }
         },
-        utils           = new window.uxrPluginUtils({ns: ns});
+        utils            = new window.uxrPluginUtils({ns: ns});
 
     // Constructor Method
     var Select = function(el, options, selector) {
@@ -154,7 +161,7 @@
         this.selector = selector;
         this.opened   = false;
         this.tabbed   = false;
-        this.clicked  = 0;
+        this.clicked  = false;
 
         this.options = $.extend(true, {}, defaults, options, this.$el.data());
 
@@ -174,8 +181,6 @@
         this.getOptionData();
 
         this.decorateUI();
-
-        this.prepareDrop();
 
         this.bindUI();
 
@@ -295,9 +300,6 @@
             });
 
         _this.$selection
-            .on(events.keydown, function(e) {
-                e.preventDefault();
-            })
             .on(events.keyup, function(e) {
                 e.preventDefault();
 
@@ -306,18 +308,21 @@
             .on(events.focus, function(e) {
                 e.preventDefault();
 
-                if(_this.disabled) {
-                    return false;
-                }
-
                 _this.onFocus();
             })
             .on(events.blur, function() {
-                if(focusedInstance && (_this.clicked === 0 && _this.opened && !_this.tabbed)) {
-                    _this.onBlur();
-                }
+                _this.onBlur();
+            })
+            .on(events.mousedown, function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+
+                _this.onClick(e);
             })
             .on(events.click, function(e) {
+                e.stopPropagation();
+            })
+            .on(events.mousedown, '.' + utils.getClassname('removeSelection'), function(e) {
                 e.stopPropagation();
                 e.preventDefault();
 
@@ -325,34 +330,34 @@
                     return false;
                 }
 
-                _this.onClick(e);
-            })
-            .on(events.click, '.' + utils.getClassname('removeSelection'), function(e) {
-                if(_this.disabled) {
-                    return false;
-                }
-
-                _this.removeTag($(e.target));
+                _this.removeTag($(this).parent());
             });
-
-        $(document).on(events.click, function(e) {
-            if(_this.$drop.has(e.target).length === 0 || _this.$selection.has(e.target) === 0) {
-                _this.onBlur();
-            }
-        });
     };
 
     Select.prototype.bindDropUI = function() {
         var _this = this;
 
         _this.$drop
+            .on(events.click, function(e) {
+                e.stopPropagation();
+            })
+            .on(events.touchmove, '.' + utils.getClassname('option'), function(e) {
+                e.stopPropagation();
+                touchmove = true;
+            })
             .on(events.click, '.' + utils.getClassname('option'), function(e) {
+                e.stopPropagation();
                 e.preventDefault();
 
-                _this.emitEvent('select');
-                _this.select($(e.currentTarget));
+                if(!touchmove) {
+                    _this.emitEvent('select');
+                    _this.select($(e.currentTarget));
+                }
+
+                touchmove = false;
             })
             .on(events.keyup + ' ' + events.input, '.' + utils.getClassname('search') + ' input', function(e) {
+                e.stopPropagation();
                 e.preventDefault();
 
                 if(e.keyCode === keys.up || e.keyCode === keys.down) {
@@ -396,18 +401,19 @@
             this.$el.find('option:eq(' + index + ')').prop('selected', true);
             this.onBlur();
             this.$list.find('#' + optionID).addClass(selected);
+
+            if(this.$el.val() !== '') {
+                this.$selection.parent().addClass(selected + ' ' + this.options.selected);
+            }
+            else {
+                this.$selection.parent().removeClass(selected + ' ' + this.options.selected);
+            }
         }
 
         else {
             // double click deselects
             if($option.hasClass(selected)) {
-                this.$el.find('option:eq(' + index + ')').prop('selected', false);
-                $option.removeClass(selected);
-                this.$selection.find('.' + selectionTag + '-' + index).remove();
-
-                if(this.$el.val() === null) {
-                    this.$selection.find('.' + selectionText).text(this.multiplePlaceholder);
-                }
+                this.deSelect(index);
             }
 
             else {
@@ -437,17 +443,22 @@
         this.emitEvent('change');
     };
 
-    Select.prototype.removeTag = function($tag) {
-        var index = $tag.parent().data('index');
+    Select.prototype.deSelect = function(index) {
+        var selected      = utils.getClassname('selected'),
+            selectionText = utils.getClassname('selectionText'),
+            selectionTag  = utils.getClassname('selectionTag');
 
         this.$el.find('option:eq(' + index + ')').prop('selected', false);
-        $('#' + utils.getClassname('option') + '-' + index).removeClass(utils.getClassname('selected'));
-        $tag.parent().remove();
+        this.$drop.find('.' + utils.getClassname('list') + ' li:eq(' + index + ')').removeClass(selected);
+        this.$selection.find('.' + selectionTag + '-' + index).remove();
 
         if(this.$el.val() === null) {
-            this.$selection.find('.' + utils.getClassname('selectionText')).text(this.multiplePlaceholder);
+            this.$selection.find('.' + selectionText).text(this.multiplePlaceholder);
         }
+    };
 
+    Select.prototype.removeTag = function($tag) {
+        this.deSelect($tag.data('index'));
         this.setDropPosition();
     };
 
@@ -465,6 +476,7 @@
 
         list = this.renderList(results);
         $list.replaceWith(list);
+        this.setDropPosition();
     };
 
     Select.prototype._search = function(item, term) {
@@ -476,25 +488,9 @@
             default:
             case 'starts':
                 return (_text.indexOf(_term) === 0 || _value.toLowerCase().indexOf(_term) === 0);
-                break;
             case 'contains':
                 return (_text.indexOf(_term) > -1 || _value.toLowerCase().indexOf(_term) > -1);
-                break;
         }
-    };
-
-    Select.prototype.showDrop = function() {
-        this.$drop.appendTo('body');
-        this.setDropPosition();
-        this.setListPosition();
-        this.$list.find('.' + utils.getClassname('highlight')).removeClass(utils.getClassname('highlight'));
-        this.bindDropUI();
-    };
-
-    Select.prototype.hideDrop = function() {
-        this.$drop.remove();
-        this.$search.val('');
-        this.setOriginalList();
     };
 
     Select.prototype.navigateWithEnter = function() {
@@ -505,8 +501,8 @@
             if(highlighted.length > 0) {
                 highlighted.removeClass(highlight);
 
-                this.emitEvent('select');
                 this.select(highlighted.find('a'));
+                this.emitEvent('select');
             }
         }
     };
@@ -624,17 +620,19 @@
     };
 
     Select.prototype.prepareDrop = function() {
-        this.$drop   = $(this.renderDrop());
-        this.$list   = this.$drop.find('.' + utils.getClassname('list'));
-        this.$search = this.$drop.find('.' + utils.getClassname('search') + ' input');
-        this.setDropPosition();
-        this.setListPosition();
+        if(!this.$drop) {
+            this.$drop   = $(this.renderDrop());
+            this.$list   = this.$drop.find('.' + utils.getClassname('list'));
+            this.$search = this.$drop.find('.' + utils.getClassname('search') + ' input');
+            this.setDropPosition();
+            this.setListPosition();
 
-        if(!this.options.search || this.options.searchItemLimit >= this.optionData.length) {
-            this.$search.parent().addClass(utils.getClassname('hide'));
-        }
-        else {
-            this.$search.parent().removeClass(utils.getClassname('hide'));
+            if(!this.options.search || this.options.searchItemLimit >= this.optionData.length) {
+                this.$search.parent().addClass(utils.getClassname('hide'));
+            }
+            else {
+                this.$search.parent().removeClass(utils.getClassname('hide'));
+            }
         }
     };
 
@@ -664,32 +662,49 @@
         this.$drop.find('.' + utils.getClassname('list')).replaceWith(this.$list);
     };
 
-    Select.prototype.inViewport = function() {
-        var drop   = this.$drop.get(0),
-            top    = drop.offsetTop,
-            left   = drop.offsetLeft,
-            width  = drop.offsetWidth,
-            height = drop.offsetHeight;
+    Select.prototype.showDrop = function() {
+        this.$drop.appendTo('body');
+        this.setDropPosition();
+        this.setListPosition();
+        this.$list.find('.' + utils.getClassname('highlight')).removeClass(utils.getClassname('highlight'));
+        this.bindDropUI();
+    };
 
-        while(drop.offsetParent) {
-            drop = drop.offsetParent;
-            top += drop.offsetTop;
-            left += drop.offsetLeft;
+    Select.prototype.hideDrop = function() {
+        if(this.$drop) {
+            this.$drop.remove();
+            this.$search.val('');
+            this.setOriginalList();
+        }
+    };
+
+    Select.prototype.open = function() {
+        if(this.disabled) {
+            return;
         }
 
-        return (
-            top >= window.pageYOffset &&
-            left >= window.pageXOffset &&
-            (top + height) <= (window.pageYOffset + window.innerHeight) &&
-            (left + width) <= (window.pageXOffset + window.innerWidth)
-        );
+        ux.close();
+
+        this.prepareDrop();
+        this.showDrop();
+        this.$selection.parent().addClass(utils.getClassname('opened') + ' ' + this.options.opened);
+        this.opened = true;
+    };
+
+    Select.prototype.close = function() {
+        touchmove    = false;
+        this.clicked = false;
+        this.tabbed  = false;
+        this.opened  = false;
+        this.hideDrop();
+        this.$selection.parent().removeClass(utils.getClassname('opened') + ' ' + this.options.opened);
     };
 
     Select.prototype.onKeyup = function(e) {
         switch(e.keyCode) {
             case keys.tab:
                 this.tabbed = true;
-                this.onFocus();
+                //this.onFocus();
                 break;
             case keys.return:
                 this.navigateWithEnter();
@@ -702,36 +717,24 @@
     };
 
     Select.prototype.onClick = function(e) {
-        if($(e.target).is('.' + utils.getClassname('removeSelection'))) {
-            return;
-        }
-
-        this.clicked++;
+        this.clicked = true;
 
         if(!this.opened) {
             this.onFocus();
         }
-
-        else if((this.opened && this.clicked % 2 === 0) || (this.opened && this.tabbed)) {
+        else {
             this.onBlur();
         }
     };
 
     Select.prototype.onFocus = function() {
-        ux.close(this._instance);
-        focusedInstance = this._instance;
-        this.showDrop();
-        this.$selection.addClass(utils.getClassname('opened'));
-        this.opened = true;
+        focusedInstances.lastFocused = focusedInstances.current;
+        focusedInstances.current     = this;
+        this.open();
     };
 
     Select.prototype.onBlur = function() {
-        focusedInstance = null;
-        this.hideDrop();
-        this.$selection.removeClass(utils.getClassname('opened'));
-        this.opened  = false;
-        this.tabbed  = false;
-        this.clicked = 0;
+        this.close();
     };
 
     Select.prototype.onChange = function(e) {
@@ -758,10 +761,6 @@
         this.emitEvent('update');
     };
 
-    Select.prototype.close = function() {
-        this.onBlur();
-    };
-
     Select.prototype.destroy = function() {
         this.emitEvent('destroy');
         this.unbindUI();
@@ -782,6 +781,27 @@
         };
 
         this.$el.data(ns.rocket, uxrocket);
+    };
+
+    Select.prototype.inViewport = function() {
+        var drop   = this.$drop.get(0),
+            top    = drop.offsetTop,
+            left   = drop.offsetLeft,
+            width  = drop.offsetWidth,
+            height = drop.offsetHeight;
+
+        while(drop.offsetParent) {
+            drop = drop.offsetParent;
+            top += drop.offsetTop;
+            left += drop.offsetLeft;
+        }
+
+        return (
+            top >= window.pageYOffset &&
+            left >= window.pageXOffset &&
+            (top + height) <= (window.pageYOffset + window.innerHeight) &&
+            (left + width) <= (window.pageXOffset + window.innerWidth)
+        );
     };
 
     Select.prototype.getPosition = function() {
@@ -869,7 +889,7 @@
             $drops.each(function() {
                 var instance = $(utils.escapeSelector('#' + $(this).data('select'))).data(ns.data);
 
-                if(instance !== focusedInstance) {
+                if(instance !== focusedInstances.current) {
                     instance.close();
                 }
             });
@@ -884,12 +904,17 @@
         });
     };
 
+    ux.getFocusedInstances = function() {
+        return focusedInstances;
+    };
+
     // shared events
-    $(document).on(events.click, function(e) {
-        if($('.' + utils.getClassname('drop')).has(e.target).length === 0 || $('.' + utils.getClassname('selection')).has(e.target) === 0) {
-            ux.close();
-        }
-    });
+    $(document)
+        .on(events.click, function(e) {
+            if(focusedInstances.current !== null) {
+                focusedInstances.current.close();
+            }
+        });
 
     $(window).on(events.resize + ' ' + events.touchend, function() {
         var $drops = $('.' + utils.getClassname('drop'));
@@ -900,7 +925,7 @@
     });
 
 // version
-    ux.version = '3.0.0-rc3';
+    ux.version = '3.0.0-rc4';
 
 // default settings
     ux.settings  = defaults;

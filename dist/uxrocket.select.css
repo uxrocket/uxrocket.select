@@ -97,9 +97,10 @@
 }
 
 .uxr-select-selected-tag {
+  position: relative;
   display: inline-block;
   margin-bottom: 3px;
-  padding: 3px;
+  padding: 3px 25px 3px 3px;
   border-radius: 4px;
   background-color: #ddd;
   font-size: .8em;
@@ -107,6 +108,13 @@
 }
 
 .uxr-select-remove-selected-tag {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 100%;
+  padding: 3px;
+  text-align: center;
   cursor: pointer;
 }
 
