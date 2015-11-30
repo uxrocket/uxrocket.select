@@ -1,7 +1,7 @@
 {
   "name": "Select",
   "registry": "uxrocket.select",
-  "version": "3.0.0-rc5",
+  "version": "3.0.0",
   "paths": {
     "lib": "lib/",
     "dist": "dist/",

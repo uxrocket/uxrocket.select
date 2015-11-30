@@ -58,17 +58,19 @@
         },
 
         defaults         = {
-            wrapper:         '',
-            opened:          '',
-            current:         '',
-            arrow:           '',
-            list:            '',
-            option:          '',
-            selected:        '',
-            search:          true,
-            searchItemLimit: 10, // search box will visible if more than 10 item present in select,
-            searchType:      'starts', // starts or contain. search if term starts with the key or contain the key
-            minLetters:      2,
+            wrapper:          '',
+            opened:           '',
+            current:          '',
+            arrow:            '',
+            list:             '',
+            option:           '',
+            selected:         '',
+            search:           true,
+            searchItemLimit:  10, // search box will visible if more than 10 item present in select,
+            searchType:       'starts', // starts or contain. search if term starts with the key or contain the key
+            minLetters:       2,
+            maxSelection:     0, // no limit
+            maxSelectionWarn: 'You have reached allowed maximum selection',
 
             // callbacks
             onReady:   false,
@@ -334,11 +336,11 @@
                 _this.removeTag($(this).parent());
             })
             .parent()
-            .on(events.mousedown, function(e){
+            .on(events.mousedown, function(e) {
                 e.stopPropagation();
                 e.preventDefault();
 
-                setTimeout(function(){
+                setTimeout(function() {
                     _this.onFocus();
                 }, 100);
             });
@@ -402,7 +404,8 @@
             optionID        = $option.attr('id'),
             index           = $selected.data('index'),
             value           = $selected.data('value'),
-            text            = $selected.text();
+            text            = $selected.text(),
+            $val            = this.$el.val();
 
         if(!this.multiple) {
             this.$list.find('.' + highlight).removeClass(highlight);
@@ -427,6 +430,11 @@
             }
 
             else {
+                if(this.options.maxSelection > 0 && $val !== null && $val.length >= this.options.maxSelection) {
+                    alert(this.options.maxSelectionWarn);
+                    return;
+                }
+
                 var tag = utils.render(templates.multi, {
                     selectionText:        text,
                     selectionTagClass:    selectionTag,
@@ -935,7 +943,7 @@
     });
 
 // version
-    ux.version = '3.0.0-rc5';
+    ux.version = '3.0.0';
 
 // default settings
     ux.settings  = defaults;
