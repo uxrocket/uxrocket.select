@@ -83,8 +83,7 @@ search               | Indicates whether list is searchable or not.
 search-item-limit    | Defines the search box is visible or not. Usefull for small list. Search list will be visible even if its set to true when options are more than `searchItemLimit`
 search-type          | Defines the search lookup. If set to `starts` then it looks up if option's text or value starts with search term, otherwise, looks up if it contains the term.
 min-letters          | Minimum letter required for search to start.
-max-selection        | For _multiple_ mode, restrict maximum selectable option count. If 0 or 
-lower, no restriction applied.
+max-selection        | For _multiple_ mode, restrict maximum selectable option count. If 0 or lower, no restriction applied.
 max-selection-warn   | Shows a user friendly alert when reached maximum selection. Default text is "You have reached allowed maximum selection". 
 placeholder          | Adds a placeholder text on multiple selects
 on-ready             | Calls the function when plugin is ready.
