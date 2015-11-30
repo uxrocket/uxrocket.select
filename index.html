@@ -142,6 +142,23 @@
             </select>
         </p>
 
+        <h3>Multiple Select (Max 3 Selection)</h3>
+
+        <p>
+            <select name="multiple-select" multiple class="select multiple" data-max-selection="3" placeholder="Select Grand Masters">
+                <option>Fae Coven</option>
+                <option>Biel Ductavis</option>
+                <option>Kenth Hamner</option>
+                <option>Awdrysta Pina</option>
+                <option>Saba Sebatyne</option>
+                <option>Satele Shan</option>
+                <option>Luke Skywalker</option>
+                <option>Nomi Sunrider</option>
+                <option>Yoda</option>
+                <option>Zym</option>
+            </select>
+        </p>
+
         <h3>Searchable Select</h3>
 
         <p>
@@ -311,6 +328,16 @@
                 <td>Minimum letter required for search to start.</td>
             </tr>
             <tr>
+                <td>maxSelection</td>
+                <td>0</td>
+                <td>For <em>multiple</em> mode, restrict maximum selectable option count. If 0 or lower, no restriction applied.</td>
+            </tr>
+            <tr>
+                <td>maxSelectionWarn</td>
+                <td>Some text</td>
+                <td>Shows a user friendly alert when reached maximum selection. Default text is "<em>You have reached allowed maximum selection</em>".</td>
+            </tr>
+            <tr>
                 <td>placeholder</td>
                 <td>null</td>
                 <td>Adds a placeholder text on multiple selects.</td>
@@ -358,6 +385,13 @@
                 </td>
             </tr>
             <tr>
+                <td>opened</td>
+                <td>Open indicator class for your theme. Added to wrapper. Plugin also adds
+                    <code>uxr-select-opened</code> for
+                    internal usage.
+                </td>
+            </tr>
+            <tr>
                 <td>current</td>
                 <td>Selection class for your theme. It is the element where the selected option is showed.</td>
             </tr>
@@ -396,6 +430,14 @@
             <tr>
                 <td>min-letters</td>
                 <td>Minimum letter required for search to start.</td>
+            </tr>
+            <tr>
+                <td>max-selection</td>
+                <td>For <em>multiple</em> mode, restrict maximum selectable option count. If 0 or lower, no restriction applied.</td>
+            </tr>
+            <tr>
+                <td>max-selection-warn</td>
+                <td>Shows a user friendly alert when reached maximum selection. Default text is "<em>You have reached allowed maximum selection</em>".</td>
             </tr>
             <tr>
                 <td>placeholder</td>
