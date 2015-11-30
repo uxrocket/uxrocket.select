@@ -59,6 +59,9 @@ search               | true             | Indicates whether list is searchable o
 searchItemLimit      | 10               | Defines the search box is visible or not. Usefull for small list. Search list will be visible even if its set to true when options are more than `searchItemLimit`
 searchType           | starts (starts or contains) | Defines the search lookup. If set to `starts` then it looks up if option's text or value starts with search term, otherwise, looks up if it contains the term.
 minLetters           | 2                | Minimum letter required for search to start.
+maxSelection         | 0                | For _multiple_ mode, restrict maximum selectable option count. If 0 or 
+lower, no restriction applied.
+maxSelectionWarn     | Text             | Shows a user friendly alert when reached maximum selection. Default text is "You have reached allowed maximum selection". 
 placeholder          | null             | Adds a placeholder text on multiple selects
 onReady              | false            | Calls the function when plugin is ready.
 onSelect             | false            | Calls the function when option is selected.
@@ -71,6 +74,7 @@ onDestroy            | false            | Calls the function when select is remo
 Data Attribute		 | &nbsp;
 -------------------- | -----
 wrapper              | Wrapper class for your theme. Wrapper is the parent element which wraps both original select and uxrSelect's selection item.
+opened               | Open indicator class for your theme. Added to wrapper. Plugin also adds `uxr-select-opened` for internal usage.
 current              | Selection class for your theme. It is the element where the selected option is showed. 
 arrow                | Arrow class for your theme. It is the part where select triangle shown.
 list                 | Unordered option list class for your theme.
@@ -80,6 +84,9 @@ search               | Indicates whether list is searchable or not.
 search-item-limit    | Defines the search box is visible or not. Usefull for small list. Search list will be visible even if its set to true when options are more than `searchItemLimit`
 search-type          | Defines the search lookup. If set to `starts` then it looks up if option's text or value starts with search term, otherwise, looks up if it contains the term.
 min-letters          | Minimum letter required for search to start.
+max-selection        | For _multiple_ mode, restrict maximum selectable option count. If 0 or 
+lower, no restriction applied.
+max-selection-warn   | Shows a user friendly alert when reached maximum selection. Default text is "You have reached allowed maximum selection". 
 placeholder          | Adds a placeholder text on multiple selects
 on-ready             | Calls the function when plugin is ready.
 on-select            | Calls the function when option is selected.
