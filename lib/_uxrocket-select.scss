@@ -80,6 +80,14 @@ $radius: 4px;
         }
     }
 
+    &-readonly {
+        &,
+        &:hover {
+            color: #777;
+            cursor: default;
+        }
+    }
+
     &-arrow {
         position: absolute;
         top: 50%;
@@ -105,6 +113,14 @@ $radius: 4px;
 
         .#{$prefix}-disabled.#{$prefix}-opened & {
             border-color: transparent transparent #999;
+        }
+
+        .#{$prefix}-readonly & {
+            border-color: #777 transparent transparent;
+        }
+
+        .#{$prefix}-readonly.#{$prefix}-opened & {
+            border-color: transparent transparent #777;
         }
     }
 
