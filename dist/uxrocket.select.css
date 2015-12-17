@@ -68,6 +68,11 @@
   cursor: default;
 }
 
+.uxr-select-readonly, .uxr-select-readonly:hover {
+  color: #777;
+  cursor: default;
+}
+
 .uxr-select-arrow {
   position: absolute;
   top: 50%;
@@ -94,6 +99,14 @@
 
 .uxr-select-disabled.uxr-select-opened .uxr-select-arrow {
   border-color: transparent transparent #999;
+}
+
+.uxr-select-readonly .uxr-select-arrow {
+  border-color: #777 transparent transparent;
+}
+
+.uxr-select-readonly.uxr-select-opened .uxr-select-arrow {
+  border-color: transparent transparent #777;
 }
 
 .uxr-select-selected-tag {

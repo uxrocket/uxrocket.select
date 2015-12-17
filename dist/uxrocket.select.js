@@ -25,7 +25,7 @@
 
     var ux, // local shorthand
         i                = 1,
-        rocketName = 'uxrSelect',
+        rocketName       = 'uxrSelect',
         focusedInstances = {
             lastFocused: null,
             current:     null
@@ -33,27 +33,33 @@
         touchmove        = false,
 
         templates        = {
-            selection: '<a href="#" id="{{selectionClass}}-{{id}}" class="{{selectionClass}}{{#if multiple}} {{multipleClass}}{{/if}}{{#if disabled}} {{disabledClass}}{{/if}} {{themeCurrent}}" style="{{width}}">' +
-                       '    <span class="{{selectionTextClass}}">{{selectionText}}</span>' +
-                       '    <span class="{{arrowClass}} {{themeArrow}}"></span>' +
+            selection: '<a href="#" id="{{selectionClass}}-{{id}}" class="{{selectionClass}}{{#if multiple}} {{multipleClass}}{{/if}}{{#if disabled}} {{disabledClass}}{{/if}}{{#if readonly}} {{readonlyClass}}{{/if}} {{themeCurrent}}" style="{{width}}">' +
+                       '    <span class="{{selectionTextClass}}">{{selectionText}}</span>'                                                                                                                                                                    +
+                       '    <span class="{{arrowClass}} {{themeArrow}}"></span>'                                                                                                                                                                              +
                        '</a>',
-            multi:     '<span class="{{selectionTagClass}} {{selectionTagClass}}-{{index}}" data-index="{{index}}" data-value="{{value}}">' +
-                       '    {{selectionText}}' +
-                       '    <span class="{{removeSelectionClass}}">X</span>' +
+            tags:                                                                                                                                                      '{{#each selected}}' +
+                       '<span class="{{selectionTagClass}} {{selectionTagClass}}-{{selected.index}}" data-index="{{selected.index}}" data-value="{{selected.value}}">' +
+                       '    {{selected.text}}'                                                                                                                         +
+                       '    <span class="{{removeSelectionClass}}">X</span>'                                                                                           +
+                       '</span>'                                                                                                                                       +
+                       '{{/each}}',
+            multi: '<span class="{{selectionTagClass}} {{selectionTagClass}}-{{index}}" data-index="{{index}}" data-value="{{value}}">' +
+                       '    {{selectionText}}'                                                                                          +
+                       '    <span class="{{removeSelectionClass}}">X</span>'                                                            +
                        '</span>',
-            search:    '<span class="{{searchClass}}">' +
+            search:                                                      '<span class="{{searchClass}}">' +
                        '   <input type="text" name="{{searchInput}}" />' +
                        '</span>',
-            list:      '<ul class="{{listClass}} {{themeList}}">' +
-                       '   {{#each options}}' +
-                       '   <li id="{{optionClass}}-{{options.index}}"{{#if options.selected}} class="{{selectedClass}} {{themeSelected}}"{{/if}}>' +
+            list:                                                                                                                                              '<ul class="{{listClass}} {{themeList}}">'                                                                                                   +
+                       '   {{#each options}}'                                                                                                                  +
+                       '   <li id="{{optionClass}}-{{options.index}}"{{#if options.selected}} class="{{selectedClass}} {{themeSelected}}"{{/if}}>'             +
                        '        <a class="{{optionClass}} {{themeOption}}" data-index="{{options.index}}" data-value="{{options.value}}">{{options.text}}</a>' +
-                       '   </li>' +
-                       '   {{/each}}' +
+                       '   </li>'                                                                                                                              +
+                       '   {{/each}}'                                                                                                                          +
                        '</ul>',
-            drop:      '<div id="{{dropID}}" data-select="{{id}}" class="{{dropClass}}{{#if multiple}} {{multipleClass}}{{/if}}">' +
-                       '    {{search}}' +
-                       '    {{list}}' +
+            drop: '<div id="{{dropID}}" data-select="{{id}}" class="{{dropClass}}{{#if multiple}} {{multipleClass}}{{/if}}">' +
+                       '    {{search}}'                                                                                       +
+                       '    {{list}}'                                                                                         +
                        '</div>'
         },
 
@@ -74,31 +80,35 @@
 
             // callbacks
             onReady:   false,
+            onOpen:    false,
+            onClose:   false,
             onSelect:  false,
             onChange:  false,
             onUpdate:  false,
             onDestroy: false
         },
         events           = {
-            focus:     'focus.' + rocketName,
-            blur:      'blur.' + rocketName,
-            change:    'change.' + rocketName,
-            click:     'click.' + rocketName + ' touchend.' + rocketName + ' pointerup.' + rocketName + ' MSPointerUp.' + rocketName,
+            focus: 'focus.' + rocketName,
+            blur: 'blur.' + rocketName,
+            change: 'change.' + rocketName,
+            click: 'click.' + rocketName + ' touchend.' + rocketName + ' pointerup.' + rocketName + ' MSPointerUp.' + rocketName,
             mousedown: 'mousedown.' + rocketName + ' touchend.' + rocketName + ' pointerdown.' + rocketName + ' MSPointerDown.' + rocketName,
-            keyup:     'keyup.' + rocketName,
-            keydown:   'keydown.' + rocketName,
-            input:     'input.' + rocketName,
-            resize:    'resize.' + rocketName,
-            touchend:  'touchend.' + rocketName + ' pointerup.' + rocketName + ' MSPointerUp.' + rocketName,
+            keyup: 'keyup.' + rocketName,
+            keydown: 'keydown.' + rocketName,
+            input: 'input.' + rocketName,
+            resize: 'resize.' + rocketName,
+            touchend: 'touchend.' + rocketName + ' pointerup.' + rocketName + ' MSPointerUp.' + rocketName,
             touchmove: 'touchmove.' + rocketName,
             // custom events
-            ready:     'uxrready.' + rocketName,
-            select:    'uxrselect.' + rocketName,
-            update:    'uxrupdate.' + rocketName,
-            destroy:   'uxrdestroy.' + rocketName
+            ready: 'uxrready.' + rocketName,
+            open: 'uxropen.' + rocketName,
+            close: 'uxrclose.' + rocketName,
+            select: 'uxrselect.' + rocketName,
+            update: 'uxrupdate.' + rocketName,
+            destroy: 'uxrdestroy.' + rocketName
         },
         keys             = {
-            codes: {
+            codes:  {
                 9:  'tab',
                 13: 'return',
                 27: 'esc',
@@ -124,6 +134,7 @@
                 wrap:            'wrap',
                 ready:           'ready',
                 disabled:        'disabled',
+                readonly:        'readonly',
                 selection:       'selection',
                 selectionText:   'selection-text',
                 selectionTag:    'selected-tag',
@@ -152,13 +163,12 @@
         this._defaults = defaults;
         this.wrapped   = false;
 
-        //utils = new window.uxrPluginUtils({ns: ns});
-
         this.el       = el;
         this.$el      = $(el);
         this.id       = 'uxr-select-options-' + i;
         this.multiple = this.el.hasAttribute('multiple');
         this.disabled = this.el.hasAttribute('disabled');
+        this.readonly = this.el.hasAttribute('readonly');
         this.width    = this.getWidth();
         this.selector = selector;
         this.opened   = false;
@@ -192,10 +202,23 @@
     };
 
     Select.prototype.getSelected = function() {
-        return {
-            value: this.$el.val(),
-            text:  this.$el.find('option:selected').text()
-        };
+        var selected = [];
+
+        if(this.multiple) {
+            this.$el.find('option:selected').each(function() {
+                selected.push({
+                    index: $(this).index(),
+                    value: $(this).attr('value'),
+                    text:  $(this).text()
+                });
+            });
+        }
+        else {
+            selected['value'] = this.$el.val();
+            selected['text']  = this.$el.find('option:selected').text();
+        }
+
+        return selected;
     };
 
     Select.prototype.getOptionData = function() {
@@ -284,6 +307,12 @@
             .on(events.focus, function(e) {
                 e.preventDefault();
                 _this.onFocus();
+            })
+            .on(events.open, function(e) {
+                _this.onOpen(e);
+            })
+            .on(events.close, function(e) {
+                _this.onClose(e);
             })
             .on(events.change, function(e) {
                 _this.onChange(e);
@@ -466,6 +495,10 @@
             selectionText = utils.getClassname('selectionText'),
             selectionTag  = utils.getClassname('selectionTag');
 
+        if(!this.$drop) {
+            this.prepareDrop();
+        }
+
         this.$el.find('option:eq(' + index + ')').prop('selected', false);
         this.$drop.find('.' + utils.getClassname('list') + ' li:eq(' + index + ')').removeClass(selected);
         this.$selection.find('.' + selectionTag + '-' + index).remove();
@@ -528,7 +561,7 @@
     Select.prototype.navigateWithArrow = function(updown) {
         var $highlighted,
             direction   = updown === 'up' ? 'prev' : 'next',
-            highlight = utils.getClassname('highlight'),
+            highlight   = utils.getClassname('highlight'),
             highlighted = (this.$list.find('.' + highlight).length > 0) ? this.$list.find('.' + highlight) : this.$list.find('.' + utils.getClassname('selected')),
             listPos     = this.$list.offset().top,
             scrollTop   = this.$list.scrollTop(),
@@ -582,6 +615,8 @@
             multipleClass:      utils.getClassname('multiple'),
             disabled:           this.disabled,
             disabledClass:      utils.getClassname('disabled'),
+            readonly:           this.readonly,
+            readonlyClass:      utils.getClassname('readonly'),
             width:              'width:' + this.width,
             selectionTextClass: utils.getClassname('selectionText'),
             selectionText:      this.getSelected().text,
@@ -593,10 +628,25 @@
         if(this.multiple) {
             this.multiplePlaceholder = this.$el.attr('placeholder') || this.options.placeholder || '';
 
-            data.selectionText = this.multiplePlaceholder;
+            if(this.getSelected().length > 0) {
+                data.selectionText = this.renderSelectionTags();
+            }
+            else {
+                data.selectionText = this.multiplePlaceholder;
+            }
         }
 
         return utils.render(templates.selection, data);
+    };
+
+    Select.prototype.renderSelectionTags = function() {
+        var data = {
+            selectionTagClass:    utils.getClassname('selectionTag'),
+            removeSelectionClass: utils.getClassname('removeSelection'),
+            selected:             this.getSelected()
+        };
+
+        return utils.render(templates.tags, data);
     };
 
     Select.prototype.renderSearchField = function() {
@@ -638,19 +688,17 @@
     };
 
     Select.prototype.prepareDrop = function() {
-        if(!this.$drop) {
-            this.$drop   = $(this.renderDrop());
-            this.$list   = this.$drop.find('.' + utils.getClassname('list'));
-            this.$search = this.$drop.find('.' + utils.getClassname('search') + ' input');
-            this.setDropPosition();
-            this.setListPosition();
+        this.$drop   = $(this.renderDrop());
+        this.$list   = this.$drop.find('.' + utils.getClassname('list'));
+        this.$search = this.$drop.find('.' + utils.getClassname('search') + ' input');
+        this.setDropPosition();
+        this.setListPosition();
 
-            if(!this.options.search || this.options.searchItemLimit >= this.optionData.length) {
-                this.$search.parent().addClass(utils.getClassname('hide'));
-            }
-            else {
-                this.$search.parent().removeClass(utils.getClassname('hide'));
-            }
+        if(!this.options.search || this.options.searchItemLimit >= this.optionData.length) {
+            this.$search.parent().addClass(utils.getClassname('hide'));
+        }
+        else {
+            this.$search.parent().removeClass(utils.getClassname('hide'));
         }
     };
 
@@ -697,16 +745,20 @@
     };
 
     Select.prototype.open = function() {
-        if(this.disabled) {
+        if(this.disabled || this.readonly) {
             return;
         }
 
         ux.close();
 
-        this.prepareDrop();
+        if(!this.$drop) {
+            this.prepareDrop();
+        }
+
         this.showDrop();
         this.$selection.parent().addClass(utils.getClassname('opened') + ' ' + this.options.opened);
         this.opened = true;
+        this.emitEvent('open');
     };
 
     Select.prototype.close = function() {
@@ -716,6 +768,7 @@
         this.opened  = false;
         this.hideDrop();
         this.$selection.parent().removeClass(utils.getClassname('opened') + ' ' + this.options.opened);
+        this.emitEvent('close');
     };
 
     Select.prototype.onKeyup = function(e) {
@@ -761,6 +814,14 @@
 
     Select.prototype.onReady = function() {
         utils.callback(this.options.onReady);
+    };
+
+    Select.prototype.onOpen = function() {
+        utils.callback(this.options.onOpen);
+    };
+
+    Select.prototype.onClose = function() {
+        utils.callback(this.options.onClose);
     };
 
     Select.prototype.onSelect = function() {
@@ -943,7 +1004,7 @@
     });
 
 // version
-    ux.version = '3.0.0';
+    ux.version = '3.0.1';
 
 // default settings
     ux.settings  = defaults;
