@@ -958,6 +958,7 @@
 
             _instance.getOptionData();
             _instance.prepareDrop();
+            _instance.$selection.find('.' + utils.getClassname('selectionText')).text(_instance.getSelected().text);
 
             // use onUpdate callback from original options
             utils.callback(_opts.onUpdate);
@@ -1012,7 +1013,7 @@
     });
 
 // version
-    ux.version = '3.0.2';
+    ux.version = '3.0.3';
 
 // default settings
     ux.settings  = defaults;
