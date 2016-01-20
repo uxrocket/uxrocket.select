@@ -956,6 +956,9 @@
             // update new options
             _instance.options = $.extend(true, {}, _opts, opts);
 
+            _instance.getOptionData();
+            _instance.prepareDrop();
+
             // use onUpdate callback from original options
             utils.callback(_opts.onUpdate);
         });
@@ -993,6 +996,11 @@
             if(focusedInstances.current !== null) {
                 focusedInstances.current.close();
             }
+        })
+        .on(events.keyup, function(e){
+            if(e.keyCode === keys.esc && focusedInstances.current !== null) {
+                focusedInstances.current.close();
+            }
         });
 
     $(window).on(events.resize + ' ' + events.touchend, function() {
@@ -1004,7 +1012,7 @@
     });
 
 // version
-    ux.version = '3.0.1';
+    ux.version = '3.0.2';
 
 // default settings
     ux.settings  = defaults;
