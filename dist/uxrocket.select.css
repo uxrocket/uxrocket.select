@@ -142,6 +142,10 @@
 .uxr-select-list {
   max-height: 250px;
   overflow-y: scroll;
+}
+
+.uxr-select-list,
+.uxr-select-list ul {
   margin: 0;
   padding: 0;
   list-style: none;
@@ -157,6 +161,12 @@
   padding: 4px;
   border: 1px solid #ccc;
   border-radius: 4px;
+}
+
+.uxr-select-group-name {
+  display: block;
+  padding: 4px;
+  font-weight: bold;
 }
 
 .uxr-select-option {

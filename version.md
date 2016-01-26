@@ -1,3 +1,7 @@
+## Version 3.1.0
+- YENİ: _optgroup_ desteği eklendi.
+- YENİ: `destroy` metoduna ek olarak aynı işlevsellikte `remove` metodu eklendi.
+
 ## Version 3.0.0-rc1
 - DEĞİŞİKLİK: Plugin mimarisi değiştirildi
 - YENİ: Liste içinde arama eklendi
