@@ -155,11 +155,15 @@ $radius: 4px;
     }
 
     &-list {
+        &,
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
         max-height: 250px;
         overflow-y: scroll;
-        margin: 0;
-        padding: 0;
-        list-style: none;
     }
 
     &-search {
@@ -171,6 +175,14 @@ $radius: 4px;
             padding: 4px;
             border: 1px solid $border;
             border-radius: $radius;
+        }
+    }
+
+    &-group {
+        &-name {
+            display: block;
+            padding: 4px;
+            font-weight: bold;
         }
     }
 
