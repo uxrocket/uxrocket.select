@@ -18,6 +18,56 @@
         });
     </script>
 
+    <script>
+        var runtime = {
+            elements: {},
+
+            init: function() {
+                this.elements.select = this.create('select');
+                this.elements.wrap   = this.get('dynamic-select');
+
+                this.elements.select.id          = 'dynamic';
+                this.elements.select.style.width = '250px';
+
+                this.append(this.elements.wrap, this.elements.select);
+                this.bind();
+            },
+
+            get: function(id) {
+                return document.getElementById(id);
+            },
+
+            create: function(tagname) {
+                return document.createElement(tagname);
+            },
+
+            append: function(parent, child) {
+                parent.appendChild(child);
+            },
+
+            bind: function() {
+                this.elements.$select = $(this.elements.select).select();
+            },
+
+            update: function() {
+                $.uxrselect.update('#dynamic');
+            },
+
+            props: function() {
+                return this.elements.$select.data('uxrSelect');
+            },
+
+            options: function() {
+                for(var i = 1; i < 10; i++){
+                    var option = runtime.create('option');
+                    option.innerText = 'Option ' + i;
+
+                    runtime.append(runtime.elements.select, option);
+                }
+            }
+        };
+    </script>
+
     <link rel="stylesheet" href="../dist/uxrocket.select.css" />
 
     <style>
@@ -43,6 +93,7 @@
 <body>
 <div class="content">
     <div class="example">
+        <p id="dynamic-select" class="wrap"></p>
         <p class="wrap">
             <select id="sample-01" class="select" data-wrapper="theme" data-current="themec" data-arrow="themea" data-list="themel" data-selected="themes" data-option="themeo" data-on-update="console.log('updated')">
                 <option value="">Select an option</option>
@@ -202,20 +253,30 @@
                 <option value="3G INTERNET 3g/EDGE Express Kart">3G INTERNET 3g/EDGE Express Kart</option>
                 <option value="3G INTERNET 6710/6510 HP NOTEBOOK">3G INTERNET 6710/6510 HP NOTEBOOK</option>
                 <option value="3G INTERNET Avea cihazlar - E156">3G INTERNET Avea cihazlar - E156</option>
-                <option value="3G INTERNET Dell Inspiron 14Z 3G Ultrabook">3G INTERNET Dell Inspiron 14Z 3G Ultrabook</option>
+                <option value="3G INTERNET Dell Inspiron 14Z 3G Ultrabook">3G INTERNET Dell Inspiron 14Z 3G Ultrabook
+                </option>
                 <option value="3G INTERNET E196 Datacard">3G INTERNET E196 Datacard</option>
                 <option value="3G INTERNET Ericsson AB F3507G">3G INTERNET Ericsson AB F3507G</option>
-                <option value="3G INTERNET NOVATEL WIRELESS EXPEDITE EU870D">3G INTERNET NOVATEL WIRELESS EXPEDITE EU870D</option>
-                <option value="3G INTERNET NOVATEL WIRELESS MERLIN EU740">3G INTERNET NOVATEL WIRELESS MERLIN EU740</option>
+                <option value="3G INTERNET NOVATEL WIRELESS EXPEDITE EU870D">3G INTERNET NOVATEL WIRELESS EXPEDITE
+                    EU870D
+                </option>
+                <option value="3G INTERNET NOVATEL WIRELESS MERLIN EU740">3G INTERNET NOVATEL WIRELESS MERLIN EU740
+                </option>
                 <option value="3G INTERNET Notebook HP-DM3/DM1">3G INTERNET Notebook HP-DM3/DM1</option>
                 <option value="3G INTERNET OLA U11">3G INTERNET OLA U11</option>
                 <option value="3G INTERNET OPTION GLOBESURFER II ">3G INTERNET OPTION GLOBESURFER II</option>
-                <option value="3G INTERNET OPTION GLOBETROTTER HSDPA 3.6 EXPR">3G INTERNET OPTION GLOBETROTTER HSDPA 3.6 EXPR</option>
-                <option value="3G INTERNET Sim Kartlı MiniNote700 / 701 / 731/DV2/110">3G INTERNET Sim Kartlı MiniNote700 / 701 / 731/DV2/110</option>
+                <option value="3G INTERNET OPTION GLOBETROTTER HSDPA 3.6 EXPR">3G INTERNET OPTION GLOBETROTTER HSDPA 3.6
+                    EXPR
+                </option>
+                <option value="3G INTERNET Sim Kartlı MiniNote700 / 701 / 731/DV2/110">3G INTERNET Sim Kartlı
+                    MiniNote700 / 701 / 731/DV2/110
+                </option>
                 <option value="3G INTERNET Turkcell VINN WIFI E5221">3G INTERNET Turkcell VINN WIFI E5221</option>
                 <option value="3G INTERNET Turkcell VINN WIFI MF65M">3G INTERNET Turkcell VINN WIFI MF65M</option>
                 <option value="3G INTERNET Toshiba G450">3G INTERNET Toshiba G450</option>
-                <option value="3G INTERNET Toshiba Portege Z830 3G Ultrabook ">3G INTERNET Toshiba Portege Z830 3G Ultrabook</option>
+                <option value="3G INTERNET Toshiba Portege Z830 3G Ultrabook ">3G INTERNET Toshiba Portege Z830 3G
+                    Ultrabook
+                </option>
                 <option value="3G INTERNET Turkcell MULTIVINN">3G INTERNET Turkcell MULTIVINN</option>
                 <option value="3G INTERNET Turkcell SlimVINN E369">3G INTERNET Turkcell SlimVINN E369</option>
                 <option value="3G INTERNET Turkcell VINN E3131CS2">3G INTERNET Turkcell VINN E3131CS2</option>
@@ -224,8 +285,12 @@
                 <option value="3G INTERNET Turkcell VINN MF667">3G INTERNET Turkcell VINN MF667</option>
                 <option value="3G INTERNET Turkcell VINN Wifi E586">3G INTERNET Turkcell VINN Wifi E586</option>
                 <option value="3G INTERNET Turkcell VINN wifi E587">3G INTERNET Turkcell VINN wifi E587</option>
-                <option value="3G INTERNET TurkcellConnect 3G/EDGE USB Stick (Siyah) ">3G INTERNET TurkcellConnect 3G/EDGE USB Stick (Siyah)</option>
-                <option value="3G INTERNET TurkcellConnect HSDPA USB STick (Beyaz)">3G INTERNET TurkcellConnect HSDPA USB STick (Beyaz)</option>
+                <option value="3G INTERNET TurkcellConnect 3G/EDGE USB Stick (Siyah) ">3G INTERNET TurkcellConnect
+                    3G/EDGE USB Stick (Siyah)
+                </option>
+                <option value="3G INTERNET TurkcellConnect HSDPA USB STick (Beyaz)">3G INTERNET TurkcellConnect HSDPA
+                    USB STick (Beyaz)
+                </option>
                 <option value="3G INTERNET VODAFONE-HUAWEI E160E">3G INTERNET VODAFONE-HUAWEI E160E</option>
                 <option value="3G INTERNET VODAFONE-HUAWEI K3520">3G INTERNET VODAFONE-HUAWEI K3520</option>
                 <option value="3G INTERNET Vınn MultiModem B260A">3G INTERNET Vınn MultiModem B260A</option>
@@ -276,7 +341,8 @@
                 <option value="ALCATEL ONE TOUCH SCRIBE">ALCATEL ONE TOUCH SCRIBE</option>
                 <option value="ALCATEL ONE TOUCH STAR">ALCATEL ONE TOUCH STAR</option>
                 <option value="ALCATEL ONETOUCH PIXI 3 ">ALCATEL ONETOUCH PIXI 3</option>
-                <option value="ALCATEL OT 700 (SANS WAP)/701 (AVEC WAP)">ALCATEL OT 700 (SANS WAP)/701 (AVEC WAP)</option>
+                <option value="ALCATEL OT 700 (SANS WAP)/701 (AVEC WAP)">ALCATEL OT 700 (SANS WAP)/701 (AVEC WAP)
+                </option>
                 <option value="ALCATEL OT-102">ALCATEL OT-102</option>
                 <option value="ALCATEL OT-303">ALCATEL OT-303</option>
                 <option value="ALCATEL OT-708">ALCATEL OT-708</option>
@@ -545,7 +611,9 @@
                 <option value="CK TELECOM (HEYUAN LION">CK TELECOM (HEYUAN LION</option>
                 <option value="CK TELECOM (HEYUAN swan">CK TELECOM (HEYUAN swan</option>
                 <option value="CNT F999 ">CNT F999</option>
-                <option value="COMPAL COMMUNICATIONS INC HEWLETT PACKARD IPAQ">COMPAL COMMUNICATIONS INC HEWLETT PACKARD IPAQ</option>
+                <option value="COMPAL COMMUNICATIONS INC HEWLETT PACKARD IPAQ">COMPAL COMMUNICATIONS INC HEWLETT PACKARD
+                    IPAQ
+                </option>
                 <option value="CONCORD 5900">CONCORD 5900</option>
                 <option value="CONCORD 6700">CONCORD 6700</option>
                 <option value="CONCORD 6800">CONCORD 6800</option>
@@ -579,7 +647,9 @@
                 <option value="D-NET DS501A">D-NET DS501A</option>
                 <option value="D-NET DS503">D-NET DS503</option>
                 <option value="DAI TELEKOM  GM862GPRS">DAI TELEKOM GM862GPRS</option>
-                <option value="DAI TELEKOM  Telit GE864-QUAD, Telit GE864-PY">DAI TELEKOM Telit GE864-QUAD, Telit GE864-PY</option>
+                <option value="DAI TELEKOM  Telit GE864-QUAD, Telit GE864-PY">DAI TELEKOM Telit GE864-QUAD, Telit
+                    GE864-PY
+                </option>
                 <option value="DAY D31">DAY D31</option>
                 <option value="DAY E88">DAY E88</option>
                 <option value="DAY M810">DAY M810</option>
@@ -1159,7 +1229,9 @@
                 <option value="LG U8120">LG U8120</option>
                 <option value="LG U990">LG U990</option>
                 <option value="LG W3000">LG W3000</option>
-                <option value="LIGHTSPEED INTERNATIONAL CO GPRS PCMCIA GPRS-100S">LIGHTSPEED INTERNATIONAL CO GPRS PCMCIA GPRS-100S</option>
+                <option value="LIGHTSPEED INTERNATIONAL CO GPRS PCMCIA GPRS-100S">LIGHTSPEED INTERNATIONAL CO GPRS
+                    PCMCIA GPRS-100S
+                </option>
                 <option value="LUXUS C67">LUXUS C67</option>
                 <option value="LUXUS C77">LUXUS C77</option>
                 <option value="LUXUS DG66">LUXUS DG66</option>
@@ -2020,7 +2092,9 @@
                 <option value="Q-Tek Imate Smartphone">Q-Tek Imate Smartphone</option>
                 <option value="QTEK 1010">QTEK 1010</option>
                 <option value="QTEK 8500">QTEK 8500</option>
-                <option value="QUANTA NAME: 1. T-Mobile, 2. Siemens, 3. QUANTA">QUANTA NAME: 1. T-Mobile, 2. Siemens, 3. QUANTA</option>
+                <option value="QUANTA NAME: 1. T-Mobile, 2. Siemens, 3. QUANTA">QUANTA NAME: 1. T-Mobile, 2. Siemens, 3.
+                    QUANTA
+                </option>
                 <option value="RAKS 220">RAKS 220</option>
                 <option value="RAKS 330">RAKS 330</option>
                 <option value="RAKS 3520">RAKS 3520</option>
@@ -2954,8 +3028,12 @@
                 <option value="TELIT GM410">TELIT GM410</option>
                 <option value="TELIT GM862-GPS">TELIT GM862-GPS</option>
                 <option value="TELIT GM862GPRS (DATA MODULE)">TELIT GM862GPRS (DATA MODULE)</option>
-                <option value="TELIT Telit GE863-GPS, Telit GE863-PY, Telit GE863-QUAD">TELIT Telit GE863-GPS, Telit GE863-PY, Telit GE863-QUAD</option>
-                <option value="TELIT Telit GM862-QUAD-PY, Telit GM862-QUAD">TELIT Telit GM862-QUAD-PY, Telit GM862-QUAD</option>
+                <option value="TELIT Telit GE863-GPS, Telit GE863-PY, Telit GE863-QUAD">TELIT Telit GE863-GPS, Telit
+                    GE863-PY, Telit GE863-QUAD
+                </option>
+                <option value="TELIT Telit GM862-QUAD-PY, Telit GM862-QUAD">TELIT Telit GM862-QUAD-PY, Telit
+                    GM862-QUAD
+                </option>
                 <option value="TELTONIKA RUT500">TELTONIKA RUT500</option>
                 <option value="TELTONIKA TM2">TELTONIKA TM2</option>
                 <option value="TIANYU B830">TIANYU B830</option>
@@ -2969,9 +3047,15 @@
                 <option value="TIGRA N6000">TIGRA N6000</option>
                 <option value="TIMSES-Z FCT">TIMSES-Z FCT</option>
                 <option value="TINNO E580">TINNO E580</option>
-                <option value="TLT DIGITAL COMMUNICATION DEVELOPMENT CO LT X6 ">TLT DIGITAL COMMUNICATION DEVELOPMENT CO LT X6</option>
-                <option value="TLT DIGITAL COMMUNICATION DEVELOPMENT CO LT X81">TLT DIGITAL COMMUNICATION DEVELOPMENT CO LT X81</option>
-                <option value="TLT DIGITAL COMMUNICATION DEVELOPMENT CO MINTON MGSM 41">TLT DIGITAL COMMUNICATION DEVELOPMENT CO MINTON MGSM 41</option>
+                <option value="TLT DIGITAL COMMUNICATION DEVELOPMENT CO LT X6 ">TLT DIGITAL COMMUNICATION DEVELOPMENT CO
+                    LT X6
+                </option>
+                <option value="TLT DIGITAL COMMUNICATION DEVELOPMENT CO LT X81">TLT DIGITAL COMMUNICATION DEVELOPMENT CO
+                    LT X81
+                </option>
+                <option value="TLT DIGITAL COMMUNICATION DEVELOPMENT CO MINTON MGSM 41">TLT DIGITAL COMMUNICATION
+                    DEVELOPMENT CO MINTON MGSM 41
+                </option>
                 <option value="TNN Mobile D100">TNN Mobile D100</option>
                 <option value="TNN Mobile D530">TNN Mobile D530</option>
                 <option value="TNN Mobile D530I">TNN Mobile D530I</option>
@@ -3079,7 +3163,9 @@
                 <option value="TurkcellConnect">TurkcellConnect</option>
                 <option value="VELETTO F888">VELETTO F888</option>
                 <option value="VELETTO N100">VELETTO N100</option>
-                <option value="VERIFONE   vx 610/vx 570/omni 5600/omni 3750">VERIFONE vx 610/vx 570/omni 5600/omni 3750</option>
+                <option value="VERIFONE   vx 610/vx 570/omni 5600/omni 3750">VERIFONE vx 610/vx 570/omni 5600/omni
+                    3750
+                </option>
                 <option value="VERSON S66">VERSON S66</option>
                 <option value="VERSON S77">VERSON S77</option>
                 <option value="VERSON VX99">VERSON VX99</option>
@@ -3155,7 +3241,9 @@
                 <option value="XPHONE N5">XPHONE N5</option>
                 <option value="YAMANLAR LX 7300">YAMANLAR LX 7300</option>
                 <option value="YAMANLAR LX 7500">YAMANLAR LX 7500</option>
-                <option value="YUEN TAT COM. COMPANY CENTURY PIONER, Model B889">YUEN TAT COM. COMPANY CENTURY PIONER, Model B889</option>
+                <option value="YUEN TAT COM. COMPANY CENTURY PIONER, Model B889">YUEN TAT COM. COMPANY CENTURY PIONER,
+                    Model B889
+                </option>
                 <option value="ZTE ATLAS">ZTE ATLAS</option>
                 <option value="ZTE Aqua">ZTE Aqua</option>
                 <option value="ZTE BLADE">ZTE BLADE</option>
@@ -3193,6 +3281,7 @@
                     <option value="Artvin">Artvin</option>
                     <option value="Aydın">Aydın</option>
                 </optgroup>
+                <optgroup label="B">
                     <option value="Balıkesir">Balıkesir</option>
                     <option value="Bartın">Bartın</option>
                     <option value="Batman">Batman</option>
@@ -3203,66 +3292,67 @@
                     <option value="Bolu">Bolu</option>
                     <option value="Burdur">Burdur</option>
                     <option value="Bursa">Bursa</option>
-                    <option value="Çanakkale">Çanakkale</option>
-                    <option value="Çankırı">Çankırı</option>
-                    <option value="Çorum">Çorum</option>
-                    <option value="Denizli">Denizli</option>
-                    <option value="Diyarbakır">Diyarbakır</option>
-                    <option value="Düzce">Düzce</option>
-                    <option value="Edirne">Edirne</option>
-                    <option value="Elazığ">Elazığ</option>
-                    <option value="Erzincan">Erzincan</option>
-                    <option value="Erzurum">Erzurum</option>
-                    <option value="Eskişehir">Eskişehir</option>
-                    <option value="Gaziantep">Gaziantep</option>
-                    <option value="Giresun">Giresun</option>
-                    <option value="Gümüşhane">Gümüşhane</option>
-                    <option value="Hakkari">Hakkari</option>
-                    <option value="Hatay">Hatay</option>
-                    <option value="Iğdır">Iğdır</option>
-                    <option value="Isparta">Isparta</option>
-                    <option value="İstanbul">İstanbul</option>
-                    <option value="İzmir">İzmir</option>
-                    <option value="Kahramanmaraş">Kahramanmaraş</option>
-                    <option value="Karabük">Karabük</option>
-                    <option value="Karaman">Karaman</option>
-                    <option value="Kars">Kars</option>
-                    <option value="Kastamonu">Kastamonu</option>
-                    <option value="Kayseri">Kayseri</option>
-                    <option value="Kırıkkale">Kırıkkale</option>
-                    <option value="Kırklareli">Kırklareli</option>
-                    <option value="Kırşehir">Kırşehir</option>
-                    <option value="Kilis">Kilis</option>
-                    <option value="Kocaeli">Kocaeli</option>
-                    <option value="Konya">Konya</option>
-                    <option value="Kütahya">Kütahya</option>
-                    <option value="Malatya">Malatya</option>
-                    <option value="Manisa">Manisa</option>
-                    <option value="Mardin">Mardin</option>
-                    <option value="Mersin">Mersin</option>
-                    <option value="Muğla">Muğla</option>
-                    <option value="Muş">Muş</option>
-                    <option value="Nevşehir">Nevşehir</option>
-                    <option value="Niğde">Niğde</option>
-                    <option value="Ordu">Ordu</option>
-                    <option value="Osmaniye">Osmaniye</option>
-                    <option value="Rize">Rize</option>
-                    <option value="Sakarya">Sakarya</option>
-                    <option value="Samsun">Samsun</option>
-                    <option value="Siirt">Siirt</option>
-                    <option value="Sinop">Sinop</option>
-                    <option value="Sivas">Sivas</option>
-                    <option value="Şanlıurfa">Şanlıurfa</option>
-                    <option value="Şırnak">Şırnak</option>
-                    <option value="Tekirdağ">Tekirdağ</option>
-                    <option value="Tokat">Tokat</option>
-                    <option value="Trabzon">Trabzon</option>
-                    <option value="Tunceli">Tunceli</option>
-                    <option value="Uşak">Uşak</option>
-                    <option value="Van">Van</option>
-                    <option value="Yalova">Yalova</option>
-                    <option value="Yozgat">Yozgat</option>
-                    <option value="Zonguldak">Zonguldak</option>
+                </optgroup>
+                <option value="Çanakkale">Çanakkale</option>
+                <option value="Çankırı">Çankırı</option>
+                <option value="Çorum">Çorum</option>
+                <option value="Denizli">Denizli</option>
+                <option value="Diyarbakır">Diyarbakır</option>
+                <option value="Düzce">Düzce</option>
+                <option value="Edirne">Edirne</option>
+                <option value="Elazığ">Elazığ</option>
+                <option value="Erzincan">Erzincan</option>
+                <option value="Erzurum">Erzurum</option>
+                <option value="Eskişehir">Eskişehir</option>
+                <option value="Gaziantep">Gaziantep</option>
+                <option value="Giresun">Giresun</option>
+                <option value="Gümüşhane">Gümüşhane</option>
+                <option value="Hakkari">Hakkari</option>
+                <option value="Hatay">Hatay</option>
+                <option value="Iğdır">Iğdır</option>
+                <option value="Isparta">Isparta</option>
+                <option value="İstanbul">İstanbul</option>
+                <option value="İzmir">İzmir</option>
+                <option value="Kahramanmaraş">Kahramanmaraş</option>
+                <option value="Karabük">Karabük</option>
+                <option value="Karaman">Karaman</option>
+                <option value="Kars">Kars</option>
+                <option value="Kastamonu">Kastamonu</option>
+                <option value="Kayseri">Kayseri</option>
+                <option value="Kırıkkale">Kırıkkale</option>
+                <option value="Kırklareli">Kırklareli</option>
+                <option value="Kırşehir">Kırşehir</option>
+                <option value="Kilis">Kilis</option>
+                <option value="Kocaeli">Kocaeli</option>
+                <option value="Konya">Konya</option>
+                <option value="Kütahya">Kütahya</option>
+                <option value="Malatya">Malatya</option>
+                <option value="Manisa">Manisa</option>
+                <option value="Mardin">Mardin</option>
+                <option value="Mersin">Mersin</option>
+                <option value="Muğla">Muğla</option>
+                <option value="Muş">Muş</option>
+                <option value="Nevşehir">Nevşehir</option>
+                <option value="Niğde">Niğde</option>
+                <option value="Ordu">Ordu</option>
+                <option value="Osmaniye">Osmaniye</option>
+                <option value="Rize">Rize</option>
+                <option value="Sakarya">Sakarya</option>
+                <option value="Samsun">Samsun</option>
+                <option value="Siirt">Siirt</option>
+                <option value="Sinop">Sinop</option>
+                <option value="Sivas">Sivas</option>
+                <option value="Şanlıurfa">Şanlıurfa</option>
+                <option value="Şırnak">Şırnak</option>
+                <option value="Tekirdağ">Tekirdağ</option>
+                <option value="Tokat">Tokat</option>
+                <option value="Trabzon">Trabzon</option>
+                <option value="Tunceli">Tunceli</option>
+                <option value="Uşak">Uşak</option>
+                <option value="Van">Van</option>
+                <option value="Yalova">Yalova</option>
+                <option value="Yozgat">Yozgat</option>
+                <option value="Zonguldak">Zonguldak</option>
             </select>
         </p>
     </div>
