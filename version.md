@@ -1,3 +1,12 @@
+# Versiyon 3.1.2
+- FIX: Plugin update olunca eventleri bozulan `selection UI` düzeltildi
+- FIX: Scroll ihtiyacı olmayan durumlarda da gözüken Drop scrollbar düzeltildi
+- FIX: Multiple modda bir seçim kaldırıldığın çalışmayan `change` eventi düzeltildi.
+
+## Versiyon 3.1.1
+- FIX: Plugin destroy olunca ekranda kalan drop kaldırıldı
+- FIX: Plugin options update olunca kendisini güncellemeyen `selection` görünümü düzeltildi.
+
 ## Version 3.1.0
 - YENİ: _optgroup_ desteği eklendi.
 - YENİ: `destroy` metoduna ek olarak aynı işlevsellikte `remove` metodu eklendi.

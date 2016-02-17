@@ -141,7 +141,7 @@
 
 .uxr-select-list {
   max-height: 250px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .uxr-select-list,
