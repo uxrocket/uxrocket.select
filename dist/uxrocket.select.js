@@ -882,7 +882,22 @@
         this.bindSelectionUI();
     };
 
-    Select.prototype.update = function() {
+    Select.prototype.update = function(opts) {
+        var _opts     = this.options;
+
+        this.multiple = this.el.hasAttribute('multiple');
+        this.disabled = this.el.hasAttribute('disabled');
+        this.readonly = this.el.hasAttribute('readonly');
+
+        // update new options
+        this.options = $.extend(true, {}, _opts, opts);
+
+        this.getOptionData();
+
+        this.resetSelection();
+
+        this.prepareDrop();
+
         this.emitEvent('update');
     };
 
@@ -975,7 +990,10 @@
         this.$el.trigger(events[which]);
     };
 
-    ux = $.fn.select = $.fn.uxrselect = $.fn.uxitdselect = $.uxrselect = function(options) {
+    // jQuery original select fallback
+    var _select = $.fn.select;
+
+    ux = $.fn.uxitdselect = $.fn.select = $.fn.Select = $.fn.uxrselect = $.uxrselect = function(options) {
         var selector = this.selector;
 
         return this.each(function() {
@@ -987,6 +1005,8 @@
             $.data(this, ns.data, new Select(this, options, selector));
         });
     };
+
+    $.uxrselect.noConflict = true;
 
     ux.update = function(el, options) {
         var $el, opts;
@@ -1002,27 +1022,7 @@
         }
 
         $el.filter('select').each(function() {
-            var selection,
-                _this     = $(this),
-                _instance = _this.data(ns.data),
-                _opts     = _instance.options;
-
-
-            _instance.multiple = this.hasAttribute('multiple');
-            _instance.disabled = this.hasAttribute('disabled');
-            _instance.readonly = this.hasAttribute('readonly');
-
-            // update new options
-            _instance.options = $.extend(true, {}, _opts, opts);
-
-            _instance.getOptionData();
-
-            _instance.resetSelection();
-
-            _instance.prepareDrop();
-
-            // use onUpdate callback from original options
-            utils.callback(_opts.onUpdate);
+            $(this).data(ns.data).update(opts);
         });
     };
 
@@ -1054,6 +1054,11 @@
 
     // shared events
     $(document)
+        .on('ready', function() {
+            if($.uxrselect.noConflict) {
+                $.fn.select = _select;
+            }
+        })
         .on(events.click, function(e) {
             if(focusedInstances.current !== null) {
                 focusedInstances.current.close();
@@ -1074,7 +1079,7 @@
     });
 
 // version
-    ux.version = '3.1.2';
+    ux.version = '3.2.0';
 
 // default settings
     ux.settings  = defaults;
