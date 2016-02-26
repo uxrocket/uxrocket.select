@@ -1,3 +1,10 @@
+# Versiyon 3.2.0
+- YENİ: Orijinal jQuery metodunu ezen `select` bindingi nedeniyle, $.uxrselect.noConflict tanımı eklendi.
+- DEĞİŞİKLİK: `$.uxrselect.noConflict = true` durumunda `$.fn.select` tanımı iptal ediliyor. `$.fn.Select` ya da `$
+.fn.uxrselect` metodları ile plugin bindingi yapılabilir.
+- DEĞİŞİKLİK: Componentin iç metodlarının daha sağlık kullanılması amacıyla, $.uxrselect.update() metodu, ilgili 
+instance içerisinde `update` metodunu çağıracak şekilde revize edildi.
+
 # Versiyon 3.1.2
 - FIX: Plugin update olunca eventleri bozulan `selection UI` düzeltildi
 - FIX: Scroll ihtiyacı olmayan durumlarda da gözüken Drop scrollbar düzeltildi

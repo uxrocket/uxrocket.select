@@ -10,8 +10,9 @@
     <script src="../dist/uxrocket.select.js"></script>
     <script>
         $(function() {
+            $.uxrselect.noConflict = true;
             var t0 = performance.now();
-            $(".huge-select, .select").select();
+            $(".huge-select, .select").uxrselect();
             var t1 = performance.now();
             var s1 = (t1 - t0).toFixed(4);
             console.log('Took', s1, 'milliseconds to load');
@@ -46,7 +47,7 @@
             },
 
             bind: function() {
-                this.elements.$select = $(this.elements.select).select();
+                this.elements.$select = $(this.elements.select).uxrselect();
             },
 
             update: function() {

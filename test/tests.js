@@ -33,7 +33,7 @@ describe('Testing UX Rocket Select', function() {
 
 
         $.each($inputs, function(item) {
-            $inputs[item].select();
+            $inputs[item].uxrselect();
 
             select[item] = $inputs[item].data(data);
         });
