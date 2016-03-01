@@ -52,6 +52,7 @@ wrapper              | null             | Wrapper class for your theme. Wrapper 
 opened               | null             | Open indicator class for your theme. Added to wrapper. Plugin also adds `uxr-select-opened` for internal usage.
 current              | null             | Selection class for your theme. It is the element where the selected option is showed. Plugin also adds `uxr-select-selection` for internal usage.
 arrow                | null             | Arrow class for your theme. It is the part where select triangle shown. Plugin also adds `uxr-select-arrow` for internal usage.
+drop                 | null             | Drop class for your theme, which holds the search and list. Plugin also adds `uxr-select-drop` for internal usage.
 list                 | null             | Unordered option list class for your theme. Plugin also adds `uxr-select-list` for internal usage.
 option               | null             | Class for each option in the list. It is the anchor element in each `li` Plugin also adds `uxr-select-option` for internal usage.
 selected             | null             | Selected option class for your theme. It is applied to `li` items in the list. Plugin also adds `uxr-select-selected` for internal usage.
@@ -76,6 +77,7 @@ wrapper              | Wrapper class for your theme. Wrapper is the parent eleme
 opened               | Open indicator class for your theme. Added to wrapper. Plugin also adds `uxr-select-opened` for internal usage.
 current              | Selection class for your theme. It is the element where the selected option is showed. 
 arrow                | Arrow class for your theme. It is the part where select triangle shown.
+drop                 | Drop class for your theme, which holds the search and list. 
 list                 | Unordered option list class for your theme.
 option               | Class for each option in the list. It is the anchor element in each `li`.
 selected             | Selected option class for your theme. It is applied to `li` items in the list.
