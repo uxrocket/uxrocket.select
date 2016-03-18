@@ -66,7 +66,7 @@
                        '    {{/if}}' +
                        '    {{/each}}' +
                        '</ul>',
-            drop:      '<div id="{{dropID}}" data-select="{{id}}" class="{{dropClass}}{{#if multiple}} {{multipleClass}}{{/if}}">' +
+            drop:      '<div id="{{dropID}}" data-select="{{id}}" class="{{dropClass}} {{themeDrop}}{{#if multiple}} {{multipleClass}}{{/if}}">' +
                        '    {{search}}' +
                        '    {{list}}' +
                        '</div>'
@@ -77,6 +77,7 @@
             opened:           '',
             current:          '',
             arrow:            '',
+            drop:             '',
             list:             '',
             option:           '',
             selected:         '',
@@ -421,7 +422,7 @@
                 e.stopPropagation();
                 touchmove = true;
             })
-            .on(events.click, '.' + utils.getClassname('option'), function(e) {
+            .on(events.mousedown, '.' + utils.getClassname('option'), function(e) {
                 e.stopPropagation();
                 e.preventDefault();
 
@@ -507,6 +508,7 @@
                     index:                index,
                     value:                value
                 });
+
                 $option.addClass(selected);
 
                 if(this.$el.val() === null) {
@@ -718,6 +720,7 @@
             dropID:        this.id,
             id:            this.el.id,
             dropClass:     utils.getClassname('drop'),
+            themeDrop:     this.options.drop,
             multiple:      this.multiple,
             multipleClass: utils.getClassname('drop') + '-multiple',
             search:        this.renderSearchField(),
@@ -883,7 +886,7 @@
     };
 
     Select.prototype.update = function(opts) {
-        var _opts     = this.options;
+        var _opts = this.options;
 
         this.multiple = this.el.hasAttribute('multiple');
         this.disabled = this.el.hasAttribute('disabled');
@@ -1079,7 +1082,7 @@
     });
 
 // version
-    ux.version = '3.2.0';
+    ux.version = '3.2.1';
 
 // default settings
     ux.settings  = defaults;

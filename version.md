@@ -1,3 +1,7 @@
+# Versiyon 3.2.1
+- YENİ: DropUI için yeni option eklendi.
+- FIX: IE'de çalışmayan multiple select seçimi düzeltildi.
+
 # Versiyon 3.2.0
 - YENİ: Orijinal jQuery metodunu ezen `select` bindingi nedeniyle, $.uxrselect.noConflict tanımı eklendi.
 - DEĞİŞİKLİK: `$.uxrselect.noConflict = true` durumunda `$.fn.select` tanımı iptal ediliyor. `$.fn.Select` ya da `$
