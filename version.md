@@ -1,3 +1,6 @@
+# Versiyon 3.2.2
+- YENİ: Option lara custom class eklenebilme özelliği getirildi
+
 # Versiyon 3.2.1
 - YENİ: DropUI için yeni option eklendi.
 - FIX: IE'de çalışmayan multiple select seçimi düzeltildi.
