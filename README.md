@@ -56,6 +56,7 @@ drop                 | null             | Drop class for your theme, which holds
 list                 | null             | Unordered option list class for your theme. Plugin also adds `uxr-select-list` for internal usage.
 option               | null             | Class for each option in the list. It is the anchor element in each `li` Plugin also adds `uxr-select-option` for internal usage.
 selected             | null             | Selected option class for your theme. It is applied to `li` items in the list. Plugin also adds `uxr-select-selected` for internal usage.
+disabled             | null             | Disabled option class for your theme. It is applied to `li` items in the list. Plugin also adds `uxr-select-disabled` for internal usage.
 search               | true             | Indicates whether list is searchable or not.
 searchItemLimit      | 10               | Defines the search box is visible or not. Usefull for small list. Search list will be visible even if its set to true when options are more than `searchItemLimit`
 searchType           | starts (starts or contains) | Defines the search lookup. If set to `starts` then it looks up if option's text or value starts with search term, otherwise, looks up if it contains the term.

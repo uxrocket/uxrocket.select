@@ -57,7 +57,7 @@
                        '        <span class="{{groupNameClass}}">{{options.groupName}}</span>' +
                        '        <ul>' +
                        '    {{/if}}' +
-                       '    <li id="{{optionClass}}-{{options.index}}" class="{{#if options.selected}}{{selectedClass}} {{themeSelected}}{{/if}} {{#if options.disabled}}{{disabledClass}}{{/if}}">' +
+                       '    <li id="{{optionClass}}-{{options.index}}" class="{{#if options.selected}}{{selectedClass}} {{themeSelected}}{{/if}} {{#if options.disabled}}{{disabledClass}} {{themeDisabled}}{{/if}}">' +
                        '        <a class="{{optionClass}} {{themeOption}} {{options.class}}" data-index="{{options.index}}" data-value="{{options.value}}">{{options.text}}</a>' +
                        '    </li>' +
                        '    {{#if options.groupEnd}}' +
@@ -81,6 +81,7 @@
             list:             '',
             option:           '',
             selected:         '',
+            disabled:         '',
             search:           true,
             searchItemLimit:  10, // search box will visible if more than 10 item present in select,
             searchType:       'starts', // starts or contain. search if term starts with the key or contain the key
@@ -478,7 +479,7 @@
             text            = $selected.text(),
             $val            = this.$el.val();
 
-        if($option.hasClass(utils.getClassname('disabled'))){
+        if($option.hasClass(utils.getClassname('disabled'))) {
             return;
         }
 
@@ -719,6 +720,7 @@
             options:        list || this.optionData,
             themeList:      this.options.list,
             themeSelected:  this.options.selected,
+            themeDisabled:  this.options.disabled,
             themeOption:    this.options.option
         };
 
