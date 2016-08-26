@@ -3362,9 +3362,11 @@
     function selected(e) {
         var $el = $(e.target);
 
-        console.log('Selected Value: ' + $el.data('value'));
-        console.log('Selected Index: ' + $el.data('index'));
-        console.log('Selected Text: ' + $el.text());
+        if(!$(e.target.parentElement).hasClass('uxr-select-disabled')) {
+            console.log('Selected Value: ' + $el.data('value'));
+            console.log('Selected Index: ' + $el.data('index'));
+            console.log('Selected Text: ' + $el.text());
+        }
     }
 
     var $s = $('#sample-01').data('uxrSelect');
