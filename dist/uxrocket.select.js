@@ -34,42 +34,42 @@
 
         templates        = {
             selection: '<a href="#" id="{{selectionClass}}-{{id}}" class="{{selectionClass}}{{#if multiple}} {{multipleClass}}{{/if}}{{#if disabled}} {{disabledClass}}{{/if}}{{#if readonly}} {{readonlyClass}}{{/if}} {{themeCurrent}}" style="{{width}}">' +
-            '    <span class="{{selectionTextClass}}">{{selectionText}}</span>' +
-            '    <span class="{{arrowClass}} {{themeArrow}}"></span>' +
-            '</a>',
+                       '    <span class="{{selectionTextClass}}">{{selectionText}}</span>' +
+                       '    <span class="{{arrowClass}} {{themeArrow}}"></span>' +
+                       '</a>',
             tags:      '{{#each selected}}' +
-            '<span class="{{selectionTagClass}} {{selectionTagClass}}-{{selected.index}}" data-index="{{selected.index}}" data-value="{{selected.value}}">' +
-            '    {{selected.text}}' +
-            '    <span class="{{removeSelectionClass}}">X</span>' +
-            '</span>' +
-            '{{/each}}',
+                       '<span class="{{selectionTagClass}} {{selectionTagClass}}-{{selected.index}}" data-index="{{selected.index}}" data-value="{{selected.value}}">' +
+                       '    {{selected.text}}' +
+                       '    <span class="{{removeSelectionClass}}">X</span>' +
+                       '</span>' +
+                       '{{/each}}',
             multi:     '<span class="{{selectionTagClass}} {{selectionTagClass}}-{{index}}" data-index="{{index}}" data-value="{{value}}">' +
-            '    {{selectionText}}' +
-            '    <span class="{{removeSelectionClass}}">X</span>' +
-            '</span>',
+                       '    {{selectionText}}' +
+                       '    <span class="{{removeSelectionClass}}">X</span>' +
+                       '</span>',
             search:    '<span class="{{searchClass}}">' +
-            '   <input type="text" name="{{searchInput}}" />' +
-            '</span>',
+                       '   <input type="text" name="{{searchInput}}" />' +
+                       '</span>',
             list:      '<ul class="{{listClass}} {{themeList}}">' +
-            '    {{#each options}}' +
-            '    {{#if options.groupStart}}' +
-            '    <li class="{{groupClass}}">' +
-            '        <span class="{{groupNameClass}}">{{options.groupName}}</span>' +
-            '        <ul>' +
-            '    {{/if}}' +
-            '    <li id="{{optionClass}}-{{options.index}}" class="{{#if options.selected}}{{selectedClass}} {{themeSelected}}{{/if}} {{#if options.disabled}}{{disabledClass}} {{themeDisabled}}{{/if}}">' +
-            '        <a class="{{optionClass}} {{themeOption}} {{options.class}}" data-index="{{options.index}}" data-value="{{options.value}}">{{options.text}}</a>' +
-            '    </li>' +
-            '    {{#if options.groupEnd}}' +
-            '        </li>' +
-            '    </ul>' +
-            '    {{/if}}' +
-            '    {{/each}}' +
-            '</ul>',
+                       '    {{#each options}}' +
+                       '    {{#if options.groupStart}}' +
+                       '    <li class="{{groupClass}}">' +
+                       '        <span class="{{groupNameClass}}">{{options.groupName}}</span>' +
+                       '        <ul>' +
+                       '    {{/if}}' +
+                       '    <li id="{{optionClass}}-{{options.index}}" class="{{#if options.selected}}{{selectedClass}} {{themeSelected}}{{/if}} {{#if options.disabled}}{{disabledClass}} {{themeDisabled}}{{/if}}">' +
+                       '        <a class="{{optionClass}} {{themeOption}} {{options.class}}" data-index="{{options.index}}" data-value="{{options.value}}">{{options.text}}</a>' +
+                       '    </li>' +
+                       '    {{#if options.groupEnd}}' +
+                       '        </li>' +
+                       '    </ul>' +
+                       '    {{/if}}' +
+                       '    {{/each}}' +
+                       '</ul>',
             drop:      '<div id="{{dropID}}" data-select="{{id}}" class="{{dropClass}} {{themeDrop}}{{#if multiple}} {{multipleClass}}{{/if}}">' +
-            '    {{search}}' +
-            '    {{list}}' +
-            '</div>'
+                       '    {{search}}' +
+                       '    {{list}}' +
+                        '</div>'
         },
 
         defaults         = {
@@ -331,8 +331,8 @@
         this.$el
             .removeAttr('aria-hidden')
             .removeClass(
-            utils.getClassname('hidden') + ' ' +
-            utils.getClassname('ready')
+                utils.getClassname('hidden') + ' ' +
+                utils.getClassname('ready')
         );
     };
 
