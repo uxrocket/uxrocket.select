@@ -642,8 +642,6 @@
             highlighted.removeClass(highlight);
 
             if(updown === 'up') {
-                // TODO: Discuss; Should I use this short hand here?
-                // highlightedIndex = --highlightedIndex < 0 ? $selectableItemsList.length - 1: highlightedIndex;
                 if(--highlightedIndex < 0) {
                     highlightedIndex = $selectableItemsList.length - 1;
                 }
