@@ -1,3 +1,11 @@
+## Versiyon 3.4.0
+- FIX: Drop'tan bir eleman seçildiğinde trigger olmayan orjinal change eventi düzeltildi.
+- FIX: Drop içinde arama yapıldıktan sonra `ok` tuşları ile seçim yapılamaması düzeltildi.
+- FIX: Drop içinde arama yapıldıktan sonra `enter` ile seçim yapılamaması düzeltildi.
+- FIX: Drop içinde grup tanımı olduğunda çalışmayan `ok` tuşları ile ilerleme düzeltildi.
+- DEĞİŞİKLİK: `$.uxrselect.close()` metodu açık olan bütün dropları kapatacak şekilde düzenlendi.
+- YENİ: Tablet ve telefonlarda içeriği sadece numeric olan listelerde uygun klavyenin gözükmesi için `data-numeric` ve `numeric` optiyonları eklendi.
+
 # Versiyon 3.2.2
 - YENİ: Option lara custom class eklenebilme özelliği getirildi
 

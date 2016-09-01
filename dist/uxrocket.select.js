@@ -88,6 +88,8 @@
             minLetters:       2,
             maxSelection:     0, // no limit
             maxSelectionWarn: 'You have reached allowed maximum selection',
+            numeric:          false, // on handheld devices, controls to numeric or classic keyboard view when
+            // search field focuses
 
             // callbacks
             onReady:   false,
@@ -333,7 +335,7 @@
             .removeClass(
                 utils.getClassname('hidden') + ' ' +
                 utils.getClassname('ready')
-        );
+            );
     };
 
     Select.prototype.bindUI = function() {
@@ -571,6 +573,7 @@
         }
 
         this.emitEvent('change');
+        this.$el.trigger('change'); // also trigger original event.
     };
 
     Select.prototype.removeTag = function($tag) {
@@ -612,8 +615,8 @@
     Select.prototype.navigateWithEnter = function() {
         if(!this.multiple) {
             var $visibleList = this.$drop.find("." + utils.getClassname('list')),
-                highlight   = utils.getClassname('highlight'),
-                highlighted = $visibleList.find('.' + highlight);
+                highlight    = utils.getClassname('highlight'),
+                highlighted  = $visibleList.find('.' + highlight);
 
             if(highlighted.length > 0) {
                 highlighted.removeClass(highlight);
@@ -626,14 +629,14 @@
 
     Select.prototype.navigateWithArrow = function(updown) {
         var $highlighted,
-            highlight   = utils.getClassname('highlight'),
-            $visibleContent = this.$drop.find("." + utils.getClassname('list')),
+            highlight            = utils.getClassname('highlight'),
+            $visibleContent      = this.$drop.find("." + utils.getClassname('list')),
             $selectableItemsList = $visibleContent.find('li:not(.' + utils.getClassname('group') + ')'),
-            highlighted = ($visibleContent.find('.' + highlight).length > 0) ? $visibleContent.find('.' + highlight) : $visibleContent.find('.' + utils.getClassname('selected')),
-            highlightedIndex = $selectableItemsList.index(highlighted),
-            listPos     = $visibleContent.offset().top,
-            scrollTop   = $visibleContent.scrollTop(),
-            height      = $visibleContent.height();
+            highlighted          = ($visibleContent.find('.' + highlight).length > 0) ? $visibleContent.find('.' + highlight) : $visibleContent.find('.' + utils.getClassname('selected')),
+            highlightedIndex     = $selectableItemsList.index(highlighted),
+            listPos              = $visibleContent.offset().top,
+            scrollTop            = $visibleContent.scrollTop(),
+            height               = $visibleContent.height();
 
         if(!highlighted.length) {
             var firstLast = updown === 'up' ? 'last' : 'first';
@@ -725,8 +728,8 @@
         var data = {
             searchClass: utils.getClassname('search'),
             searchInput: utils.getClassname('search') + '-' + this._instance,
-            inputType  : this.options.numeric ? 'tel' : 'text',
-            list       : this.id
+            inputType:   this.options.numeric ? 'tel' : 'text',
+            list:        this.id
         };
 
         return utils.render(templates.search, data);
@@ -772,12 +775,12 @@
         this.setDropPosition();
         this.setListPosition();
 
-    if(!this.options.search || this.options.searchItemLimit >= this.optionData.length) {
-        this.$search.parent().addClass(utils.getClassname('hide'));
-    }
-    else {
-        this.$search.parent().removeClass(utils.getClassname('hide'));
-    }
+        if(!this.options.search || this.options.searchItemLimit >= this.optionData.length) {
+            this.$search.parent().addClass(utils.getClassname('hide'));
+        }
+        else {
+            this.$search.parent().removeClass(utils.getClassname('hide'));
+        }
     };
 
     Select.prototype.setDropPosition = function(keyboard) {
@@ -1074,10 +1077,7 @@
         if($drops.length > 0) {
             $drops.each(function() {
                 var instance = $(utils.escapeSelector('#' + $(this).data('select'))).data(ns.data);
-
-                if(instance !== focusedInstances.current) {
-                    instance.close();
-                }
+                instance.close();
             });
         }
     };
@@ -1116,7 +1116,7 @@
     });
 
 // version
-    ux.version = '3.3.0';
+    ux.version = '3.4.0';
 
 // default settings
     ux.settings  = defaults;
