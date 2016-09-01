@@ -3356,15 +3356,38 @@
                 <option value="Zonguldak">Zonguldak</option>
             </select>
         </p>
+
+        <p class="wrap">
+            <select id="sample-numeric" class="select" data-numeric="true" data-search="true">
+                <option value="">Select an option</option>
+                <option>1905</option>
+                <option>1992</option>
+                <option>1993</option>
+                <option>1994</option>
+                <option>1995</option>
+                <option>1996</option>
+                <option>1997</option>
+                <option>1998</option>
+                <option>1999</option>
+                <option>2000</option>
+                <option>2001</option>
+                <option>2002</option>
+                <option>2003</option>
+            </select>
+        </p>
+
+
     </div>
 </div>
 <script>
     function selected(e) {
         var $el = $(e.target);
 
-        console.log('Selected Value: ' + $el.data('value'));
-        console.log('Selected Index: ' + $el.data('index'));
-        console.log('Selected Text: ' + $el.text());
+        if(!$(e.target.parentElement).hasClass('uxr-select-disabled')) {
+            console.log('Selected Value: ' + $el.data('value'));
+            console.log('Selected Index: ' + $el.data('index'));
+            console.log('Selected Text: ' + $el.text());
+        }
     }
 
     var $s = $('#sample-01').data('uxrSelect');
