@@ -48,7 +48,7 @@
                        '    <span class="{{removeSelectionClass}}">X</span>' +
                        '</span>',
             search:    '<span class="{{searchClass}}">' +
-                       '   <input type="text" name="{{searchInput}}" />' +
+                       '   <input type="{{inputType}}" name="{{searchInput}}" />' +
                        '</span>',
             list:      '<ul class="{{listClass}} {{themeList}}">' +
                        '    {{#each options}}' +
@@ -69,7 +69,7 @@
             drop:      '<div id="{{dropID}}" data-select="{{id}}" class="{{dropClass}} {{themeDrop}}{{#if multiple}} {{multipleClass}}{{/if}}">' +
                        '    {{search}}' +
                        '    {{list}}' +
-                        '</div>'
+                       '</div>'
         },
 
         defaults         = {
@@ -82,7 +82,7 @@
             option:           '',
             selected:         '',
             disabled:         '',
-            search:           true,
+            search:           '',
             searchItemLimit:  10, // search box will visible if more than 10 item present in select,
             searchType:       'starts', // starts or contain. search if term starts with the key or contain the key
             minLetters:       2,
@@ -105,7 +105,6 @@
             click:     'click.' + rocketName + ' touchend.' + rocketName + ' pointerup.' + rocketName + ' MSPointerUp.' + rocketName,
             mousedown: 'mousedown.' + rocketName + ' touchend.' + rocketName + ' pointerdown.' + rocketName + ' MSPointerDown.' + rocketName,
             keyup:     'keyup.' + rocketName,
-            localkeyup:'keyup.' + rocketName + '.local',
             keydown:   'keydown.' + rocketName,
             input:     'input.' + rocketName,
             resize:    'resize.' + rocketName,
@@ -153,6 +152,7 @@
                 removeSelection: 'remove-selected-tag',
                 arrow:           'arrow',
                 multiple:        'multiple',
+                numeric:         'numeric',
                 opened:          'opened',
                 drop:            'drop',
                 reverseDrop:     'reverse-drop',
@@ -371,7 +371,7 @@
         var _this = this;
 
         _this.$selection
-            .on(events.localkeyup, function(e) {
+            .on(events.keyup, function(e) {
                 e.preventDefault();
 
                 _this.onKeyup(e);
@@ -451,13 +451,13 @@
     };
 
     Select.prototype.unbindKeyupListener = function() {
-        $(document).off(events.localkeyup);
+        $(document).off(events.keyup);
     };
 
     Select.prototype.bindKeyupListener = function() {
         var _this = this;
 
-        $(document).on(events.localkeyup, function(e) {
+        $(document).on(events.keyup, function(e) {
             e.preventDefault();
 
             if(e.keyCode === keys.up || e.keyCode === keys.down) {
@@ -465,6 +465,9 @@
             }
             else if(e.keyCode === keys.return) {
                 _this.navigateWithEnter();
+            }
+            else if(e.keyCode === keys.esc) {
+                _this.close();
             }
             else if(_this.$search.val().length >= _this.options.minLetters) {
                 _this.search(_this.$search.val());
@@ -582,7 +585,7 @@
             list;
 
         results = $.map(this.optionData, function(item) {
-            if(_this._search(item, term)) {
+            if(_this._search(item, term.trim())) {
                 return item;
             }
         });
@@ -608,7 +611,7 @@
 
     Select.prototype.navigateWithEnter = function() {
         if(!this.multiple) {
-            var $visibleList = $('#uxr-select-options-' + this._instance).find("." + utils.getClassname('list')),
+            var $visibleList = this.$drop.find("." + utils.getClassname('list')),
                 highlight   = utils.getClassname('highlight'),
                 highlighted = $visibleList.find('.' + highlight);
 
@@ -624,8 +627,8 @@
     Select.prototype.navigateWithArrow = function(updown) {
         var $highlighted,
             highlight   = utils.getClassname('highlight'),
-            $visibleContent = $('#uxr-select-options-' + this._instance).find("." + utils.getClassname('list')),
-            $selectableItemsList = $visibleContent.find('[id^="' + utils.getClassname('option') + '"]'),
+            $visibleContent = this.$drop.find("." + utils.getClassname('list')),
+            $selectableItemsList = $visibleContent.find('li').not('.' + utils.getClassname('group')),
             highlighted = ($visibleContent.find('.' + highlight).length > 0) ? $visibleContent.find('.' + highlight) : $visibleContent.find('.' + utils.getClassname('selected')),
             highlightedIndex = $selectableItemsList.index(highlighted),
             listPos     = $visibleContent.offset().top,
@@ -722,7 +725,8 @@
         var data = {
             searchClass: utils.getClassname('search'),
             searchInput: utils.getClassname('search') + '-' + this._instance,
-            list:        this.id
+            inputType  : this.options.numeric ? 'tel' : 'text',
+            list       : this.id
         };
 
         return utils.render(templates.search, data);
@@ -768,11 +772,19 @@
         this.setDropPosition();
         this.setListPosition();
 
-        if(!this.options.search || this.options.searchItemLimit >= this.optionData.length) {
+        if(this.options.search === true) { //forced to be opened by data-search attr
+            this.$search.parent().removeClass(utils.getClassname('hide'));
+        }
+        else if(this.options.search === false) { //forced to be closed by data-search attr
             this.$search.parent().addClass(utils.getClassname('hide'));
         }
-        else {
-            this.$search.parent().removeClass(utils.getClassname('hide'));
+        else { //data-search attr not given, fallback to default behaviour
+            if(this.options.searchItemLimit >= this.optionData.length) {
+                this.$search.parent().addClass(utils.getClassname('hide'));
+            }
+            else {
+                this.$search.parent().removeClass(utils.getClassname('hide'));
+            }
         }
     };
 
@@ -1099,11 +1111,6 @@
         })
         .on(events.click, function(e) {
             if(focusedInstances.current !== null) {
-                focusedInstances.current.close();
-            }
-        })
-        .on(events.keyup, function(e) {
-            if(e.keyCode === keys.esc && focusedInstances.current !== null) {
                 focusedInstances.current.close();
             }
         });
