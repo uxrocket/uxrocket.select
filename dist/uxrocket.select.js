@@ -82,7 +82,7 @@
             option:           '',
             selected:         '',
             disabled:         '',
-            search:           '',
+            search:           true,
             searchItemLimit:  10, // search box will visible if more than 10 item present in select,
             searchType:       'starts', // starts or contain. search if term starts with the key or contain the key
             minLetters:       2,
@@ -628,7 +628,7 @@
         var $highlighted,
             highlight   = utils.getClassname('highlight'),
             $visibleContent = this.$drop.find("." + utils.getClassname('list')),
-            $selectableItemsList = $visibleContent.find('li').not('.' + utils.getClassname('group')),
+            $selectableItemsList = $visibleContent.find('li:not(.' + utils.getClassname('group') + ')'),
             highlighted = ($visibleContent.find('.' + highlight).length > 0) ? $visibleContent.find('.' + highlight) : $visibleContent.find('.' + utils.getClassname('selected')),
             highlightedIndex = $selectableItemsList.index(highlighted),
             listPos     = $visibleContent.offset().top,
@@ -772,20 +772,12 @@
         this.setDropPosition();
         this.setListPosition();
 
-        if(this.options.search === true) { //forced to be opened by data-search attr
-            this.$search.parent().removeClass(utils.getClassname('hide'));
-        }
-        else if(this.options.search === false) { //forced to be closed by data-search attr
-            this.$search.parent().addClass(utils.getClassname('hide'));
-        }
-        else { //data-search attr not given, fallback to default behaviour
-            if(this.options.searchItemLimit >= this.optionData.length) {
-                this.$search.parent().addClass(utils.getClassname('hide'));
-            }
-            else {
-                this.$search.parent().removeClass(utils.getClassname('hide'));
-            }
-        }
+    if(!this.options.search || this.options.searchItemLimit >= this.optionData.length) {
+        this.$search.parent().addClass(utils.getClassname('hide'));
+    }
+    else {
+        this.$search.parent().removeClass(utils.getClassname('hide'));
+    }
     };
 
     Select.prototype.setDropPosition = function(keyboard) {
