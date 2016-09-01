@@ -63,6 +63,7 @@ searchType           | starts (starts or contains) | Defines the search lookup. 
 minLetters           | 2                | Minimum letter required for search to start.
 maxSelection         | 0                | For _multiple_ mode, restrict maximum selectable option count. If 0 or lower, no restriction applied.
 maxSelectionWarn     | Text             | Shows a user friendly alert when reached maximum selection. Default text is "You have reached allowed maximum selection". 
+numeric              | false            | On handheld devices, controls to numeric or classic keyboard view when search field focuses
 placeholder          | null             | Adds a placeholder text on multiple selects
 onReady              | false            | Calls the function when plugin is ready.
 onSelect             | false            | Calls the function when option is selected.
@@ -88,6 +89,7 @@ search-type          | Defines the search lookup. If set to `starts` then it loo
 min-letters          | Minimum letter required for search to start.
 max-selection        | For _multiple_ mode, restrict maximum selectable option count. If 0 or lower, no restriction applied.
 max-selection-warn   | Shows a user friendly alert when reached maximum selection. Default text is "You have reached allowed maximum selection". 
+numeric              | on handheld devices, controls to numeric or classic keyboard view when search field focuses
 placeholder          | Adds a placeholder text on multiple selects
 on-ready             | Calls the function when plugin is ready.
 on-select            | Calls the function when option is selected.

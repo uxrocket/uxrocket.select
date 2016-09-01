@@ -3,6 +3,7 @@
 - FIX: Drop içinde arama yapıldıktan sonra `ok` tuşları ile seçim yapılamaması düzeltildi.
 - FIX: Drop içinde arama yapıldıktan sonra `enter` ile seçim yapılamaması düzeltildi.
 - FIX: Drop içinde grup tanımı olduğunda çalışmayan `ok` tuşları ile ilerleme düzeltildi.
+- DEĞİŞİKLİK: Drop içinde arama kutusu görünür ise, drop açıldığında arama kutusunun focus olması sağlandı.
 - DEĞİŞİKLİK: `$.uxrselect.close()` metodu açık olan bütün dropları kapatacak şekilde düzenlendi.
 - YENİ: Tablet ve telefonlarda içeriği sadece numeric olan listelerde uygun klavyenin gözükmesi için `data-numeric` ve `numeric` optiyonları eklendi.
 
