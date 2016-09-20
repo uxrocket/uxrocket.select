@@ -818,8 +818,9 @@
     };
 
     Select.prototype.hideDrop = function() {
-        if(this.$drop) {
-            this.$drop.remove();
+        var drop = $("#" + this.id);
+        if(drop.length > 0) {
+            $("#" + this.id).remove();
             this.$search.val('');
             this.setOriginalList();
         }
