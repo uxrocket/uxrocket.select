@@ -1,3 +1,6 @@
+## Versiyon 3.4.1
+- FIX: Drop'un kapanmasına engel olan bir bug çözüldü.
+
 ## Versiyon 3.4.0
 - FIX: Drop'tan bir eleman seçildiğinde trigger olmayan orjinal change eventi düzeltildi.
 - FIX: Drop içinde arama yapıldıktan sonra `ok` tuşları ile seçim yapılamaması düzeltildi.
