@@ -1,3 +1,6 @@
+## Versiyon 3.5.0
+- YENI: Multiple drop üzerinde herhangi bir seçim yapıldığında kaç adet seçim yapıldığı gösterilebilecek.
+
 ## Versiyon 3.4.1
 - FIX: Drop'un kapanmasına engel olan bir bug çözüldü.
 

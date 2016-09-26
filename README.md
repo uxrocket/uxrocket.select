@@ -64,6 +64,8 @@ minLetters           | 2                | Minimum letter required for search to 
 maxSelection         | 0                | For _multiple_ mode, restrict maximum selectable option count. If 0 or lower, no restriction applied.
 maxSelectionWarn     | Text             | Shows a user friendly alert when reached maximum selection. Default text is "You have reached allowed maximum selection". 
 numeric              | false            | On handheld devices, controls to numeric or classic keyboard view when search field focuses
+displayType          | tags             | For _multiple_ mode, displays selection as `tags` or `text`
+multipleInfoMessage  | 'Seçilen Kayıt:' | For _multiple_ and _text_ mode, this will be the selection prefix
 placeholder          | null             | Adds a placeholder text on multiple selects
 onReady              | false            | Calls the function when plugin is ready.
 onSelect             | false            | Calls the function when option is selected.
