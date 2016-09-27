@@ -201,6 +201,14 @@ $radius: 4px;
             border: 1px solid $border;
             border-radius: $radius;
         }
+
+        div[contenteditable="true"] {
+            width: calc(100% - 8px);
+            padding: 4px;
+            border: 1px solid $border;
+            border-radius: $radius;
+        }
+
     }
 
     &-group {
@@ -234,6 +242,8 @@ $radius: 4px;
         display: none;
     }
 }
+
+
 
 @keyframes uxr-select-blink {
     0% {
