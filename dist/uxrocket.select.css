@@ -187,6 +187,13 @@
   border-radius: 4px;
 }
 
+.uxr-select-search div[contenteditable="true"] {
+  width: calc(100% - 8px);
+  padding: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
 .uxr-select-group-name {
   display: block;
   padding: 4px;
