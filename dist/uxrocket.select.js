@@ -73,22 +73,24 @@
         },
 
         defaults         = {
-            wrapper:          '',
-            opened:           '',
-            current:          '',
-            arrow:            '',
-            drop:             '',
-            list:             '',
-            option:           '',
-            selected:         '',
-            disabled:         '',
-            search:           true,
-            searchItemLimit:  10, // search box will visible if more than 10 item present in select,
-            searchType:       'starts', // starts or contain. search if term starts with the key or contain the key
-            minLetters:       2,
-            maxSelection:     0, // no limit
-            maxSelectionWarn: 'You have reached allowed maximum selection',
-            numeric:          false, // on handheld devices, controls to numeric or classic keyboard view when
+            wrapper:             '',
+            opened:              '',
+            current:             '',
+            arrow:               '',
+            drop:                '',
+            list:                '',
+            option:              '',
+            selected:            '',
+            disabled:            '',
+            search:              true,
+            searchItemLimit:     10, // search box will visible if more than 10 item present in select,
+            searchType:          'starts', // starts or contain. search if term starts with the key or contain the key
+            displayType:         'tags', // tags or selected number
+            multipleInfoMessage:  'Seçilen Kayıt:',
+            minLetters:          2,
+            maxSelection:        0, // no limit
+            maxSelectionWarn:    'You have reached allowed maximum selection',
+            numeric:             false, // on handheld devices, controls to numeric or classic keyboard view when
             // search field focuses
 
             // callbacks
@@ -528,24 +530,29 @@
                     return;
                 }
 
-                var tag = utils.render(templates.multi, {
-                    selectionText:        text,
-                    selectionTagClass:    selectionTag,
-                    removeSelectionClass: removeSelection,
-                    index:                index,
-                    value:                value
-                });
-
+                this.$el.find('option:eq(' + index + ')').prop('selected', true);
                 $option.addClass(selected);
 
-                if(this.$el.val() === null) {
-                    this.$selection.find('.' + selectionText).html(tag);
-                }
-                else {
-                    this.$selection.find('.' + selectionText).append(tag);
+                if(this.options.displayType === 'tags') {
+                    var tag = utils.render(templates.multi, {
+                        selectionText:        text,
+                        selectionTagClass:    selectionTag,
+                        removeSelectionClass: removeSelection,
+                        index:                index,
+                        value:                value
+                    });
+
+                    if(this.$el.val() === null) {
+                        this.$selection.find('.' + selectionText).html(tag);
+                    }
+                    else {
+                        this.$selection.find('.' + selectionText).append(tag);
+                    }
                 }
 
-                this.$el.find('option:eq(' + index + ')').prop('selected', true);
+                else {
+                    this.$selection.find('.' + selectionText).html(this.options.multipleInfoMessage + ' ' + this.$el.val().length + '/' + this.optionData.length);
+                }
             }
 
             // multiple selection could change the selection height
@@ -567,6 +574,12 @@
         this.$el.find('option:eq(' + index + ')').prop('selected', false);
         this.$drop.find('#' + utils.getClassname('option') + '-' + index).removeClass(selected);
         this.$selection.find('.' + selectionTag + '-' + index).remove();
+
+        if(this.multiple && this.options.displayType !== 'tags' && this.$el.val() !== null) {
+            this.$selection
+                .find('.' + selectionText)
+                .html(this.options.multipleInfoMessage + ' ' + this.$el.val().length + '/' + this.optionData.length);
+        }
 
         if(this.$el.val() === null) {
             this.$selection.find('.' + selectionText).text(this.multiplePlaceholder);
@@ -818,8 +831,9 @@
     };
 
     Select.prototype.hideDrop = function() {
-        if(this.$drop) {
-            this.$drop.remove();
+        var drop = $("#" + this.id);
+        if(drop.length > 0) {
+            $("#" + this.id).remove();
             this.$search.val('');
             this.setOriginalList();
         }
@@ -1116,7 +1130,7 @@
     });
 
 // version
-    ux.version = '3.4.0';
+    ux.version = '3.5.0';
 
 // default settings
     ux.settings  = defaults;
