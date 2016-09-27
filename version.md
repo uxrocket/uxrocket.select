@@ -1,3 +1,12 @@
+## Versiyon 3.5.1
+- FIX: açılan listenin pozisyonu window yüksekliğine ve alt veya üst boşluk müsaitliğine göre hizalanacak şekilde düzeltildi.
+
+## Versiyon 3.5.0
+- YENI: Multiple drop üzerinde herhangi bir seçim yapıldığında kaç adet seçim yapıldığı gösterilebilecek.
+
+## Versiyon 3.4.1
+- FIX: Drop'un kapanmasına engel olan bir bug çözüldü.
+
 ## Versiyon 3.4.0
 - FIX: Drop'tan bir eleman seçildiğinde trigger olmayan orjinal change eventi düzeltildi.
 - FIX: Drop içinde arama yapıldıktan sonra `ok` tuşları ile seçim yapılamaması düzeltildi.
@@ -18,7 +27,7 @@
 - YENİ: Orijinal jQuery metodunu ezen `select` bindingi nedeniyle, $.uxrselect.noConflict tanımı eklendi.
 - DEĞİŞİKLİK: `$.uxrselect.noConflict = true` durumunda `$.fn.select` tanımı iptal ediliyor. `$.fn.Select` ya da `$
 .fn.uxrselect` metodları ile plugin bindingi yapılabilir.
-- DEĞİŞİKLİK: Componentin iç metodlarının daha sağlık kullanılması amacıyla, $.uxrselect.update() metodu, ilgili 
+- DEĞİŞİKLİK: Componentin iç metodlarının daha sağlık kullanılması amacıyla, $.uxrselect.update() metodu, ilgili
 instance içerisinde `update` metodunu çağıracak şekilde revize edildi.
 
 # Versiyon 3.1.2
@@ -55,7 +64,7 @@ instance içerisinde `update` metodunu çağıracak şekilde revize edildi.
 - FIX: Diğer pluginlerden gelen data ile karıştığı için data('opt') tanımları data('uxSelect') olarak değiştirildi.
 
 ## Versiyon 2.6.0
-- DEĞİŞİKLİK: Select elemanından wrapper üzerine class isimleri aktarılırken, "uxitd-select-ready" ve selector classı kaldırılmaya başlandı. 
+- DEĞİŞİKLİK: Select elemanından wrapper üzerine class isimleri aktarılırken, "uxitd-select-ready" ve selector classı kaldırılmaya başlandı.
 
 ## Versiyon 2.5.1
 - FIX: Select'teki bütün classların wrapper üzerine eklemesi nedeniyle, $.uxselect.update() metodunun wrapper üzerinde de kontrol yapmaya başlaması nedeniyle alınan hatalar düzeltildi.
