@@ -809,7 +809,6 @@
         var totalVisibleHeight = document.documentElement.clientHeight;
         var topSpace           = this.$el.offset().top - $(window).scrollTop();
         var bottomSpace        = (totalVisibleHeight - topSpace) - this.$selection.height();
-
         var setPosition = {
             top: function(){
                 optionList.css( { maxHeight: topSpace } );
@@ -1154,7 +1153,7 @@
     });
 
 // version
-    ux.version = '3.5.0';
+    ux.version = '3.5.1';
 
 // default settings
     ux.settings  = defaults;
