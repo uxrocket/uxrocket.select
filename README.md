@@ -67,11 +67,13 @@ numeric              | false            | On handheld devices, controls to numer
 displayType          | tags             | For _multiple_ mode, displays selection as `tags` or `text`
 multipleInfoMessage  | 'Seçilen Kayıt:' | For _multiple_ and _text_ mode, this will be the selection prefix
 placeholder          | null             | Adds a placeholder text on multiple selects
-onReady              | false            | Calls the function when plugin is ready.
-onSelect             | false            | Calls the function when option is selected.
-onChange             | false            | Calls the function when list is closed.
-onUpdate             | false            | Calls the function when plugin options are updated.
-onDestroy            | false            | Calls the function when select is removed.
+onReady              | false            | Calls a function when plugin is ready.
+onOpen               | false            | Calls a function when droplist opened
+onClose              | false            | Calls a function when droplist closed.
+onSelect             | false            | Calls a function when option is selected.
+onChange             | false            | Calls a function when original select's value changed.
+onUpdate             | false            | Calls a function when plugin options are updated.
+onDestroy            | false            | Calls a function when select is removed.
 
 
 
@@ -93,20 +95,24 @@ max-selection        | For _multiple_ mode, restrict maximum selectable option c
 max-selection-warn   | Shows a user friendly alert when reached maximum selection. Default text is "You have reached allowed maximum selection". 
 numeric              | on handheld devices, controls to numeric or classic keyboard view when search field focuses
 placeholder          | Adds a placeholder text on multiple selects
-on-ready             | Calls the function when plugin is ready.
-on-select            | Calls the function when option is selected.
-on-change            | Calls the function when list is closed.
-on-update            | Calls the function when plugin options are updated.
-on-destroy           | Calls the function when select is removed.
+on-ready             | Calls a function when plugin is ready.
+on-open              | Calls a function when droplist opened
+on-close             | Calls a function when droplist closed.
+on-select            | Calls a function when option is selected.
+on-change            | Calls a function when original select's value changed.
+on-update            | Calls a function when plugin options are updated.
+on-destroy           | Calls a function when select is removed.
 
 
 Callbacks			 | &nbsp;
 -------------------- | -----
-onReady              | Calls the function when plugin is ready.
-onSelect             | Calls the function when option is selected.
-onChange             | Calls the function when list is closed.
-onUpdate             | Calls the function when plugin options are updated.
-onDestroy            | Calls the function when select is removed.
+onReady              | Calls a function when plugin is ready.
+onOpen               | Calls a function when droplist opened
+onClose              | Calls a function when droplist closed.
+onSelect             | Calls a function when option is selected.
+onChange             | Calls a function when original select's value changed.
+onUpdate             | Calls a function when plugin options are updated.
+onDestroy            | Calls a function when select is removed.
 
 
 ## Event Hooks
@@ -121,11 +127,15 @@ $('.select').on('uxrselect.uxrSelect', function(){
 Event Name			 | &nbsp;
 -------------------- | -----
 uxrready             | triggers when uxrSelect binds to element for the first time
+uxropen              | triggers when selection droplist opened
+uxrclose             | triggers when selection droplist closed
 uxrselect            | triggers when an option selected
+change               | triggers when the selected option value *set* to Native select. 
 uxrupdate            | triggers when plugin settings updated
 uxrdestroy           | triggers when uxrSelect unbinds from the element.
 
-All these custom events also hooked the element itself when plugin is binded, and fires the callback options when triggered.
+All these custom events also hooked the element itself when plugin is binded, and fires the callback options when triggered. 
+_Note: When you watch the `uxrselect.uxrSelect` event, you get the Native selects previous with `this.$el.value()` method. In order to get the new value, you should watch the `change.uxrSelect` or `change` events_
  
 
 ## Public Methods
