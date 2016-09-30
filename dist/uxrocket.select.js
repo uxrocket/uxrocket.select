@@ -48,7 +48,7 @@
                        '    <span class="{{removeSelectionClass}}">X</span>' +
                        '</span>',
             search:    '<span class="{{searchClass}}">' +
-                       '   <input type="{{inputType}}" name="{{searchInput}}" />' +
+                       '   <div searchField="true" id="{{searchInput}}"></div>' +
                        '</span>',
             list:      '<ul class="{{listClass}} {{themeList}}">' +
                        '    {{#each options}}' +
@@ -110,6 +110,7 @@
             mousedown: 'mousedown.' + rocketName + ' touchend.' + rocketName + ' pointerdown.' + rocketName + ' MSPointerDown.' + rocketName,
             keyup    : 'keyup.' + rocketName,
             keydown  : 'keydown.' + rocketName,
+            keypress  : 'keypress.' + rocketName,
             input    : 'input.' + rocketName,
             resize   : 'resize.' + rocketName,
             touchend : 'touchend.' + rocketName + ' pointerup.' + rocketName + ' MSPointerUp.' + rocketName,
@@ -125,7 +126,8 @@
         },
         keys             = {
             codes:  {
-                9:  'tab',
+                8 : 'backspace',
+                9 : 'tab',
                 13: 'return',
                 27: 'esc',
                 37: 'left',
@@ -133,13 +135,14 @@
                 39: 'right',
                 40: 'down'
             },
-            tab:    9,
-            return: 13,
-            esc:    27,
-            left:   37,
-            up:     38,
-            right:  39,
-            down:   40
+            backspace: 8,
+            tab      : 9,
+            return   : 13,
+            esc      : 27,
+            left     : 37,
+            up       : 38,
+            right    : 39,
+            down     : 40
         },
         ns               = {
             prefix:  'uxr-',
@@ -177,23 +180,26 @@
 
     // Constructor Method
     var Select = function(el, options, selector) {
-        this._instance = i;
-        this._name     = rocketName;
-        this._defaults = defaults;
-        this.wrapped   = false;
+        this._instance          = i;
+        this._name              = rocketName;
+        this._defaults          = defaults;
+        this.wrapped            = false;
 
-        this.el       = el;
-        this.$el      = $(el);
-        this.id       = 'uxr-select-options-' + i;
-        this.multiple = this.el.hasAttribute('multiple');
-        this.disabled = this.el.hasAttribute('disabled');
-        this.readonly = this.el.hasAttribute('readonly');
-        this.width    = this.getWidth();
-        this.selector = selector;
-        this.opened   = false;
-        this.hasGroup = false;
-        this.tabbed   = false;
-        this.clicked  = false;
+        this.el                 = el;
+        this.$el                = $(el);
+        this.id                 = 'uxr-select-options-' + i;
+        this.multiple           = this.el.hasAttribute('multiple');
+        this.disabled           = this.el.hasAttribute('disabled');
+        this.readonly           = this.el.hasAttribute('readonly');
+        this.width              = this.getWidth();
+        this.selector           = selector;
+        this.opened             = false;
+        this.hasGroup           = false;
+        this.tabbed             = false;
+        this.clicked            = false;
+
+        this.searchQueryHolder  = [];
+        this.nonLetters         = [8,9,13,27,38,40,46];
 
         this.options = $.extend(true, {}, defaults, options, this.$el.data());
 
@@ -447,6 +453,7 @@
             });
 
         _this.bindKeyupListener();
+        _this.bindKeypressListener();
     };
 
     Select.prototype.unbindUI = function() {
@@ -456,15 +463,71 @@
     };
 
     Select.prototype.unbindKeyupListener = function() {
-        $(document).off(events.keyup);
+        $(document).off(events.keyup +' '+ events.keypress);
+    };
+
+    Select.prototype.updateSearch = function(){
+        this.searchQuery  = this.searchQueryHolder.join('');
+        this.$search.text(this.searchQuery);
+        if(this.searchQuery.length && this.searchQuery.length >= this.options.minLetters){
+            this.search(this.searchQuery);
+        }
+    };
+
+    Select.prototype.modifySearchText = function(){
+        var _this = this;
+        return {
+            add: function(){ // when press any letters
+                _this.searchQueryHolder.push(_this.queryLetter);
+                _this.updateSearch();
+            },
+            remove: function(){ // when press backspace
+                _this.searchQueryHolder.pop();
+                _this.updateSearch();
+                _this.checkSearchQuery();
+            },
+            reset: function(){
+                _this.searchQueryHolder = [];
+                _this.updateSearch();
+            }
+        };
+    };
+
+    Select.prototype.checkSearchQuery = function(){
+        if(this.searchQueryHolder.length === 0 || this.searchQueryHolder.length < this.options.minLetters){
+            this.setOriginalList();
+        }
+    };
+
+    Select.prototype.bindKeypressListener = function() {
+        var _this = this;
+        var preventBackspaceKey = function(){
+            $(document).bind('keydown', function (e) {
+                console.log(_this.opened);
+                if (e.keyCode === 8 && _this.opened) {
+                    e.preventDefault();
+                }
+            });
+        };
+        preventBackspaceKey();
+        $(document).on(events.keypress, function(e) {
+            e.preventDefault();
+            _this.queryLetter  = String.fromCharCode(e.keyCode);
+            if (_this.queryLetter && (_this.nonLetters.indexOf(e.keyCode) === -1)) {
+                _this.modifySearchText().add();
+            }
+            return true;
+        });
     };
 
     Select.prototype.bindKeyupListener = function() {
         var _this = this;
-
         $(document).on(events.keyup, function(e) {
             e.preventDefault();
-
+            if( e.keyCode === keys.backspace ){
+                if(_this.searchQueryHolder.length === 0){return;}
+                _this.modifySearchText().remove();
+            }
             if(e.keyCode === keys.up || e.keyCode === keys.down) {
                 _this.navigateWithArrow(keys.codes[e.keyCode]);
             }
@@ -474,17 +537,9 @@
             else if(e.keyCode === keys.esc) {
                 _this.close();
             }
-            else if(_this.$search.val().length >= _this.options.minLetters) {
-                _this.search(_this.$search.val());
-            }
-            else {
-                _this.setOriginalList();
-            }
-
             return true;
         });
     };
-
 
     Select.prototype.select = function($selected) {
         var selected        = utils.getClassname('selected'),
@@ -606,7 +661,6 @@
                 return item;
             }
         });
-
         list = this.renderList(results);
         $list.replaceWith(list);
         this.setDropPosition();
@@ -785,7 +839,7 @@
     Select.prototype.prepareDrop = function() {
         this.$drop   = $(this.renderDrop());
         this.$list   = this.$drop.find('.' + utils.getClassname('list'));
-        this.$search = this.$drop.find('.' + utils.getClassname('search') + ' input');
+        this.$search = this.$drop.find('.' + utils.getClassname('search') + '> div');
         this.setDropPosition();
         this.setListPosition();
 
@@ -878,6 +932,7 @@
         this.opened = true;
         this.$search.focus();
         this.emitEvent('open');
+        this.modifySearchText().reset();
     };
 
     Select.prototype.close = function() {
@@ -1153,7 +1208,7 @@
     });
 
 // version
-    ux.version = '3.5.1';
+    ux.version = '3.5.2';
 
 // default settings
     ux.settings  = defaults;

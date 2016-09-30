@@ -202,11 +202,12 @@ $radius: 4px;
             border-radius: $radius;
         }
 
-        div[contenteditable="true"] {
+        div[searchField="true"] {
             width: calc(100% - 8px);
             padding: 4px;
             border: 1px solid $border;
             border-radius: $radius;
+            height: 25px;
         }
 
     }
