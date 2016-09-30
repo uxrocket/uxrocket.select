@@ -1,3 +1,6 @@
+## Versiyon 3.5.2
+- FIX: İçerisinde arama özelliği olan select'lerin tabindex sorununu gidermek için input yerine arama yapılan değeri gösteren div koyuldu.
+
 ## Versiyon 3.5.1
 - FIX: açılan listenin pozisyonu window yüksekliğine ve alt veya üst boşluk müsaitliğine göre hizalanacak şekilde düzeltildi.
 
