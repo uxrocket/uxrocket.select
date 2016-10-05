@@ -201,6 +201,15 @@ $radius: 4px;
             border: 1px solid $border;
             border-radius: $radius;
         }
+
+        div[searchField="true"] {
+            width: calc(100% - 8px);
+            padding: 4px;
+            border: 1px solid $border;
+            border-radius: $radius;
+            height: 25px;
+        }
+
     }
 
     &-group {
@@ -234,6 +243,8 @@ $radius: 4px;
         display: none;
     }
 }
+
+
 
 @keyframes uxr-select-blink {
     0% {
