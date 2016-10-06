@@ -1,3 +1,6 @@
+## Versiyon 3.5.3
+- DEĞİŞİKLİK: Update methodu yeniden düzenlendi.
+
 ## Versiyon 3.5.2
 - FIX: İçerisinde arama özelliği olan select'lerin tabindex sorununu gidermek için input yerine arama yapılan değeri gösteren div koyuldu.
 

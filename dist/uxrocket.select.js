@@ -1146,16 +1146,24 @@
     $.uxrselect.noConflict = true;
 
     ux.update = function(el, options) {
-        var $el, opts;
+        var opts = options || el,
+            $el;
 
         // all elements will update according to new options
-        if(typeof options === 'undefined' && typeof el === 'object') {
+        if (!el){
             $el  = $('.' + utils.getClassname('ready'));
-            opts = el;
         }
-        else {
+        // This is a selector that we should query
+        else if(typeof el === 'string') {
             $el  = $(el);
-            opts = options;
+        }
+        // Directly use given object
+        else if(typeof el === 'object') {
+            $el = el;
+        }
+        // Do nothing since this is an unexpected value like a number
+        else {
+            return;
         }
 
         $el.filter('select').each(function() {
@@ -1208,7 +1216,7 @@
     });
 
 // version
-    ux.version = '3.5.2';
+    ux.version = '3.5.3';
 
 // default settings
     ux.settings  = defaults;
