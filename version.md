@@ -1,3 +1,6 @@
+## Versiyon 3.5.4
+- DEĞİŞİKLİK: Tablette keyboard açılmaması nedeniyle 3.5.2 deki değişiklikler geri alındı. 
+
 ## Versiyon 3.5.3
 - DEĞİŞİKLİK: Update methodu yeniden düzenlendi.
 
