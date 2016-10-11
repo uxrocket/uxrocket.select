@@ -1,3 +1,6 @@
+## Versiyon 3.5.4
+- FIX: Drowdown menülerin boyutları ile ilgili bir bug düzeltildi.
+
 ## Versiyon 3.5.3
 - DEĞİŞİKLİK: Update methodu yeniden düzenlendi.
 
