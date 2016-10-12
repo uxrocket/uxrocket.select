@@ -50,8 +50,7 @@
   border-radius: 50%;
   border: dashed 2px #ccc;
   background-color: #fff;
-  -webkit-animation: uxr-select-loading 2s infinite linear;
-          animation: uxr-select-loading 2s infinite linear;
+  animation: uxr-select-loading 2s infinite linear;
   content: "";
 }
 
@@ -73,8 +72,7 @@
 
 .uxr-select-multiple.uxr-select-opened .uxr-select-selection-text:after {
   content: "|";
-  -webkit-animation: uxr-select-blink linear infinite 1s;
-          animation: uxr-select-blink linear infinite 1s;
+  animation: uxr-select-blink linear infinite 1s;
 }
 
 .uxr-select-disabled, .uxr-select-disabled:hover {
@@ -224,18 +222,6 @@
   display: none;
 }
 
-@-webkit-keyframes uxr-select-blink {
-  0% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
 @keyframes uxr-select-blink {
   0% {
     opacity: 0;
@@ -248,24 +234,11 @@
   }
 }
 
-@-webkit-keyframes uxr-select-loading {
-  from {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
-
 @keyframes uxr-select-loading {
   from {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
+    transform: rotate(0deg);
   }
   to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
