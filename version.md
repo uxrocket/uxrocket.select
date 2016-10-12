@@ -1,3 +1,6 @@
+## Versiyon 3.5.5
+- DEĞİŞİKLİK: Tablette keyboard açılmaması nedeniyle 3.5.2 deki değişiklikler geri alındı.
+
 ## Versiyon 3.5.4
 - FIX: Drowdown menülerin boyutları ile ilgili bir bug düzeltildi.
 
