@@ -1,3 +1,6 @@
+## Versiyon 3.5.6
+- DEĞİŞİKLİK: Component'in initialize olmadığı durumda update methodu warning basacak şekilde düzenlendi.
+
 ## Versiyon 3.5.5
 - DEĞİŞİKLİK: Tablette keyboard açılmaması nedeniyle 3.5.2 deki değişiklikler geri alındı.
 
