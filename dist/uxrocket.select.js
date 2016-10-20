@@ -722,7 +722,11 @@
             this.multiplePlaceholder = this.$el.attr('placeholder') || this.options.placeholder || '';
 
             if(this.getSelected().length > 0) {
-                data.selectionText = this.renderSelectionTags();
+                if(this.options.displayType === 'text') {
+                    data.selectionText = this.options.multipleInfoMessage + ' ' + this.getSelected().length + '/' + this.optionData.length;
+                } else {
+                    data.selectionText = this.renderSelectionTags();
+                }
             }
             else {
                 data.selectionText = this.multiplePlaceholder;
