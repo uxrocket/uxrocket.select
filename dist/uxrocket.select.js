@@ -413,6 +413,13 @@
                     return false;
                 }
 
+                // Removes selected from a pre-loaded option
+               $(_this.optionData).each(function(){
+                   if(this.text === $(e.target).parent().data('value')) {
+                       this.selected = false;
+                   }
+               });
+
                 _this.removeTag($(this).parent());
             })
             .parent()
@@ -512,7 +519,7 @@
             this.$list.find('.' + highlight).removeClass(highlight);
             this.$list.find('.' + selected).removeClass(selected);
             this.$selection.find('.' + selectionText).text(text);
-            this.$el.find('option:eq(' + index + ')').prop('selected', true);
+            this.$el.find('[value="' + value + '"]').prop('selected', true);
             this.onBlur();
             this.$list.find('#' + optionID).addClass(selected);
 
@@ -527,7 +534,7 @@
         else {
             // double click deselects
             if($option.hasClass(selected)) {
-                this.deSelect(index);
+                this.deSelect(value);
             }
 
             else {
@@ -536,7 +543,7 @@
                     return;
                 }
 
-                this.$el.find('option:eq(' + index + ')').prop('selected', true);
+                this.$el.find('[value="' + value + '"]').prop('selected', true);
                 $option.addClass(selected);
 
                 if(this.options.displayType === 'tags') {
@@ -568,18 +575,24 @@
         this.emitEvent('change');
     };
 
-    Select.prototype.deSelect = function(index) {
+    Select.prototype.deSelect = function(value) {
         var selected      = utils.getClassname('selected'),
             selectionText = utils.getClassname('selectionText'),
-            selectionTag  = utils.getClassname('selectionTag');
+            selectionTag  = utils.getClassname('selectionTag'),
+            option = $('[data-value="' + value + '"]').parent();
 
         if(!this.$drop) {
             this.prepareDrop();
+        } else {
+            this.$drop.find('[data-value="' + value + '"]').parent().removeClass(selected)
         }
 
-        this.$el.find('option:eq(' + index + ')').prop('selected', false);
-        this.$drop.find('#' + utils.getClassname('option') + '-' + index).removeClass(selected);
-        this.$selection.find('.' + selectionTag + '-' + index).remove();
+        this.$el.find('[value="' + value + '"]').removeAttr('selected');
+        option.removeClass(selected);
+        this.$selection.find('[data-value="' + value + '"]').remove();
+        this.$el.val($.grep(this.$el.val(), function(val) {
+            return val !== value;
+        }));
 
         if(this.multiple && this.options.displayType !== 'tags' && this.$el.val() !== null) {
             this.$selection
@@ -587,7 +600,7 @@
                 .html(this.options.multipleInfoMessage + ' ' + this.$el.val().length + '/' + this.optionData.length);
         }
 
-        if(this.$el.val() === null) {
+        if(this.multiple && this.options.displayType === 'tags' && this.$el.val().length < 1) {
             this.$selection.find('.' + selectionText).text(this.multiplePlaceholder);
         }
 
@@ -596,7 +609,7 @@
     };
 
     Select.prototype.removeTag = function($tag) {
-        this.deSelect($tag.data('index'));
+        this.deSelect($tag.data('value'));
         this.setDropPosition();
     };
 
@@ -1146,7 +1159,7 @@
     });
 
 // version
-    ux.version = '3.5.6';
+    ux.version = '3.5.7';
 
 // default settings
     ux.settings  = defaults;
