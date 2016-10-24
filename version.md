@@ -1,3 +1,7 @@
+## Versiyon 3.5.7
+- FIX: Display-type text olması durumunda pre-selected verilerin tag şeklinde gözükmesi problemi giderildi.
+- FIX: Display-type tag olması durumunda pre-selected verilerin çalışması düzenlendi.
+
 ## Versiyon 3.5.6
 - DEĞİŞİKLİK: Component'in initialize olmadığı durumda update methodu warning basacak şekilde düzenlendi.
 
