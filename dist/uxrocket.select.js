@@ -584,7 +584,7 @@
         if(!this.$drop) {
             this.prepareDrop();
         } else {
-            this.$drop.find('[data-value="' + value + '"]').parent().removeClass(selected)
+            this.$drop.find('[data-value="' + value + '"]').parent().removeClass(selected);
         }
 
         this.$el.find('[value="' + value + '"]').removeAttr('selected');
@@ -826,16 +826,16 @@
             minWidth: this.$selection.outerWidth()
         };
         var optionList         = $('.uxr-select-list');
-        var dropHeight         = this.$drop.height();
+        var dropHeight         = this.$drop.height() > 280 ? 280 : this.$drop.height(); // Max-height with search field
         var totalVisibleHeight = document.documentElement.clientHeight;
-        var topSpace           = (this.$el.offset().top - $(window).scrollTop()) > 250 ? 250 : this.$el.offset().top - $(window).scrollTop();
-        var bottomSpace        = ((totalVisibleHeight - topSpace) - this.$selection.height()) > 250 ? 250 :(totalVisibleHeight - topSpace) - this.$selection.height();
+        var topSpace           = this.$el.offset().top - $(window).scrollTop();
+        var bottomSpace        = (totalVisibleHeight - topSpace) - this.$selection.height();
         var setPosition = {
             top: function(){
-                optionList.css( { maxHeight: topSpace } );
+                optionList.css( { maxHeight: topSpace > 250 ? 250 : topSpace} ); // Max-height for options
             },
             bottom: function(){
-                optionList.css( { maxHeight: bottomSpace } );
+                optionList.css( { maxHeight: bottomSpace > 250 ? 250 : bottomSpace } );
             }
         };
         if( bottomSpace >= dropHeight ){
