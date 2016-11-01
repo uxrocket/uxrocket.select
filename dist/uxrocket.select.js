@@ -1008,6 +1008,10 @@
             focusedInstances.current = null;
         }
 
+        if(focusedInstances.current && focusedInstances.current.el === this.$el[0]) {
+            focusedInstances.current = null;
+        }
+
         this.unbindUI();
         this.undecorateUI();
 
