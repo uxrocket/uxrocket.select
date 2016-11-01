@@ -590,14 +590,20 @@
         this.$el.find('[value="' + value + '"]').removeAttr('selected');
         option.removeClass(selected);
         this.$selection.find('[data-value="' + value + '"]').remove();
-        this.$el.val($.grep(this.$el.val(), function(val) {
-            return val !== value;
-        }));
+        if(this.$el.val()) {
+            this.$el.val($.grep(this.$el.val(), function(val) {
+                return val !== value;
+            }));
+        }
 
-        if(this.multiple && this.options.displayType !== 'tags' && this.$el.val() !== null) {
-            this.$selection
-                .find('.' + selectionText)
-                .html(this.options.multipleInfoMessage + ' ' + this.$el.val().length + '/' + this.optionData.length);
+        if(this.multiple && this.options.displayType !== 'tags') {
+            var $selection = this.$selection.find('.' + selectionText);
+            if(this.$el.val()) {
+                $selection.html(this.options.multipleInfoMessage + ' ' + this.$el.val().length + '/' + this.optionData.length);
+            }
+            else {
+                $selection.html(this.options.multipleInfoMessage + ' ' + 0 + '/' + this.optionData.length);
+            }
         }
 
         if(this.multiple && this.options.displayType === 'tags' && (this.$el.val() === null || this.$el.val().length < 1)) {
