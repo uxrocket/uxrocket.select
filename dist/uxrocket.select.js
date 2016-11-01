@@ -465,6 +465,7 @@
     Select.prototype.unbindUI = function() {
         this.emitEvent('destroy');
         this.$selection.off('.' + rocketName);
+        this.$selection.parent().off('.' + rocketName);
         this.$el.off('.' + rocketName);
     };
 

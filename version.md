@@ -1,6 +1,7 @@
 ## Versiyon 3.5.8
 - FIX: Display-type text durumunda seçim sayısının sıfır olmaması problemi giderildi.
 - FIX: Drop pozisyonunun hesaplanmasındaki bir yanlışlık düzeltildi.
+- FIX: Component remove edildikten sonra da çalışan bir event düzeltildi.
 
 ## Versiyon 3.5.7
 - FIX: Display-type text olması durumunda pre-selected verilerin tag şeklinde gözükmesi problemi giderildi.
