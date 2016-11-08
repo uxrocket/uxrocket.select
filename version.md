@@ -1,3 +1,6 @@
+## Versiyon 3.5.9
+- FIX: Tablet ve telefonlarda, klayve açılınca, drop'un klavyenin altında kalması düzeltildi.
+
 ## Versiyon 3.5.8
 - FIX: Display-type text durumunda seçim sayısının sıfır olmaması problemi giderildi.
 - FIX: Drop pozisyonunun hesaplanmasındaki bir yanlışlık düzeltildi.
