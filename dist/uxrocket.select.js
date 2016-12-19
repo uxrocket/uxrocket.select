@@ -546,6 +546,7 @@
                 }
 
                 this.$el.find('[value="' + value + '"]').prop('selected', true);
+                this.$list.find('#' + optionID).addClass(selected);
                 $option.addClass(selected);
 
                 if(this.options.displayType === 'tags') {
@@ -1178,7 +1179,7 @@
     });
 
 // version
-    ux.version = '3.5.9';
+    ux.version = '3.5.10';
 
 // default settings
     ux.settings  = defaults;
