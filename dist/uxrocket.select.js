@@ -1063,8 +1063,8 @@
         $shadow.html('<div ' + attr + '></div>').appendTo('body');
 
         w = $shadow.find('div').css('width');
-
-        if(w === '0px') {
+        // w is sometimes wrong because IE 11 does not return correct with value
+        if(w === '0px' || w.indexOf('-') > -1) {
             w = this.$el.width() + 'px';
         }
 

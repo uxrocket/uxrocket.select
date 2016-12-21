@@ -31,6 +31,7 @@ config.codekit
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm
 
 *.iml
+.vscode
 
 ## Directory-based project format:
 .idea/
