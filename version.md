@@ -1,3 +1,6 @@
+## Versiyon 3.5.10
+- FIX: Multiple select'lerde search sonrasında seçilen seçeneğin yeniden açılan menüde seçilmiş olarak görünmemesi problemi çözüldü.
+
 ## Versiyon 3.5.9
 - FIX: Tablet ve telefonlarda, klayve açılınca, drop'un klavyenin altında kalması düzeltildi.
 
