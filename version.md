@@ -1,6 +1,6 @@
 ## Versiyon 3.5.11
 - FIX: Select genişliği IE 11 de eksi değerde ve yanlış hesaplanıyordu. Düzelmesi için fazladan bir kontrol eklendi.
-
+- FIX: selectbox tıklandığında aktif element blur yapıldı
 ## Versiyon 3.5.10
 - FIX: Multiple select'lerde search sonrasında seçilen seçeneğin yeniden açılan menüde seçilmiş olarak görünmemesi problemi çözüldü.
 
