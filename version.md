@@ -1,3 +1,6 @@
+## Versiyon 3.5.12
+- FIX: aktif element blur yapılan blok exeption içerisine alındı.
+
 ## Versiyon 3.5.11
 - FIX: Select genişliği IE 11 de eksi değerde ve yanlış hesaplanıyordu. Düzelmesi için fazladan bir kontrol eklendi.
 - FIX: selectbox tıklandığında aktif element blur yapıldı
