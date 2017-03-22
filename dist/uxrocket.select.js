@@ -897,7 +897,9 @@
         if(this.disabled || this.readonly) {
             return;
         }
-        document.activeElement.blur();
+        try{
+            document.activeElement.blur();
+        }catch(e){console.log(e); }
         ux.close();
 
         if(!this.$drop) {
