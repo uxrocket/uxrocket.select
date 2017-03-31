@@ -125,11 +125,15 @@
   position: relative;
   display: inline-block;
   margin-bottom: 3px;
-  padding: 3px 25px 3px 3px;
+  padding: 3px;
   border-radius: 4px;
   background-color: #ddd;
   font-size: .8em;
   line-height: 1;
+}
+
+.uxr-select-selected-tag.uxr-select-has-remove-selected-tag {
+  padding: 3px 25px 3px 3px;
 }
 
 .uxr-select-remove-selected-tag {

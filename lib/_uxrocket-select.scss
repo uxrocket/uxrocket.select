@@ -143,11 +143,15 @@ $radius: 4px;
         position: relative;
         display: inline-block;
         margin-bottom: 3px;
-        padding: 3px 25px 3px 3px;
+        padding: 3px;
         border-radius: $radius;
         background-color: #ddd;
         font-size: .8em;
         line-height: 1;
+
+        &.#{$prefix}-has-remove-selected-tag {
+          padding: 3px 25px 3px 3px;
+        }
     }
 
     &-remove-selected-tag {

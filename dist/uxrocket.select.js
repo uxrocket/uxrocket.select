@@ -39,14 +39,18 @@
                        '    <span class="{{arrowClass}} {{themeArrow}}"></span>' +
                        '</a>',
             tags:      '{{#each selected}}' +
-                       '<span class="{{selectionTagClass}} {{selectionTagClass}}-{{selected.index}}" data-index="{{selected.index}}" data-value="{{selected.value}}">' +
+                       '<span class="{{selectionTagClass}} {{selectionTagClass}}-{{selected.index}} {{#if selected.isRemovable}} {{hasRemoveSelected}} {{/if}}" data-index="{{selected.index}}" data-value="{{selected.value}}">' +
                        '    {{selected.text}}' +
+                       '    {{#if selected.isRemovable}}' +
                        '    <span class="{{removeSelectionClass}}">X</span>' +
+                       '    {{/if}}' +
                        '</span>' +
                        '{{/each}}',
-            multi:     '<span class="{{selectionTagClass}} {{selectionTagClass}}-{{index}}" data-index="{{index}}" data-value="{{value}}">' +
+            multi:     '<span class="{{selectionTagClass}} {{selectionTagClass}}-{{index}} {{#if isRemovable}} {{hasRemoveSelected}} {{/if}}" data-index="{{index}}" data-value="{{value}}">' +
                        '    {{selectionText}}' +
+                       '    {{#if isRemovable}}' +
                        '    <span class="{{removeSelectionClass}}">X</span>' +
+                       '    {{/if}}' +
                        '</span>',
             search:    '<span class="{{searchClass}}">' +
                        '   <input type="{{inputType}}" name="{{searchInput}}" />' +
@@ -92,6 +96,7 @@
             maxSelection:        0, // no limit
             maxSelectionWarn:    'You have reached allowed maximum selection',
             numeric:             false, // on handheld devices, controls to numeric or classic keyboard view when
+            isRemovable:         false,
             // search field focuses
 
             // callbacks
@@ -151,30 +156,31 @@
             data:    rocketName,
             name:    'select',
             classes: {
-                wrap:            'wrap',
-                ready:           'ready',
-                disabled:        'disabled',
-                readonly:        'readonly',
-                selection:       'selection',
-                selectionText:   'selection-text',
-                selectionTag:    'selected-tag',
-                removeSelection: 'remove-selected-tag',
-                arrow:           'arrow',
-                multiple:        'multiple',
-                numeric:         'numeric',
-                opened:          'opened',
-                drop:            'drop',
-                reverseDrop:     'reverse-drop',
-                list:            'list',
-                option:          'option',
-                optionName:      'option-name',
-                group:           'group',
-                groupName:       'group-name',
-                highlight:       'highlight',
-                selected:        'selected',
-                search:          'search',
-                hidden:          'aria-hidden',
-                hide:            'hide'
+                wrap:               'wrap',
+                ready:              'ready',
+                disabled:           'disabled',
+                readonly:           'readonly',
+                selection:          'selection',
+                selectionText:      'selection-text',
+                selectionTag:       'selected-tag',
+                removeSelection:    'remove-selected-tag',
+                hasRemoveSelected:  'has-remove-selected-tag',
+                arrow:              'arrow',
+                multiple:           'multiple',
+                numeric:            'numeric',
+                opened:             'opened',
+                drop:               'drop',
+                reverseDrop:        'reverse-drop',
+                list:               'list',
+                option:             'option',
+                optionName:         'option-name',
+                group:              'group',
+                groupName:          'group-name',
+                highlight:          'highlight',
+                selected:           'selected',
+                search:             'search',
+                hidden:             'aria-hidden',
+                hide:               'hide'
             }
         },
         utils                  = new window.uxrPluginUtils({ns: ns});
@@ -230,14 +236,16 @@
     };
 
     Select.prototype.getSelected = function() {
-        var selected = [];
+        var selected = [],
+            _this = this;
 
         if(this.multiple) {
             this.$el.find('option:selected').each(function() {
                 selected.push({
                     index: $(this).index(),
                     value: $(this).attr('value'),
-                    text:  $(this).text()
+                    text:  $(this).text(),
+                    isRemovable: _this.options.isRemovable
                 });
             });
         }
@@ -501,17 +509,19 @@
     };
 
     Select.prototype.select = function($selected) {
-        var selected        = utils.getClassname('selected'),
-            highlight       = utils.getClassname('highlight'),
-            selectionText   = utils.getClassname('selectionText'),
-            selectionTag    = utils.getClassname('selectionTag'),
-            removeSelection = utils.getClassname('removeSelection'),
-            $option         = $selected.parent(),
-            optionID        = $option.attr('id'),
-            index           = $selected.data('index'),
-            value           = $selected.data('value'),
-            text            = $selected.text(),
-            $val            = this.$el.val();
+        var selected            = utils.getClassname('selected'),
+            highlight           = utils.getClassname('highlight'),
+            selectionText       = utils.getClassname('selectionText'),
+            selectionTag        = utils.getClassname('selectionTag'),
+            removeSelection     = utils.getClassname('removeSelection'),
+            hasRemoveSelected   = utils.getClassname('hasRemoveSelected'),
+            $option             = $selected.parent(),
+            optionID            = $option.attr('id'),
+            index               = $selected.data('index'),
+            value               = $selected.data('value'),
+            text                = $selected.text(),
+            $val                = this.$el.val(),
+            isRemovable         = this.options.isRemovable;
 
         if($option.hasClass(utils.getClassname('disabled'))) {
             return;
@@ -545,6 +555,8 @@
                     return;
                 }
 
+
+
                 this.$el.find('[value="' + value + '"]').prop('selected', true);
                 this.$list.find('#' + optionID).addClass(selected);
                 $option.addClass(selected);
@@ -555,7 +567,9 @@
                         selectionTagClass:    selectionTag,
                         removeSelectionClass: removeSelection,
                         index:                index,
-                        value:                value
+                        value:                value,
+                        isRemovable:          isRemovable,
+                        hasRemoveSelected:    hasRemoveSelected
                     });
 
                     if(this.$el.val() === null) {
@@ -759,10 +773,12 @@
     };
 
     Select.prototype.renderSelectionTags = function() {
+
         var data = {
             selectionTagClass:    utils.getClassname('selectionTag'),
             removeSelectionClass: utils.getClassname('removeSelection'),
-            selected:             this.getSelected()
+            hasRemoveSelected:    utils.getClassname('hasRemoveSelected'),
+            selected:             this.getSelected(),
         };
 
         return utils.render(templates.tags, data);
@@ -899,7 +915,7 @@
         }
         try{
             document.activeElement.blur();
-        }catch(e){console.log(e); }
+        }catch(e){console.log(e);}
         ux.close();
 
         if(!this.$drop) {
@@ -1181,7 +1197,7 @@
     });
 
 // version
-    ux.version = '3.5.10';
+    ux.version = '3.5.13';
 
 // default settings
     ux.settings  = defaults;
