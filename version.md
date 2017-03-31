@@ -1,3 +1,6 @@
+## Versiyon 3.5.13
+- YENI: Multiple drop üzerinde bulunan seçili elemanlarda yer alan remove butonu opsiyonel hale getirildi.
+
 ## Versiyon 3.5.12
 - FIX: aktif element blur yapılan blok exeption içerisine alındı.
 
