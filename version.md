@@ -1,3 +1,6 @@
+## Versiyon 3.5.14
+- FIX: Arama özelliği olan selectboxlarda, aranın öğenin selected olarak görünmeme sorunu düzeltildi.
+
 ## Versiyon 3.5.13
 - YENI: Multiple drop üzerinde bulunan seçili elemanlarda yer alan remove butonu opsiyonel hale getirildi.
 

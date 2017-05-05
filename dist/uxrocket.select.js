@@ -555,8 +555,6 @@
                     return;
                 }
 
-
-
                 this.$el.find('[value="' + value + '"]').prop('selected', true);
                 this.$list.find('#' + optionID).addClass(selected);
                 $option.addClass(selected);
@@ -583,10 +581,17 @@
                 else {
                     this.$selection.find('.' + selectionText).html(this.options.multipleInfoMessage + ' ' + this.$el.val().length + '/' + this.optionData.length);
                 }
+
+                // selected for search items
+                if (this.options.search) {
+                    this.updateOptionData('selected', {prop: 'index', val: index}, true);
+                }
+
             }
 
             // multiple selection could change the selection height
             this.setDropPosition();
+
         }
 
         this.emitEvent('change');
@@ -596,7 +601,8 @@
         var selected      = utils.getClassname('selected'),
             selectionText = utils.getClassname('selectionText'),
             selectionTag  = utils.getClassname('selectionTag'),
-            option        = $('[data-value="' + value + '"]').parent();
+            option        = $('[data-value="' + value + '"]').parent(),
+            index         = this.$drop.find('[data-value="' + value + '"]').data('index');
 
         if(!this.$drop) {
             this.prepareDrop();
@@ -629,6 +635,8 @@
 
         this.emitEvent('change');
         this.$el.trigger('change'); // also trigger original event.
+
+        this.updateOptionData('selected',  { prop: 'index', val: index} , false);
     };
 
     Select.prototype.removeTag = function($tag) {
@@ -1103,6 +1111,22 @@
         virtualKeyboardVisible = this.isTouchDevice();
     };
 
+    /**
+     * @param prop           property to be updated
+     * @param comparison    property updated to be comparison case
+     * @param val          new property value
+     */
+    Select.prototype.updateOptionData = function (prop, comparison, val) {
+
+        var item = $.grep(this.optionData, function (item) {
+            return item[comparison.prop] === comparison.val;
+        });
+
+        if (prop in item[0]) {
+            item[0][prop] = val;
+        }
+
+    };
 
     // jQuery original select fallback
     var _select = $.fn.select;
