@@ -113,7 +113,7 @@
             blur:      'blur.' + rocketName,
             change:    'change.' + rocketName,
             click:     'click.' + rocketName + ' touchend.' + rocketName + ' pointerup.' + rocketName + ' MSPointerUp.' + rocketName,
-            mousedown: 'mousedown.' + rocketName + ' touchend.' + rocketName + ' pointerdown.' + rocketName + ' MSPointerDown.' + rocketName,
+            mousedown: 'mousedown.' + rocketName + ' pointerdown.' + rocketName + ' MSPointerDown.' + rocketName,
             keyup:     'keyup.' + rocketName,
             keydown:   'keydown.' + rocketName,
             keypress:  'keypress.' + rocketName,
@@ -1220,7 +1220,7 @@
     });
 
 // version
-    ux.version = '3.5.14';
+    ux.version = '3.5.15';
 
 // default settings
     ux.settings  = defaults;

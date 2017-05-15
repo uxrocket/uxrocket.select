@@ -1,3 +1,6 @@
+## Versiyon 3.5.15
+- FIX: Issue #44 fixed.
+
 ## Versiyon 3.5.14
 - FIX: Arama özelliği olan selectboxlarda, aranın öğenin selected olarak görünmeme sorunu düzeltildi.
 
