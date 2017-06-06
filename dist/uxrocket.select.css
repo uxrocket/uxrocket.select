@@ -246,3 +246,22 @@
     transform: rotate(360deg);
   }
 }
+
+.uxr-select-selection {
+  position: relative;
+}
+
+.uxr-select-icon-holder {
+  position: absolute;
+  top: 3px;
+  right: 2px;
+}
+
+.uxr-select-icon-holder img {
+  width: 24px;
+}
+
+.uxr-select-icon-holder i {
+  right: 2px;
+  position: relative;
+}

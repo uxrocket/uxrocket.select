@@ -1,0 +1,326 @@
+[
+      {
+        "cityCode": "1",
+        "cityName": "ADANA"
+      },
+      {
+        "cityCode": "2",
+        "cityName": "ADIYAMAN"
+      },
+      {
+        "cityCode": "3",
+        "cityName": "AFYON"
+      },
+      {
+        "cityCode": "4",
+        "cityName": "AĞRI"
+      },
+      {
+        "cityCode": "5",
+        "cityName": "AMASYA"
+      },
+      {
+        "cityCode": "6",
+        "cityName": "ANKARA"
+      },
+      {
+        "cityCode": "7",
+        "cityName": "ANTALYA"
+      },
+      {
+        "cityCode": "8",
+        "cityName": "ARTVİN"
+      },
+      {
+        "cityCode": "9",
+        "cityName": "AYDIN"
+      },
+      {
+        "cityCode": "10",
+        "cityName": "BALIKESİR"
+      },
+      {
+        "cityCode": "11",
+        "cityName": "BİLECİK"
+      },
+      {
+        "cityCode": "12",
+        "cityName": "BİNGOL"
+      },
+      {
+        "cityCode": "13",
+        "cityName": "BİTLİS"
+      },
+      {
+        "cityCode": "14",
+        "cityName": "BOLU"
+      },
+      {
+        "cityCode": "15",
+        "cityName": "BURDUR"
+      },
+      {
+        "cityCode": "17",
+        "cityName": "ÇANAKKALE"
+      },
+      {
+        "cityCode": "16",
+        "cityName": "BURSA"
+      },
+      {
+        "cityCode": "19",
+        "cityName": "ÇORUM"
+      },
+      {
+        "cityCode": "18",
+        "cityName": "ÇANKIRI"
+      },
+      {
+        "cityCode": "21",
+        "cityName": "DİYARBAKIR"
+      },
+      {
+        "cityCode": "20",
+        "cityName": "DENİZLİ"
+      },
+      {
+        "cityCode": "23",
+        "cityName": "ELAZIĞ"
+      },
+      {
+        "cityCode": "22",
+        "cityName": "EDİRNE"
+      },
+      {
+        "cityCode": "25",
+        "cityName": "ERZURUM"
+      },
+      {
+        "cityCode": "24",
+        "cityName": "ERZİNCAN"
+      },
+      {
+        "cityCode": "27",
+        "cityName": "GAZİANTEP"
+      },
+      {
+        "cityCode": "26",
+        "cityName": "ESKİŞEHİR"
+      },
+      {
+        "cityCode": "29",
+        "cityName": "GÜMÜŞHANE"
+      },
+      {
+        "cityCode": "28",
+        "cityName": "GİRESUN"
+      },
+      {
+        "cityCode": "31",
+        "cityName": "HATAY"
+      },
+      {
+        "cityCode": "30",
+        "cityName": "HAKKARİ"
+      },
+      {
+        "cityCode": "34",
+        "cityName": "İSTANBUL"
+      },
+      {
+        "cityCode": "35",
+        "cityName": "İZMİR"
+      },
+      {
+        "cityCode": "32",
+        "cityName": "ISPARTA"
+      },
+      {
+        "cityCode": "33",
+        "cityName": "İÇEL"
+      },
+      {
+        "cityCode": "38",
+        "cityName": "KAYSERİ"
+      },
+      {
+        "cityCode": "39",
+        "cityName": "KIRKLARELİ"
+      },
+      {
+        "cityCode": "36",
+        "cityName": "KARS"
+      },
+      {
+        "cityCode": "37",
+        "cityName": "KASTAMONU"
+      },
+      {
+        "cityCode": "42",
+        "cityName": "KONYA"
+      },
+      {
+        "cityCode": "43",
+        "cityName": "KÜTAHYA"
+      },
+      {
+        "cityCode": "40",
+        "cityName": "KIRŞEHİR"
+      },
+      {
+        "cityCode": "41",
+        "cityName": "KOCAELİ"
+      },
+      {
+        "cityCode": "46",
+        "cityName": "KAHRAMANMARAŞ"
+      },
+      {
+        "cityCode": "47",
+        "cityName": "MARDİN"
+      },
+      {
+        "cityCode": "44",
+        "cityName": "MALATYA"
+      },
+      {
+        "cityCode": "45",
+        "cityName": "MANİSA"
+      },
+      {
+        "cityCode": "51",
+        "cityName": "NİĞDE"
+      },
+      {
+        "cityCode": "50",
+        "cityName": "NEVŞEHİR"
+      },
+      {
+        "cityCode": "49",
+        "cityName": "MUŞ"
+      },
+      {
+        "cityCode": "48",
+        "cityName": "MUĞLA"
+      },
+      {
+        "cityCode": "55",
+        "cityName": "SAMSUN"
+      },
+      {
+        "cityCode": "54",
+        "cityName": "SAKARYA"
+      },
+      {
+        "cityCode": "53",
+        "cityName": "RİZE"
+      },
+      {
+        "cityCode": "52",
+        "cityName": "ORDU"
+      },
+      {
+        "cityCode": "59",
+        "cityName": "TEKİRDAĞ"
+      },
+      {
+        "cityCode": "58",
+        "cityName": "SİVAS"
+      },
+      {
+        "cityCode": "57",
+        "cityName": "SİNOP"
+      },
+      {
+        "cityCode": "56",
+        "cityName": "SİİRT"
+      },
+      {
+        "cityCode": "63",
+        "cityName": "ŞANLIURFA"
+      },
+      {
+        "cityCode": "62",
+        "cityName": "TUNCELİ"
+      },
+      {
+        "cityCode": "61",
+        "cityName": "TRABZON"
+      },
+      {
+        "cityCode": "60",
+        "cityName": "TOKAT"
+      },
+      {
+        "cityCode": "68",
+        "cityName": "AKSARAY"
+      },
+      {
+        "cityCode": "69",
+        "cityName": "BAYBURT"
+      },
+      {
+        "cityCode": "70",
+        "cityName": "KARAMAN"
+      },
+      {
+        "cityCode": "71",
+        "cityName": "KIRIKKALE"
+      },
+      {
+        "cityCode": "64",
+        "cityName": "UŞAK"
+      },
+      {
+        "cityCode": "65",
+        "cityName": "VAN"
+      },
+      {
+        "cityCode": "66",
+        "cityName": "YOZGAT"
+      },
+      {
+        "cityCode": "67",
+        "cityName": "ZONGULDAK"
+      },
+      {
+        "cityCode": "76",
+        "cityName": "IĞDIR"
+      },
+      {
+        "cityCode": "77",
+        "cityName": "YALOVA"
+      },
+      {
+        "cityCode": "78",
+        "cityName": "KARABÜK"
+      },
+      {
+        "cityCode": "79",
+        "cityName": "KİLİS"
+      },
+      {
+        "cityCode": "72",
+        "cityName": "BATMAN"
+      },
+      {
+        "cityCode": "73",
+        "cityName": "ŞIRNAK"
+      },
+      {
+        "cityCode": "74",
+        "cityName": "BARTIN"
+      },
+      {
+        "cityCode": "75",
+        "cityName": "ARDAHAN"
+      },
+      {
+        "cityCode": "81",
+        "cityName": "DÜZCE"
+      },
+      {
+        "cityCode": "80",
+        "cityName": "OSMANİYE"
+      }
+    ]
