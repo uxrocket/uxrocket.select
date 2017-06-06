@@ -12,10 +12,50 @@
         $(function() {
             $.uxrselect.noConflict = true;
             var t0 = performance.now();
-            $(".huge-select, .select").uxrselect();
+            $(".huge-select, .uxr-select").uxrselect();
+
+            var transformRequest = function(){
+                return {
+                    test: 123
+                };
+            };
+
+            var changeEndpoint = function(){
+                return '/uxrocket.select/data/data.json?x=y'
+            };
+
+            var transformResponse = function(response){
+                response = JSON.parse(response);
+                console.log(response[0]);
+                response[0].asd = 123;
+                changeEndpoint();
+                return JSON.stringify(response);
+            };
+
+            $('.select-with-ajax').uxrselect({
+                ajax: true,
+                ajaxUrl: '/uxrocket.select/data/data.json',
+                httpMethod: 'POST',
+                key: 'cityName',
+                value: 'cityValue',
+                searchTerm: 'searchTerm',
+                transformRequest: transformRequest,
+                transformResponse: transformResponse,
+                iconClicked: function(){
+                    console.log('icon clicked');
+                },
+                changeEndpoint: changeEndpoint
+            });
+            
+
             var t1 = performance.now();
             var s1 = (t1 - t0).toFixed(4);
             console.log('Took', s1, 'milliseconds to load');
+
+            $('.select').on('iconclick.uxrSelect', function(){
+                console.warn('iconClick.uxrselect');
+            });
+            
         });
     </script>
 
@@ -101,7 +141,7 @@
 
         <p id="dynamic-select" class="wrap"></p>
         <p class="wrap">
-            <select id="sample-01" class="select" data-wrapper="theme" data-current="themec" data-arrow="themea" data-list="themel" data-selected="themes" data-drop="themed" data-option="themeo" data-on-update="console.log('updated')">
+            <select id="sample-01" class="select uxr-select" data-wrapper="theme" data-current="themec" data-arrow="themea" data-list="themel" data-selected="themes" data-drop="themed" data-option="themeo" data-on-update="console.log('updated')">
                 <option value="">Select an option</option>
                 <option>Option 01</option>
                 <option>Option 02</option>
@@ -111,7 +151,7 @@
         </p>
 
         <p class="wrap">
-            <select id="sample:02" class="select" data-on-select="selected(event)" data-wrapper="sample-wrapper" data-search="false">
+            <select id="sample:02" class="select uxr-select" data-on-select="selected(event)" data-wrapper="sample-wrapper" data-search="false">
                 <option value="34" class="option-123">İstanbul</option>
                 <option value="06">Ankara</option>
                 <option value="35" selected>İzmir</option>
@@ -121,7 +161,7 @@
         </p>
 
         <p class="wrap">
-            <select id="sample-readonly" class="select" readonly>
+            <select id="sample-readonly" class="select uxr-select" readonly>
                 <option value="34">İstanbul</option>
                 <option value="06">Ankara</option>
                 <option value="35" selected>İzmir</option>
@@ -131,7 +171,7 @@
         </p>
 
         <p class="wrap">
-            <select id="sample-disabled" class="select" disabled>
+            <select id="sample-disabled" class="select uxr-select" disabled>
                 <option value="34">İstanbul</option>
                 <option value="06">Ankara</option>
                 <option value="35" selected>İzmir</option>
@@ -141,7 +181,7 @@
         </p>
 
         <p class="wrap">
-            <select id="sample-optgroup" class="select">
+            <select id="sample-optgroup" class="select uxr-select">
                 <optgroup label="Programming Languages">
                     <option>C++</option>
                     <option>C#</option>
@@ -163,7 +203,7 @@
         <p class="wrap">
             <label>
                 <span class="label-text">Select your city</span>
-                <select class="select" style="width: 20%">
+                <select class="select uxr-select" style="width: 20%">
                     <option value="Adana">Adana</option>
                     <option value="Adıyaman">Adıyaman</option>
                     <option value="Afyon">Afyon</option>
@@ -3273,7 +3313,7 @@
         </p>
 
         <p class="wrap">
-            <select id="multiple-record-number" class="select" multiple placeholder="Display selection as text" data-multiple-info-message="Selected record:" data-display-type="text" data-max-selection="6">
+            <select id="multiple-record-number" class="select uxr-select" multiple placeholder="Display selection as text" data-multiple-info-message="Selected record:" data-display-type="text" data-max-selection="6">
                 <optgroup label="A">
                     <option selected value="Adana">Adana</option>
                     <option selected value="Adıyaman">Adıyaman</option>
@@ -3363,7 +3403,7 @@
         </p>
 
         <p class="wrap">
-            <select id="multiple-tag-display" class="select" multiple placeholder="Display selection as tags" data-display-type="tags" data-max-selection="6" data-is-removable="true">
+            <select id="multiple-tag-display" class="select uxr-select" multiple placeholder="Display selection as tags" data-display-type="tags" data-max-selection="6" data-is-removable="true">
                 <optgroup label="A">
                     <option value="Adana">Adana</option>
                     <option value="Adıyaman">Adıyaman</option>
@@ -3452,8 +3492,25 @@
             </select>
         </p>
 
+
         <p class="wrap">
-            <select id="sample-numeric" class="select" data-numeric="true" data-search="true">
+            <select id="multiple-tag-display-with-ajax" class="select select-with-ajax" multiple placeholder="Display selection as tags" 
+                data-display-type="tags" 
+                data-with-icon="true" data-max-selection="6" data-is-removable="true">
+            
+            </select>
+        </p>
+
+        <p class="wrap">
+            <select id="multiple-tag-display-with-ajax2" class="select select-with-ajax" multiple placeholder="Display selection as tags" 
+                data-display-type="tags" 
+                data-with-icon="true" 
+                data-icon-template="<i class='fa fa-search fa-lg'></i>" data-max-selection="6" data-is-removable="true">
+            </select>
+        </p>
+
+        <p class="wrap">
+            <select id="sample-numeric" class="uxr-select" data-numeric="true" data-search="true">
                 <option value="">Select an option</option>
                 <option>1905</option>
                 <option>1992</option>
@@ -3486,5 +3543,8 @@
     }
     var $s = $('#sample-01').data('uxrSelect');
 </script>
+
+<script src="https://use.fontawesome.com/c2afdf4798.js"></script>
 </body>
 </html>
+

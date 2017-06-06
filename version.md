@@ -1,3 +1,6 @@
+## Versiyon 3.6.0
+- YENİ: Ajax ile data çekilip dinamik select datası basılması özelliği eklendi. 
+
 ## Versiyon 3.5.16
 - FIX: Issue #44 fixed.
 

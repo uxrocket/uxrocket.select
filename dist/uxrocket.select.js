@@ -128,7 +128,8 @@
             select:    'uxrselect.' + rocketName,
             update:    'uxrupdate.' + rocketName,
             destroy:   'uxrdestroy.' + rocketName,
-            scroll:    'scroll'
+            scroll:    'scroll',
+            iconClick: 'iconclick.' + rocketName
         },
         keys                   = {
             codes:     {
@@ -180,11 +181,14 @@
                 selected:           'selected',
                 search:             'search',
                 hidden:             'aria-hidden',
-                hide:               'hide'
+                hide:               'hide',
+                iconHolder   :      'icon-holder'
             }
         },
+        searchIcon = 'data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTguMS4xLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDI1MC4zMTMgMjUwLjMxMyIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMjUwLjMxMyAyNTAuMzEzOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgd2lkdGg9IjMycHgiIGhlaWdodD0iMzJweCI+CjxnIGlkPSJTZWFyY2giPgoJPHBhdGggc3R5bGU9ImZpbGwtcnVsZTpldmVub2RkO2NsaXAtcnVsZTpldmVub2RkOyIgZD0iTTI0NC4xODYsMjE0LjYwNGwtNTQuMzc5LTU0LjM3OGMtMC4yODktMC4yODktMC42MjgtMC40OTEtMC45My0wLjc2ICAgYzEwLjctMTYuMjMxLDE2Ljk0NS0zNS42NiwxNi45NDUtNTYuNTU0QzIwNS44MjIsNDYuMDc1LDE1OS43NDcsMCwxMDIuOTExLDBTMCw0Ni4wNzUsMCwxMDIuOTExICAgYzAsNTYuODM1LDQ2LjA3NCwxMDIuOTExLDEwMi45MSwxMDIuOTExYzIwLjg5NSwwLDQwLjMyMy02LjI0NSw1Ni41NTQtMTYuOTQ1YzAuMjY5LDAuMzAxLDAuNDcsMC42NCwwLjc1OSwwLjkyOWw1NC4zOCw1NC4zOCAgIGM4LjE2OSw4LjE2OCwyMS40MTMsOC4xNjgsMjkuNTgzLDBDMjUyLjM1NCwyMzYuMDE3LDI1Mi4zNTQsMjIyLjc3MywyNDQuMTg2LDIxNC42MDR6IE0xMDIuOTExLDE3MC4xNDYgICBjLTM3LjEzNCwwLTY3LjIzNi0zMC4xMDItNjcuMjM2LTY3LjIzNWMwLTM3LjEzNCwzMC4xMDMtNjcuMjM2LDY3LjIzNi02Ny4yMzZjMzcuMTMyLDAsNjcuMjM1LDMwLjEwMyw2Ny4yMzUsNjcuMjM2ICAgQzE3MC4xNDYsMTQwLjA0NCwxNDAuMDQzLDE3MC4xNDYsMTAyLjkxMSwxNzAuMTQ2eiIgZmlsbD0iIzAwMDAwMCIvPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+Cjwvc3ZnPgo=',
         utils                  = new window.uxrPluginUtils({ns: ns});
 
+        console.log(utils);
     // Constructor Method
     var Select = function(el, options, selector) {
         this._instance = i;
@@ -220,19 +224,96 @@
             this.el.id = ns.data + '-' + this._instance;
         }
 
-        // add options to UX Rocket registry
-        this.registry();
+        this.loadAjaxData(function(){
+            // add options to UX Rocket registry
+            this.registry();
 
-        this.getOptionData();
+            this.getOptionData();
 
-        this.decorateUI();
+            this.decorateUI();
 
-        this.bindUI();
-        this.bindSelectionUI();
+            this.bindUI();
+            this.bindSelectionUI();
 
-        this.$el.addClass(utils.getClassname('ready'));
+            this.$el.addClass(utils.getClassname('ready'));
+            this.appendIcon();
+            this.emitEvent('ready');
+        }.bind(this));
 
-        this.emitEvent('ready');
+    };
+
+
+
+    Select.prototype.appendIcon = function(){
+        if(this.options.withIcon){
+            var icon = this.options.iconTemplate ||  '<img src="'+searchIcon+'" />';
+            this.$el.next().append( '<span class="'+utils.getClassname('iconHolder')+'">'+ icon +'</span>' );
+            this.bindIcon();
+        }
+    };
+
+    Select.prototype.bindIcon = function(){
+        $('body').find('.' + utils.getClassname('iconHolder')).off(events.click);
+        $('body').find('.' + utils.getClassname('iconHolder'))
+            .on(events.click, function(e){
+                this.emitEvent('iconClick');
+                if( this.options.iconClicked ){
+                    this.options.iconClicked();
+                }
+            }.bind(this));
+    };
+
+    Select.prototype.prepareRequest = function(){
+        this.requestModel = {};
+        if( this.options.transformRequest ){
+            this.requestModel = $.extend(true, this.requestModel, this.options.transformRequest());
+        }
+        var search = null;
+        try {
+            search = this.$search.val();
+        }catch(e){}
+        if(search && search.length < 3){
+            return;
+        }
+        this.requestModel[this.options.searchTerm || 'searchTerm'] = search;
+    };
+
+    Select.prototype.sendRequest = function(){
+        var dfd = jQuery.Deferred();
+        this.prepareRequest();
+        if( this.options.changeEndpoint ){
+            this.options.ajaxUrl = this.options.changeEndpoint();
+        }
+        $.ajax({
+            url: this.options.ajaxUrl,
+            method: this.options.httpMethod || 'GET',
+            data: this.requestModel,
+            success: function(response){
+                var options = '';
+                for(var i = 0, l = response.length; i < l; i++){
+                    options += '<option value="' + response[i][this.options.value] + '">'+ response[i][this.options.key] +'</option>';
+                }
+                this.$el.empty().append(options);
+                dfd.resolve( response );
+            }.bind(this),
+            error: function( response ){
+                console.log('An error occurred fetching ajax data');
+                dfd.reject( response );
+            },
+            dataFilter: this.options.transformResponse ? eval(this.options.transformResponse) : function(data){return data;}
+        });
+        return dfd.promise();
+    };
+
+    Select.prototype.loadAjaxData = function(cb){
+        if(this.options.ajax && this.options.ajaxUrl){
+            this.sendRequest()
+                .done(function(){
+                    cb();
+                });
+        }else {
+            cb();
+        }
     };
 
     Select.prototype.getSelected = function() {
@@ -385,6 +466,7 @@
             .on(events.destroy, function() {
                 _this.onDestroy();
             });
+
     };
 
     Select.prototype.bindSelectionUI = function() {
@@ -440,6 +522,7 @@
                     _this.onFocus();
                 }, 100);
             });
+            
     };
 
     Select.prototype.bindDropUI = function() {
@@ -498,7 +581,11 @@
                 _this.close();
             }
             else if(_this.$search.val().length >= _this.options.minLetters) {
-                _this.search(_this.$search.val());
+                if(_this.options.ajax && _this.options.ajaxUrl){
+                    _this.sendRequest();
+                }else{
+                    _this.search(_this.$search.val());
+                }
             }
             else {
                 _this.setOriginalList();
@@ -560,6 +647,7 @@
                 $option.addClass(selected);
 
                 if(this.options.displayType === 'tags') {
+
                     var tag = utils.render(templates.multi, {
                         selectionText:        text,
                         selectionTagClass:    selectionTag,
@@ -576,6 +664,7 @@
                     else {
                         this.$selection.find('.' + selectionText).append(tag);
                     }
+
                 }
 
                 else {
@@ -958,6 +1047,9 @@
     };
 
     Select.prototype.onClick = function(e) {
+        if( !$(e.target).hasClass( utils.getClassname('selectionText') ) ){
+            return;
+        }
         this.clicked = true;
 
         if(!this.opened) {
@@ -1220,7 +1312,7 @@
     });
 
 // version
-    ux.version = '3.5.15';
+    ux.version = '3.6.0';
 
 // default settings
     ux.settings  = defaults;
