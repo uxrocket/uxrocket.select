@@ -693,6 +693,10 @@
             option        = $('[data-value="' + value + '"]').parent(),
             index         = this.$drop.find('[data-value="' + value + '"]').data('index');
 
+        if(value){
+            this.$el.find('[value="' + value + '"]').prop('selected', false);
+        }
+
         if(!this.$drop) {
             this.prepareDrop();
         } else {
@@ -1312,7 +1316,7 @@
     });
 
 // version
-    ux.version = '3.6.0';
+    ux.version = '3.6.1';
 
 // default settings
     ux.settings  = defaults;

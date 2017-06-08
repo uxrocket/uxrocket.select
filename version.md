@@ -1,3 +1,6 @@
+## Versiyon 3.6.2
+- FIX: Seçim kaldırıldığında selected özelliği false olarak set edildi.
+
 ## Versiyon 3.6.0
 - YENİ: Ajax ile data çekilip dinamik select datası basılması özelliği eklendi. 
 
