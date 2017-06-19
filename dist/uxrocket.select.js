@@ -195,7 +195,6 @@
         this._name     = rocketName;
         this._defaults = defaults;
         this.wrapped   = false;
-
         this.el       = el;
         this.$el      = $(el);
         this.id       = 'uxr-select-options-' + i;
@@ -208,12 +207,9 @@
         this.hasGroup = false;
         this.tabbed   = false;
         this.clicked  = false;
-
         this.searchQueryHolder = [];
         this.nonLetters        = [8, 9, 13, 27, 38, 40, 46];
-
         this.options = $.extend(true, {}, defaults, options, this.$el.data());
-
         i++;
 
         this.init();
