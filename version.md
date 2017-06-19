@@ -1,3 +1,6 @@
+## Versiyon 3.6.3
+- FIX: Mobilde dropdown açılmama sorunu çözüldü.
+
 ## Versiyon 3.6.2
 - FIX: Seçim kaldırıldığında selected özelliği false olarak set edildi.
 

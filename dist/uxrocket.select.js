@@ -489,12 +489,11 @@
             .on(events.mousedown, function(e) {
                 e.stopPropagation();
                 e.preventDefault();
-
-                _this.onClick(e);
             })
             .on(events.click, function(e) {
                 e.stopPropagation();
                 e.preventDefault();
+                _this.onClick(e);
             })
             .on(events.mousedown, '.' + utils.getClassname('removeSelection'), function(e) {
                 e.stopPropagation();
@@ -1051,8 +1050,14 @@
     };
 
     Select.prototype.onClick = function(e) {
-        if( !$(e.target).hasClass( utils.getClassname('selectionText') ) ){
-            return;
+        try {
+            if ( this.options.displayType === 'tags' ) {
+                if( $(e.target).parent().hasClass( utils.getClassname('iconHolder') ) ){
+                    return;
+                }
+            }
+        }catch(e){
+            console.log(e);
         }
         this.clicked = true;
 
@@ -1316,7 +1321,7 @@
     });
 
 // version
-    ux.version = '3.6.1';
+    ux.version = '3.6.3';
 
 // default settings
     ux.settings  = defaults;
