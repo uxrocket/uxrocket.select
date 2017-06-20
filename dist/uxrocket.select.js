@@ -195,7 +195,6 @@
         this._name     = rocketName;
         this._defaults = defaults;
         this.wrapped   = false;
-
         this.el       = el;
         this.$el      = $(el);
         this.id       = 'uxr-select-options-' + i;
