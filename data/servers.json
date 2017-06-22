@@ -1,0 +1,18 @@
+[
+    {
+        "serverName": "Test",
+        "id": 1
+    },
+    {
+        "serverName": "Development",
+        "id": 2
+    },
+    {
+        "serverName": "Preprod",
+        "id": 3
+    },
+    {
+        "serverName": "Production",
+        "id": 4
+    }
+]

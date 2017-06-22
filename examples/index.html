@@ -20,8 +20,10 @@
                 };
             };
 
+            var endpoint = '/uxrocket.select/data/data.json?x=y';
+
             var changeEndpoint = function(){
-                return '/uxrocket.select/data/data.json?x=y'
+                return endpoint;
             };
 
             var transformResponse = function(response){
@@ -37,12 +39,13 @@
                 ajaxUrl: '/uxrocket.select/data/data.json',
                 httpMethod: 'POST',
                 key: 'cityName',
-                value: 'cityValue',
+                value: 'cityCode',
                 searchTerm: 'searchTerm',
                 transformRequest: transformRequest,
                 transformResponse: transformResponse,
                 iconClicked: function(){
                     console.log('icon clicked');
+                    endpoint = '/uxrocket.select/data/servers.json';
                 },
                 changeEndpoint: changeEndpoint
             });
@@ -3496,7 +3499,7 @@
         <p class="wrap">
             <select id="multiple-tag-display-with-ajax" class="select select-with-ajax" multiple placeholder="Display selection as tags" 
                 data-display-type="tags" 
-                data-with-icon="true" data-max-selection="6" data-is-removable="true">
+                data-with-icon="true" data-max-selection="2" data-is-removable="true">
             
             </select>
         </p>

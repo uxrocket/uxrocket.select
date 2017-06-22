@@ -106,7 +106,8 @@
             onSelect:  false,
             onChange:  false,
             onUpdate:  false,
-            onDestroy: false
+            onDestroy: false,
+            initialRequest: false
         },
         events                 = {
             focus:     'focus.' + rocketName,
@@ -195,18 +196,18 @@
         this._name     = rocketName;
         this._defaults = defaults;
         this.wrapped   = false;
-        this.el       = el;
-        this.$el      = $(el);
-        this.id       = 'uxr-select-options-' + i;
-        this.multiple = this.el.hasAttribute('multiple');
-        this.disabled = this.el.hasAttribute('disabled');
-        this.readonly = this.el.hasAttribute('readonly');
-        this.width    = this.getWidth();
-        this.selector = selector;
-        this.opened   = false;
-        this.hasGroup = false;
-        this.tabbed   = false;
-        this.clicked  = false;
+        this.el        = el;
+        this.$el       = $(el);
+        this.id        = 'uxr-select-options-' + i;
+        this.multiple  = this.el.hasAttribute('multiple');
+        this.disabled  = this.el.hasAttribute('disabled');
+        this.readonly  = this.el.hasAttribute('readonly');
+        this.width     = this.getWidth();
+        this.selector  = selector;
+        this.opened    = false;
+        this.hasGroup  = false;
+        this.tabbed    = false;
+        this.clicked   = false;
 
         this.searchQueryHolder = [];
         this.nonLetters        = [8, 9, 13, 27, 38, 40, 46];
@@ -214,34 +215,30 @@
         this.options = $.extend(true, {}, defaults, options, this.$el.data());
 
         i++;
-
-        this.init();
+        this.loadAjaxData();
     };
+
 
     Select.prototype.init = function() {
         if(this.el.id === '') {
             this.el.id = ns.data + '-' + this._instance;
         }
 
-        this.loadAjaxData(function(){
-            // add options to UX Rocket registry
-            this.registry();
+        // add options to UX Rocket registry
+        this.registry();
 
-            this.getOptionData();
+        this.getOptionData();
 
-            this.decorateUI();
+        this.decorateUI();
 
-            this.bindUI();
-            this.bindSelectionUI();
+        this.bindUI();
+        this.bindSelectionUI();
 
-            this.$el.addClass(utils.getClassname('ready'));
-            this.appendIcon();
-            this.emitEvent('ready');
-        }.bind(this));
+        this.$el.addClass(utils.getClassname('ready'));
+        this.appendIcon();
+        this.emitEvent('ready');
 
     };
-
-
 
     Select.prototype.appendIcon = function(){
         if(this.options.withIcon){
@@ -293,6 +290,8 @@
                     options += '<option value="' + response[i][this.options.value] + '">'+ response[i][this.options.key] +'</option>';
                 }
                 this.$el.empty().append(options);
+                this.getOptionData()
+                $('.uxr-select-list').replaceWith(this.renderList());
                 dfd.resolve( response );
             }.bind(this),
             error: function( response ){
@@ -306,12 +305,16 @@
 
     Select.prototype.loadAjaxData = function(cb){
         if(this.options.ajax && this.options.ajaxUrl){
-            this.sendRequest()
-                .done(function(){
-                    cb();
-                });
+            if(this.options.initialRequest){
+                this.sendRequest()
+                    .done(function(){
+                        this.init();
+                    }.bind(this));
+                return;
+            }
+            this.init();
         }else {
-            cb();
+            this.init();
         }
     };
 
@@ -935,7 +938,9 @@
         this.setListPosition();
 
         if(!this.options.search || this.options.searchItemLimit >= this.optionData.length) {
-            this.$search.parent().addClass(utils.getClassname('hide'));
+            if(!this.options.ajax){
+                this.$search.parent().addClass(utils.getClassname('hide'));
+            }
         }
         else {
             this.$search.parent().removeClass(utils.getClassname('hide'));
