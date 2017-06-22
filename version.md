@@ -1,3 +1,6 @@
+## Versiyon 3.6.6
+- FIX: Touch device dropdown açılmama sorunu çözüldü
+
 ## Versiyon 3.6.4
 - FIX: Touch device dropdown açılmama sorunu çözüldü..
 

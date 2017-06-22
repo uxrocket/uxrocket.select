@@ -1325,7 +1325,7 @@
     });
 
 // version
-    ux.version = '3.6.4';
+    ux.version = '3.6.6';
 
 // default settings
     ux.settings  = defaults;
