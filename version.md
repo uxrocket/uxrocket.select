@@ -1,3 +1,6 @@
+## Versiyon 3.6.7
+- DEĞİŞİKLİK: Ajax objesine yeni parametreler eklendi. 
+
 ## Versiyon 3.6.6
 - FIX: Touch device dropdown açılmama sorunu çözüldü
 

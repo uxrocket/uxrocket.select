@@ -283,7 +283,9 @@
         $.ajax({
             url: this.options.ajaxUrl,
             method: this.options.httpMethod || 'GET',
-            data: this.requestModel,
+            data: JSON.stringify(this.requestModel),
+            dataType: 'JSON',
+            contentType : 'application/json; charset=utf-8',
             success: function(response){
                 var options = '';
                 for(var i = 0, l = response.length; i < l; i++){
@@ -298,7 +300,7 @@
                 console.log('An error occurred fetching ajax data');
                 dfd.reject( response );
             },
-            dataFilter: this.options.transformResponse ? eval(this.options.transformResponse) : function(data){return data;}
+            dataFilter: this.options.transformResponse ? this.options.transformResponse : function(data){return data;}
         });
         return dfd.promise();
     };
@@ -1325,7 +1327,7 @@
     });
 
 // version
-    ux.version = '3.6.6';
+    ux.version = '3.6.7';
 
 // default settings
     ux.settings  = defaults;

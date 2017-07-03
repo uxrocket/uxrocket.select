@@ -38,6 +38,7 @@
                 ajax: true,
                 ajaxUrl: '/uxrocket.select/data/data.json',
                 httpMethod: 'POST',
+                displayType: 'tags',
                 key: 'cityName',
                 value: 'cityCode',
                 searchTerm: 'searchTerm',
@@ -45,7 +46,6 @@
                 transformResponse: transformResponse,
                 iconClicked: function(){
                     console.log('icon clicked');
-                    endpoint = '/uxrocket.select/data/servers.json';
                 },
                 changeEndpoint: changeEndpoint
             });
@@ -3498,19 +3498,12 @@
 
         <p class="wrap">
             <select id="multiple-tag-display-with-ajax" class="select select-with-ajax" multiple placeholder="Display selection as tags" 
-                data-display-type="tags" 
-                data-with-icon="true" data-max-selection="2" data-is-removable="true">
+                
+                data-max-selection="2" data-is-removable="true">
             
             </select>
         </p>
 
-        <p class="wrap">
-            <select id="multiple-tag-display-with-ajax2" class="select select-with-ajax" multiple placeholder="Display selection as tags" 
-                data-display-type="tags" 
-                data-with-icon="true" 
-                data-icon-template="<i class='fa fa-search fa-lg'></i>" data-max-selection="6" data-is-removable="true">
-            </select>
-        </p>
 
         <p class="wrap">
             <select id="sample-numeric" class="uxr-select" data-numeric="true" data-search="true">
