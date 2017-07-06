@@ -1034,6 +1034,11 @@
         this.opened = true;
         this.$search.focus();
         this.emitEvent('open');
+        if(this.options.ajax && this.options.ajaxUrl){
+            var $list = this.$drop.find('.' + utils.getClassname('list'));
+            var list  = this.renderList();
+            $list.replaceWith(list);
+        }
     };
 
     Select.prototype.close = function() {
