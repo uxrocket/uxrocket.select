@@ -1,3 +1,6 @@
+## Versiyon 3.6.9
+- DEĞİŞİKLİK: Ajax objesine yeni parametre eklendi. 
+
 ## Versiyon 3.6.8
 - FIX: arama yapıldıktan sonra listenin kaybolma durumu düzeltildi. 
 

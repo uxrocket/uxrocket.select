@@ -26,12 +26,11 @@
                 return endpoint;
             };
 
-            var transformResponse = function(response){
-                response = JSON.parse(response);
+            var transformResponse = function(response, type){
+                console.log(response[0], type);
+                response[0].selected = true;
                 console.log(response[0]);
-                response[0].asd = 123;
-                changeEndpoint();
-                return JSON.stringify(response);
+                return response;
             };
 
             $('.select-with-ajax').uxrselect({
@@ -42,6 +41,7 @@
                 key: 'cityName',
                 value: 'cityCode',
                 searchTerm: 'searchTerm',
+                iconTemplate: '<i class="icon-search"></i>',
                 transformRequest: transformRequest,
                 transformResponse: transformResponse,
                 iconClicked: function(){
