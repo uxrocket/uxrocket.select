@@ -47,7 +47,10 @@
                 iconClicked: function(){
                     console.log('icon clicked');
                 },
-                changeEndpoint: changeEndpoint
+                changeEndpoint: changeEndpoint,
+                selectedData: function(selected){
+                    console.log('selectedData', selected);
+                }
             });
             
 
@@ -3499,7 +3502,7 @@
         <p class="wrap">
             <select id="multiple-tag-display-with-ajax" class="select select-with-ajax" multiple placeholder="Display selection as tags" 
                 
-                data-max-selection="2" data-is-removable="true">
+                data-max-selection="6" data-is-removable="true">
             
             </select>
         </p>

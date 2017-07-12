@@ -1,3 +1,6 @@
+## Versiyon 3.6.10
+- YENİ: Seçilen elemanları dönen callback eklendi. 
+
 ## Versiyon 3.6.9
 - DEĞİŞİKLİK: Ajax objesine yeni parametre eklendi. 
 
