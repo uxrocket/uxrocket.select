@@ -1,3 +1,8 @@
+## Versiyon 3.6.11
+- YENİ: İkontype 'arrow' ve 'search' olarak parametrik hale getirildi.
+- FIX: Ajax ile data yüklenme durumunda multiple dropdownun seçimden sonra kapanma soeunu düzeltildi.
+- DEĞİŞİKLİK: Refactoring  
+
 ## Versiyon 3.6.10
 - YENİ: Seçilen elemanları dönen callback eklendi. 
 
