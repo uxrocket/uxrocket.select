@@ -1,3 +1,6 @@
+## Versiyon 3.6.14
+- FIX: bugfix
+
 ## Versiyon 3.6.12
 - FIX: callback null kontrolü
 
