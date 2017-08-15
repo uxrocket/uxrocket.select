@@ -1,3 +1,6 @@
+## Versiyon 3.7.0
+- YENİ: dropdown pozisyon için popperjs kullanıldı.
+
 ## Versiyon 3.6.14
 - FIX: bugfix
 
