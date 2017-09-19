@@ -292,7 +292,7 @@
                     options += '<option value="' + mappedData[i][this.options.value] + '">'+ mappedData[i][this.options.key] +'</option>';
                 }
                 this.$el.empty().append(options);
-                this.getOptionData();
+                this.getOptionData()
                 $('.uxr-select-list').replaceWith(this.renderList());
                 this.dfd.resolve( mappedData );
             }.bind(this),
