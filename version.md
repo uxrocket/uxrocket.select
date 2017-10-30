@@ -1,3 +1,6 @@
+## Versiyon 3.7.2
+- DEĞİŞİKLİK: Dropdown is fitted related container
+
 ## Versiyon 3.6.15
 - FIX: bugfix
 
