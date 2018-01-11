@@ -1100,6 +1100,12 @@
             $list.replaceWith(list);
         }
         this.setDropPosition(true);
+
+        $(document).on(events.click, function(e) {
+            if(focusedInstances.current !== null) {
+                focusedInstances.current.close();
+            }
+        });
     };
 
     Select.prototype.close = function() {
@@ -1111,6 +1117,9 @@
         this.unbindKeyupListener();
         this.hideDrop();
         this.$selection.parent().removeClass(utils.getClassname('opened') + ' ' + this.options.opened);
+
+        $(document).off(events.click);
+
         this.emitEvent('close');
     };
 
@@ -1182,7 +1191,7 @@
 
     Select.prototype.onDestroy = function() {
         utils.callback(this.options.onDestroy);
-    };
+    }; 
 
     Select.prototype.resetSelection = function() {
         this.removeSelection();
@@ -1383,12 +1392,12 @@
                 $.fn.select = _select;
             }
         })
-        .on(events.click, function(e) {
+ /*       .on(events.click, function(e) {
             if(focusedInstances.current !== null) {
                 focusedInstances.current.close();
             }
         });
-
+*/
 
 
     $(window).on(events.resize + ' ' + events.touchend + ' ' + events.scroll, function() {
@@ -1402,7 +1411,7 @@
 
 
 // version
-    ux.version = '3.7.2';
+    ux.version = '3.7.3';
 
 // default settings
     ux.settings  = defaults;
