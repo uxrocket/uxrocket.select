@@ -19,6 +19,10 @@
 }(function($) {
     'use strict';
 
+    var _isMobile = function() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    };
+
     if(typeof window.UXRocket === 'undefined') {
         console.warn('UXRocket Select is required UXRocket Factory to run properly. You can clone/download factory at https://github.com/uxrocket/uxrocket.factory');
     }
@@ -84,6 +88,7 @@
 
         defaults               = {
             wrapper:             '',
+            disabledForMobile:   false,
             opened:              '',
             current:             '',
             arrow:               '',
@@ -201,13 +206,17 @@
     // Constructor Method
     var Select = function(el, options, selector) {
 
-        
+        this.el        = el;
+        this.$el       = $(el);
+        this.options = $.extend(true, {}, defaults, options, this.$el.data());
+        if( this.options.disabledForMobile ) {
+            if (  _isMobile() ) { return; }
+        }
+
         this._instance = i;
         this._name     = rocketName;
         this._defaults = defaults;
         this.wrapped   = false;
-        this.el        = el;
-        this.$el       = $(el);
         this.id        = 'uxr-select-options-' + i;
         this.iconHolderId = utils.getClassname('iconHolder') + i;
         this.multiple  = this.el.hasAttribute('multiple');
@@ -223,7 +232,7 @@
         this.searchQueryHolder = [];
         this.nonLetters        = [8, 9, 13, 27, 38, 40, 46];
 
-        this.options = $.extend(true, {}, defaults, options, this.$el.data());
+        
 
         i++;
         this.loadAjaxData();
@@ -1392,12 +1401,12 @@
                 $.fn.select = _select;
             }
         })
- /*       .on(events.click, function(e) {
+        .on(events.click, function(e) {
             if(focusedInstances.current !== null) {
                 focusedInstances.current.close();
             }
         });
-*/
+
 
 
     $(window).on(events.resize + ' ' + events.touchend + ' ' + events.scroll, function() {
@@ -1411,7 +1420,7 @@
 
 
 // version
-    ux.version = '3.7.3';
+    ux.version = '3.7.6';
 
 // default settings
     ux.settings  = defaults;
