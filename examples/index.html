@@ -10,6 +10,9 @@
     <script src="../lib/uxrocket.select.js"></script>
     <script>
         $(function() {
+            $('body').on('click', function(e){
+                console.log('body click', e);
+            });
             $.uxrselect.noConflict = true;
             var t0 = performance.now();
             $(".huge-select, .uxr-select").uxrselect();

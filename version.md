@@ -1,3 +1,6 @@
+## Versiyon 3.7.8
+- FIX: Ghost click fixed
+
 ## Versiyon 3.7.2
 - FIX: Select onclose binding fixed
 
