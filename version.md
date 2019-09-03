@@ -1,3 +1,6 @@
+## Versiyon 3.7.9
+- YENİ: added toggleAll feature
+
 ## Versiyon 3.7.8
 - FIX: Ghost click fixed
 

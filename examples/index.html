@@ -15,8 +15,9 @@
             });
             $.uxrselect.noConflict = true;
             var t0 = performance.now();
-            $(".huge-select, .uxr-select").uxrselect();
-
+            window.selectt = $(".huge-select, .uxr-select").uxrselect();
+            // console.log('select', select);
+            // select.uxrselect.toggleAll($(".city-select"), true)
             var transformRequest = function(){
                 return {
                     test: 123
@@ -36,7 +37,7 @@
                 return response;
             };
 
-            $('.select-with-ajax').uxrselect({
+            var sel = $('.select-with-ajax').uxrselect({
                 ajax: true,
                 ajaxUrl: '/uxrocket.select/data/data.json',
                 httpMethod: 'POST',
@@ -55,7 +56,7 @@
                     console.log('selectedData', selected);
                 }
             });
-            
+            console.log('sel', sel);
 
             var t1 = performance.now();
             var s1 = (t1 - t0).toFixed(4);
@@ -212,7 +213,7 @@
         <p class="wrap">
             <label>
                 <span class="label-text">Select your city</span>
-                <select class="select uxr-select" style="width: 20%">
+                <select class="select uxr-select " style="width: 20%">
                     <option value="Adana">Adana</option>
                     <option value="Adıyaman">Adıyaman</option>
                     <option value="Afyon">Afyon</option>
@@ -3322,7 +3323,7 @@
         </p>
 
         <p class="wrap">
-            <select id="multiple-record-number" class="select uxr-select" multiple placeholder="Display selection as text" data-multiple-info-message="Selected record:" data-display-type="text" data-max-selection="6">
+            <select id="multiple-record-number" class="select uxr-select" multiple placeholder="Display selection as text" data-multiple-info-message="Selected record:" data-display-type="text" >
                 <optgroup label="A">
                     <option selected value="Adana">Adana</option>
                     <option selected value="Adıyaman">Adıyaman</option>
@@ -3412,7 +3413,7 @@
         </p>
 
         <p class="wrap">
-            <select id="multiple-tag-display" class="select uxr-select" multiple placeholder="Display selection as tags" data-display-type="tags" data-max-selection="6" data-is-removable="true">
+            <select id="multiple-tag-display" class="select uxr-select city-select" multiple placeholder="Display selection as tags" data-display-type="tags" data-is-removable="true">
                 <optgroup label="A">
                     <option value="Adana">Adana</option>
                     <option value="Adıyaman">Adıyaman</option>

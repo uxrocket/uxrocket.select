@@ -141,7 +141,7 @@ _Note: When you watch the `uxrselect.uxrSelect` event, you get the Native select
 ## Public Methods
 Method  				         | Description
 -------------------------------- | -------------------------------------------------------
-$(selector).select(options)      | Binds the plugin 
+$(selector).select(options)      | Binds the plugin
 $.uxrselect.update(el, opt)      | Updates the settings on the element
 $.uxrselect.destroy(el)          | Removes plugin from element. If `el` is undefined, removes from all elements
 $.uxrselect.remove(el)           | Removes plugin from element. If `el` is undefined, removes from all elements. Same as `destroy` method.
@@ -149,3 +149,5 @@ $.uxrselect.close                | Closes the select list
 $.uxrselect.getFocusedInstance() | Shows the active and previous instance
 $.uxrselect.version              | Shows the plugin version
 $.uxrselect.settings             | Shows the default settings
+$.uxrselect.toggleAll(el, value) | Bulk update all select values. if value is true, select all items. if value is false, deselect all items.
+

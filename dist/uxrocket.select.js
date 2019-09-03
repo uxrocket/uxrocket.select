@@ -727,11 +727,16 @@
     };
 
     Select.prototype.deSelect = function(value) {
-        var selected      = utils.getClassname('selected'),
+        try {
+            var selected      = utils.getClassname('selected'),
             selectionText = utils.getClassname('selectionText'),
             selectionTag  = utils.getClassname('selectionTag'),
             option        = $('[data-value="' + value + '"]').parent(),
             index         = this.$drop.find('[data-value="' + value + '"]').data('index');
+        } catch (error) {
+            console.log(error);
+            return;
+        }
 
         if(value){
             this.$el.find('[value="' + value + '"]').prop('selected', false);
@@ -994,7 +999,7 @@
     };
 
     Select.prototype.setDropPosition = function(virtualKeyboardVisible) {
-
+        if ( !this.$drop ) { return; }
 
         var dropStyle          = {
                 top:      this.getPosition().top + this.$selection.height(),
@@ -1058,6 +1063,45 @@
         this.$drop.find('.' + utils.getClassname('list')).replaceWith(this.$list);
     };
 
+    Select.prototype.iterateDropItems = function(list, instance) {
+        var isSelected = instance.toggleAllItems ? 'selected' : '';
+        var _this = this;
+        list.find('li').each( function() {
+            var subItems = $(this).find('li');
+            if ( subItems.length ) {
+                _this.iterateDropItems(subItems, instance);
+            } else {
+                if (isSelected) {
+                    if ( !$(this).hasClass( utils.getClassname('selected') ) ) {
+                        _this.select( $(this).find('a') );
+                    }
+                } else {
+                    if ( $(this).hasClass( utils.getClassname('selected') ) ) {
+                        _this.deSelect( $(this).find('a').text() );
+                    }
+                }
+            }
+        });
+    };
+
+    Select.prototype.toggleAll = function() {
+        if ( !this.$drop ) { return; }
+        var $el = $(utils.escapeSelector('#' + this.$drop.data('select')));
+        var instance = $(utils.escapeSelector('#' + this.$drop.data('select'))).data(ns.data);
+        if ( !instance.multiple || !instance.toggleAllEnable ) { return; }
+        console.log('toggleAll');
+        console.log('toggleAll instance', instance);
+        console.log('toggleAll $el', $el);
+        // if ( !instance.multiple ) { return; }
+        // var isSelected = instance.toggleAllItems ? 'selected' : '';
+        var options = $el.find('option');
+        // options.prop("selected", isSelected);
+        console.log('toggleAll options', options);
+        this.iterateDropItems(this.$list, instance);
+        instance.toggleAllEnable = false;
+    };
+
+
     Select.prototype.showDrop = function() {
         this.$drop.appendTo('body');
 /*
@@ -1070,6 +1114,7 @@
         this.setListPosition();
         this.$list.find('.' + utils.getClassname('highlight')).removeClass(utils.getClassname('highlight'));
         this.bindDropUI();
+        this.toggleAll();
     };
 
     Select.prototype.hideDrop = function() {
@@ -1108,12 +1153,6 @@
             $list.replaceWith(list);
         }
         this.setDropPosition(true);
-
-        $(document).on(events.click, function(e) {
-            if(focusedInstances.current !== null) {
-                focusedInstances.current.close();
-            }
-        });
     };
 
     Select.prototype.close = function() {
@@ -1392,6 +1431,19 @@
         });
     };
 
+    ux.toggleAll = function(el, bool) {
+        var _this = this;
+        var selected = utils.getClassname('selected');
+        console.log(this.multiple);
+        // if( !this.multiple ) { return; }
+        var $el = typeof el === 'undefined' ? $('.' + utils.getClassname('ready')) : $(el);
+        var instance = $el.data(ns.data);
+        instance.toggleAllItems = bool;
+        instance.toggleAllEnable = true;
+        instance.toggleAll();
+        console.log('instance', instance);
+    };
+
     ux.getFocusedInstances = function() {
         return focusedInstances;
     };
@@ -1422,7 +1474,7 @@
 
 
 // version
-    ux.version = '3.7.8';
+    ux.version = '3.7.9';
 
 // default settings
     ux.settings  = defaults;
