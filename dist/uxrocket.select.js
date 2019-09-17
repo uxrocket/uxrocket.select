@@ -65,6 +65,11 @@
                        '   <input type="{{inputType}}" name="{{searchInput}}" />' +
                        '</span>',
             list:      '<ul class="{{listClass}} {{themeList}}">' +
+                       '    {{#if multiple}}' +
+                       '    <li id="{{optionClass}}" class="uxr-select-selectAll">' +
+                       '        <a class="{{optionClass}} {{themeOption}}" data-value="true">{{selectAllText}}</a>' +
+                       '    </li>' +
+                       '    {{/if}}' +
                        '    {{#each options}}' +
                        '    {{#if options.groupStart}}' +
                        '    <li class="{{groupClass}}">' +
@@ -119,7 +124,11 @@
             onDestroy: false,
             initialRequest: false,
             ajaxOptions: {},
-            iconType: 'arrow'
+            iconType: 'arrow',
+            text: {
+                selectAll: 'Tümünü Seç',
+                deSelectAll: 'Seçimi Temizle'
+            }
         },
         events                 = {
             focus:     'focus.' + rocketName,
@@ -195,7 +204,8 @@
                 search:             'search',
                 hidden:             'aria-hidden',
                 hide:               'hide',
-                iconHolder   :      'icon-holder'
+                iconHolder   :      'icon-holder',
+                selectAll:          'selectAll'
             }
         },
         isMobile = /Android|webOS|iPhone|iPad|Opera Mini/i.test(navigator.userAgent),
@@ -642,7 +652,12 @@
             $val                = this.$el.val(),
             isRemovable         = this.options.isRemovable;
 
-        if($option.hasClass(utils.getClassname('disabled'))) {
+        if ( this.multiple && $option.hasClass(utils.getClassname('selectAll') ) ) {
+            this.prepareToggleAll($selected);
+            return;
+        }
+
+        if($option.hasClass(utils.getClassname('disabled')) || $option.hasClass(utils.getClassname('selectAll'))) {
             return;
         }
 
@@ -718,6 +733,19 @@
         }
 
         this.emitEvent('change');
+    };
+
+    Select.prototype.prepareToggleAll = function ($selected) {
+        var toggleAllValue = $selected.data('value');
+        $selected.data('value', !toggleAllValue);
+        if ( toggleAllValue ) {
+            $selected.parent().addClass( utils.getClassname('selected') );
+            $selected.text( this.options.text.deSelectAll );
+        } else {
+            $selected.parent().removeClass( utils.getClassname('selected') );
+            $selected.text( this.options.text.selectAll );
+        }
+        ux.toggleAll(this.$el, toggleAllValue); 
     };
 
     Select.prototype.selectedItems = function(){
@@ -949,6 +977,7 @@
     };
 
     Select.prototype.renderList = function(list) {
+        console.warn('957 this.multiple', this.multiple);
         var data = {
             listClass:      utils.getClassname('list'),
             groupClass:     utils.getClassname('group'),
@@ -956,7 +985,10 @@
             selectedClass:  utils.getClassname('selected'),
             disabledClass:  utils.getClassname('disabled'),
             optionClass:    utils.getClassname('option'),
+            selectAllText:  this.options.text.selectAll,
+            deSelectAllText:  this.options.text.deSelectAll,
             options:        list || this.optionData,
+            multiple:       this.multiple,
             themeList:      this.options.list,
             themeSelected:  this.options.selected,
             themeDisabled:  this.options.disabled,
@@ -972,6 +1004,8 @@
             id:            this.el.id,
             dropClass:     utils.getClassname('drop'),
             themeDrop:     this.options.drop,
+            selectAllText:  this.options.text.selectAll,
+            deSelectAllText:  this.options.text.deSelectAll,
             multiple:      this.multiple,
             multipleClass: utils.getClassname('drop') + '-multiple',
             search:        this.renderSearchField(),
@@ -1071,6 +1105,9 @@
             if ( subItems.length ) {
                 _this.iterateDropItems(subItems, instance);
             } else {
+                if ( $(this).hasClass( utils.getClassname('selectAll') ) ) {
+                    return;
+                }
                 if (isSelected) {
                     if ( !$(this).hasClass( utils.getClassname('selected') ) ) {
                         _this.select( $(this).find('a') );
@@ -1089,14 +1126,6 @@
         var $el = $(utils.escapeSelector('#' + this.$drop.data('select')));
         var instance = $(utils.escapeSelector('#' + this.$drop.data('select'))).data(ns.data);
         if ( !instance.multiple || !instance.toggleAllEnable ) { return; }
-        console.log('toggleAll');
-        console.log('toggleAll instance', instance);
-        console.log('toggleAll $el', $el);
-        // if ( !instance.multiple ) { return; }
-        // var isSelected = instance.toggleAllItems ? 'selected' : '';
-        var options = $el.find('option');
-        // options.prop("selected", isSelected);
-        console.log('toggleAll options', options);
         this.iterateDropItems(this.$list, instance);
         instance.toggleAllEnable = false;
     };
@@ -1358,9 +1387,12 @@
         var item = $.grep(this.optionData, function (item) {
             return item[comparison.prop] === comparison.val;
         });
-
-        if (prop in item[0]) {
-            item[0][prop] = val;
+        try {
+            if (prop in item[0]) {
+                item[0][prop] = val;
+            }
+        } catch (error) {
+            console.log(error);
         }
 
     };
@@ -1474,7 +1506,7 @@
 
 
 // version
-    ux.version = '3.7.9';
+    ux.version = '3.7.10';
 
 // default settings
     ux.settings  = defaults;

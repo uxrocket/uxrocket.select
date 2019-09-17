@@ -1,3 +1,6 @@
+## Versiyon 3.7.10
+- YENİ: added toggle all option in dropdown list if multiple attribute is exist
+
 ## Versiyon 3.7.9
 - YENİ: added toggleAll feature
 
