@@ -3323,7 +3323,7 @@
         </p>
 
         <p class="wrap">
-            <select id="multiple-record-number" class="select uxr-select" multiple placeholder="Display selection as text" data-multiple-info-message="Selected record:" data-display-type="text" >
+            <select id="multiple-record-number" class="select uxr-select" data-select-all='true' multiple placeholder="Display selection as text" data-multiple-info-message="Selected record:" data-display-type="text" >
                 <optgroup label="A">
                     <option selected value="Adana">Adana</option>
                     <option selected value="Adıyaman">Adıyaman</option>
@@ -3413,7 +3413,7 @@
         </p>
 
         <p class="wrap">
-            <select id="multiple-tag-display" class="select uxr-select city-select" multiple placeholder="Display selection as tags" data-display-type="tags" data-is-removable="true">
+            <select id="multiple-tag-display" class="select uxr-select city-select" data-select-all='false' multiple placeholder="Display selection as tags" data-display-type="tags" data-is-removable="true">
                 <optgroup label="A">
                     <option value="Adana">Adana</option>
                     <option value="Adıyaman">Adıyaman</option>
@@ -3504,7 +3504,7 @@
 
 
         <p class="wrap">
-            <select id="multiple-tag-display-with-ajax" class="select select-with-ajax" multiple placeholder="Display selection as tags" 
+            <select id="multiple-tag-display-with-ajax" class="select select-with-ajax" data-select-all='false' multiple placeholder="Display selection as tags" 
                 
                 data-max-selection="6" data-is-removable="true">
             

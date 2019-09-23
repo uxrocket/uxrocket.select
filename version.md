@@ -1,3 +1,6 @@
+## Versiyon 3.7.11
+- YENİ: added new data attribute data-select-all
+
 ## Versiyon 3.7.10
 - YENİ: added toggle all option in dropdown list if multiple attribute is exist
 

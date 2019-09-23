@@ -102,7 +102,7 @@ on-select            | Calls a function when option is selected.
 on-change            | Calls a function when original select's value changed.
 on-update            | Calls a function when plugin options are updated.
 on-destroy           | Calls a function when select is removed.
-
+select-all           | Boolean. Enable select all feature for multiple selectboxes.
 
 Callbacks			 | &nbsp;
 -------------------- | -----
