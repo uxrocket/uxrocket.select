@@ -1,3 +1,6 @@
+## Versiyon 3.7.12
+- FIX: prevent closing dropdown, during mobile touch event fired
+
 ## Versiyon 3.7.11
 - YENİ: added new data attribute data-select-all
 
