@@ -236,12 +236,12 @@
         
     // Constructor Method
     var Select = function(el, options, selector) {
-
+        this.selectAllValue = true;
         this.el        = el;
         this.$el       = $(el);
         this.options = $.extend(true, {}, defaults, options, this.$el.data());
-        console.warn('this.$el.data()', this.$el.data());
-        console.log('this.options', this.options);
+        // console.warn('this.$el.data()', this.$el.data(), this.$el.data('select-all'));
+        // console.log('this.options', this.options);
         if( this.options.disabledForMobile ) {
             if (  _isMobile() ) { return; }
         }
@@ -590,9 +590,6 @@
         var _this = this;
 
         _this.$drop
-            .on(events.click, function(e) {
-                e.stopPropagation();
-            })
             .on(events.touchmove, '.' + utils.getClassname('option'), function(e) {
                 e.stopPropagation();
                 touchmove = true;
@@ -674,12 +671,12 @@
             $val                = this.$el.val(),
             isRemovable         = this.options.isRemovable;
 
-        if ( this.multiple && $option.hasClass(utils.getClassname('selectAll') ) ) {
-            this.prepareToggleAll($selected);
+        if( $option.hasClass( utils.getClassname('disabled') ) ) {
             return;
         }
 
-        if($option.hasClass(utils.getClassname('disabled')) || $option.hasClass(utils.getClassname('selectAll'))) {
+        if ( this.multiple && this.$el.data('select-all') ) {
+            this.prepareToggleAll($selected);
             return;
         }
 
@@ -690,7 +687,6 @@
             this.$el.find('[value="' + value + '"]').prop('selected', true);
             this.onBlur();
             this.$list.find('#' + optionID).addClass(selected);
-
             if(this.$el.val() !== '') {
                 this.$selection.parent().addClass(selected + ' ' + this.options.selected);
             }
@@ -757,17 +753,53 @@
         this.emitEvent('change');
     };
 
+    Select.prototype.deselectAll = function (list, instance) {
+        var selectionText = utils.getClassname('selectionText');
+        var isSelected = instance.toggleAllItems ? 'selected' : '';
+        var _this = this;
+        list.find('li').each( function() {
+            var subItems = $(this).find('li');
+            $(this).removeClass( utils.getClassname('selected') );
+            if ( subItems.length ) {
+                _this.deselectAll(subItems, instance);
+            } 
+        });
+        this.$el.find('option').each(function() {
+            $(this).prop('selected', false);
+        });
+        this.$selection.find('.' + selectionText).html(this.options.multipleInfoMessage + ' ' + this.$el.val().length + '/' + this.optionData.length);
+    };
+
+    Select.prototype.selectAll = function (list, instance) {
+        var selectionText = utils.getClassname('selectionText');
+        var isSelected = instance.toggleAllItems ? 'selected' : '';
+        var _this = this;
+        list.find('li').each( function() {
+            var subItems = $(this).find('li');
+            $(this).addClass( utils.getClassname('selected') );
+            if ( subItems.length ) {
+                _this.selectAll(subItems, instance);
+            } 
+        });
+        this.$el.find('option').each(function() {
+            $(this).prop('selected', true);
+        });
+        this.$selection.find('.' + selectionText).html(this.options.multipleInfoMessage + ' ' + this.$el.val().length + '/' + this.optionData.length);
+    };
+
     Select.prototype.prepareToggleAll = function ($selected) {
-        var toggleAllValue = $selected.data('value');
-        $selected.data('value', !toggleAllValue);
-        if ( toggleAllValue ) {
+        var instance = $(utils.escapeSelector('#' + this.$drop.data('select'))).data(ns.data);
+        if ( this.selectAllValue ) {
             $selected.parent().addClass( utils.getClassname('selected') );
             $selected.text( this.options.text.deSelectAll );
+            this.selectAll(this.$list, instance);
+            this.selectAllValue = false;
         } else {
             $selected.parent().removeClass( utils.getClassname('selected') );
             $selected.text( this.options.text.selectAll );
+            this.deselectAll(this.$list, instance);
+            this.selectAllValue = true;
         }
-        ux.toggleAll(this.$el, toggleAllValue); 
     };
 
     Select.prototype.selectedItems = function(){
@@ -1000,6 +1032,9 @@
 
     Select.prototype.renderList = function(list) {
         console.warn('957 this.multiple', this.multiple);
+        if ( !this.$el.data('select-all') ) {
+            this.$el.data('select-all', false);
+        }
         var data = {
             listClass:      utils.getClassname('list'),
             groupClass:     utils.getClassname('group'),
@@ -1010,7 +1045,7 @@
             selectAllText:  this.options.text.selectAll,
             deSelectAllText:  this.options.text.deSelectAll,
             options:        list || this.optionData,
-            isSelectAllEnable: this.multiple && this.options.selectAll,
+            isSelectAllEnable: ( this.multiple && this.$el.data('select-all') ),
             themeList:      this.options.list,
             themeSelected:  this.options.selected,
             themeDisabled:  this.options.disabled,
@@ -1021,6 +1056,10 @@
     };
 
     Select.prototype.renderDrop = function() {
+        if ( !this.$el.data('select-all') ) {
+            this.$el.data('select-all', false);
+        }
+        console.warn('renderDrop', this.$el.data('select-all'));
         var data = {
             dropID:        this.id,
             id:            this.el.id,
@@ -1028,7 +1067,7 @@
             themeDrop:     this.options.drop,
             selectAllText:  this.options.text.selectAll,
             deSelectAllText:  this.options.text.deSelectAll,
-            multiple:      this.multiple,
+            multiple:      ( this.multiple && this.$el.data('select-all') ),
             multipleClass: utils.getClassname('drop') + '-multiple',
             search:        this.renderSearchField(),
             list:          this.renderList()
@@ -1119,40 +1158,6 @@
         this.$drop.find('.' + utils.getClassname('list')).replaceWith(this.$list);
     };
 
-    Select.prototype.iterateDropItems = function(list, instance) {
-        var isSelected = instance.toggleAllItems ? 'selected' : '';
-        var _this = this;
-        list.find('li').each( function() {
-            var subItems = $(this).find('li');
-            if ( subItems.length ) {
-                _this.iterateDropItems(subItems, instance);
-            } else {
-                if ( $(this).hasClass( utils.getClassname('selectAll') ) ) {
-                    return;
-                }
-                if (isSelected) {
-                    if ( !$(this).hasClass( utils.getClassname('selected') ) ) {
-                        _this.select( $(this).find('a') );
-                    }
-                } else {
-                    if ( $(this).hasClass( utils.getClassname('selected') ) ) {
-                        _this.deSelect( $(this).find('a').text() );
-                    }
-                }
-            }
-        });
-    };
-
-    Select.prototype.toggleAll = function() {
-        if ( !this.$drop ) { return; }
-        var $el = $(utils.escapeSelector('#' + this.$drop.data('select')));
-        var instance = $(utils.escapeSelector('#' + this.$drop.data('select'))).data(ns.data);
-        if ( !instance.multiple || !instance.toggleAllEnable ) { return; }
-        this.iterateDropItems(this.$list, instance);
-        instance.toggleAllEnable = false;
-    };
-
-
     Select.prototype.showDrop = function() {
         this.$drop.appendTo('body');
 /*
@@ -1165,7 +1170,7 @@
         this.setListPosition();
         this.$list.find('.' + utils.getClassname('highlight')).removeClass(utils.getClassname('highlight'));
         this.bindDropUI();
-        this.toggleAll();
+        // this.toggleAll();
     };
 
     Select.prototype.hideDrop = function() {
@@ -1528,7 +1533,7 @@
 
 
 // version
-    ux.version = '3.7.11';
+    ux.version = '3.7.13';
 
 // default settings
     ux.settings  = defaults;

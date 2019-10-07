@@ -1,3 +1,6 @@
+## Versiyon 3.7.13
+- FIX: selectall bugfix
+
 ## Versiyon 3.7.12
 - FIX: prevent closing dropdown, during mobile touch event fired
 
