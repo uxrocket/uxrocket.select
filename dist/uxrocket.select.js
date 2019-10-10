@@ -594,11 +594,11 @@
                 e.stopPropagation();
                 touchmove = true;
             })
-            .on(events.touchstart, '.' + utils.getClassname('option'), function(e) {
+            .on(events.touchend, '.' + utils.getClassname('option'), function(e) {
                 e.stopPropagation();
-                touchmove = true;
+                touchmove = false;
             })
-            .on(events.click, '.' + utils.getClassname('option'), function(e) {
+            .on('click', '.' + utils.getClassname('option'), function(e) {
                 e.stopPropagation();
                 e.preventDefault();
                 if(!touchmove) {
@@ -1533,7 +1533,7 @@
 
 
 // version
-    ux.version = '3.7.13';
+    ux.version = '3.7.14';
 
 // default settings
     ux.settings  = defaults;
