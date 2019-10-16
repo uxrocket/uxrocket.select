@@ -1,3 +1,6 @@
+## Versiyon 3.7.15
+- FIX: selectall bugfix
+
 ## Versiyon 3.7.14
 - FIX: ios 13 bugfix
 
