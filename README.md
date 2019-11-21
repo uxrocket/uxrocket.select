@@ -149,5 +149,4 @@ $.uxrselect.close                | Closes the select list
 $.uxrselect.getFocusedInstance() | Shows the active and previous instance
 $.uxrselect.version              | Shows the plugin version
 $.uxrselect.settings             | Shows the default settings
-$.uxrselect.toggleAll(el, value) | Bulk update all select values. if value is true, select all items. if value is false, deselect all items.
 
