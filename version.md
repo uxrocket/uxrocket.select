@@ -1,3 +1,6 @@
+## Versiyon 3.7.18
+- FIX: tablet & desktop dropdown kapanmama sorunu 
+
 ## Versiyon 3.7.16
 - FIX: selectall bugfix
 
