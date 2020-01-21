@@ -1,4 +1,4 @@
-## Versiyon 3.7.18
+## Versiyon 3.7.19
 - FIX: tablet & desktop dropdown kapanmama sorunu 
 
 ## Versiyon 3.7.16
