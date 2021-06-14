@@ -1,3 +1,6 @@
+## Versiyon 3.7.20
+- FIX: ios 14.6 mobile events bugfix
+
 ## Versiyon 3.7.19
 - FIX: tablet & desktop dropdown kapanmama sorunu 
 
