@@ -1557,7 +1557,7 @@
 
 
 // version
-    ux.version = '3.7.22';
+    ux.version = '3.7.23';
 
 // default settings
     ux.settings  = defaults;

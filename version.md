@@ -1,4 +1,4 @@
-## Versiyon 3.7.22
+## Versiyon 3.7.23
 - FIX: multi selection feature bugfix
 
 ## Versiyon 3.7.21
