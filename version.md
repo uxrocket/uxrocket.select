@@ -1,3 +1,6 @@
+## Versiyon 3.7.22
+- FIX: multi selection feature bugfix
+
 ## Versiyon 3.7.21
 - FIX: ios 14.6 mobile events bug fix
 

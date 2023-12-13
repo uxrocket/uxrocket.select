@@ -6,6 +6,7 @@ $select-version: "3.7.21";
 $prefix: 'uxr-select';
 $border: #ccc;
 $radius: 4px;
+$bg: #3a9dd4;
 
 /** -------------------------------------------
  	Select Styles
@@ -29,6 +30,38 @@ $radius: 4px;
         }
     }
 
+
+    &-selectAll {
+        width: 20px;
+        height: 20px;
+        border: 1px solid $border;
+        border-radius: 3px;
+        position: relative;
+        box-sizing: border-box;
+        flex: none;
+        cursor: pointer;
+        &:after {
+            content: "";
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            left: 4px;
+            top: 1px;
+            color: #fff;
+        }
+
+        &.selected {
+            background-color: $bg;
+            border: none;
+            &:after {
+                content: "\2713";
+       
+            }
+        }
+
+
+    }
+
     &-ready {
         visibility: hidden;
     }
@@ -36,13 +69,15 @@ $radius: 4px;
     &-selection {
         position: relative;
         overflow: hidden;
-        display: inline-block;
-        min-height: 32px;
+        display: flex;
+        height: auto;
+        min-height: 40px;
         border-radius: $radius;
         border: 1px solid $border;
         color: #222;
         text-decoration: none;
         vertical-align: middle;
+        align-items: center;
 
         &.#{$prefix}-opened {
             border-radius: $radius $radius 0 0;
@@ -72,9 +107,11 @@ $radius: 4px;
             white-space: nowrap;
 
             .#{$prefix}-multiple & {
+
+                font-weight: 400;
                 padding: 5px;
                 overflow: auto;
-                background-color: #fff;
+                // background-color: #fff;
                 white-space: normal;
             }
 
@@ -114,7 +151,7 @@ $radius: 4px;
         border-color: #555 transparent transparent;
 
         .#{$prefix}-multiple & {
-            display: none;
+            // display: none;
         }
 
         .#{$prefix}-opened & {
@@ -196,14 +233,17 @@ $radius: 4px;
     }
 
     &-search {
-        display: block;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         padding: 4px;
 
         input {
-            width: calc(100% - 8px);
+            width: 100%;
             padding: 4px;
             border: 1px solid $border;
             border-radius: $radius;
+            margin-left: 5px;
         }
 
         div[searchField="true"] {
@@ -224,13 +264,67 @@ $radius: 4px;
         }
     }
 
+    &-multiple {
+        .#{$prefix}-option {
+            text-indent: 25px;
+
+            &:after {
+                content: "";
+                width: 20px;
+                height: 20px;
+                border: 1px solid $border;
+                border-radius: 3px;
+                position: absolute;
+                box-sizing: border-box;
+                flex: none;
+                left: 4px;
+                top: 5px;
+            }
+    
+            &:before {
+                content: "";
+                position: absolute;
+                width: 18px;
+                height: 18px;
+                left: -16px;
+                top: 5px;
+                color: #fff;
+                z-index: 5;
+            }
+
+            
+        }
+
+        .#{$prefix}-selected,
+        .#{$prefix}-highlight {
+            .#{$prefix}-option {
+                &:before {
+                    content: "\2713";
+                }
+
+                &:after {
+                    background-color: $bg;
+                    border: none;
+                }
+            }
+        }
+    }
+
     &-option {
         display: block;
         max-width: 400px;
         padding: 4px;
         cursor: pointer;
+        position: relative;
+        
 
-        &:hover,
+
+
+        &:hover{
+            background-color: #eee;
+   
+        }
+
         .#{$prefix}-selected &,
         .#{$prefix}-highlight & {
             background-color: #f0f0f0;
