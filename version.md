@@ -1,3 +1,6 @@
+## Versiyon 3.7.24
+- YENİ: added closeOnChange option for multiple mode
+
 ## Versiyon 3.7.23
 - FIX: multi selection feature bugfix
 
